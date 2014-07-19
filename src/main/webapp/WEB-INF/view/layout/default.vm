@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		#if ($pageTitle)
+		<title>$esc.html($pageTitle)</title>
+		#end
+		
+		<!-- jQuery -->
+		<script src="$res.getLocation('js/jquery-1.11.1.js')"></script>
+		
+		<!-- Script i18n -->
+		<script src="$scriptMsgLocate.getDefaultMessageLocation()"></script>
+		#set ($localMessage = $scriptMsgLocate.getLocalMessageLocation())
+		#if ($localMessage)
+			<script src="$localMessage"></script>
+		#end
+		
+		<!-- other style sheet and script -->
+		#if ($pageResources)
+			#foreach($pageResource in $header.write($pageResources)) 
+				$pageResource 
+			#end
+		#end
+		
+		<!-- meta keywords and meta description -->
+		#if ($metaKeywords)
+		<meta name="keywords" content="$esc.html($metaKeywords)"/>
+		#end
+		
+		#if ($metaDescription)
+		<meta name="description" content="$esc.html($metaDescription)"/>
+		#end
+
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	
+	</head>
+	<body>
+		<div class="page-header-frame">
+			#parse('share/header.vm')
+		</div>		
+		
+		<div class="page-body-frame">
+			$screen_content
+		</div>
+		
+		<div class="page-footer-frame">
+			#parse('share/footer.vm')
+		</div>
+		
+	</body>
+</html>

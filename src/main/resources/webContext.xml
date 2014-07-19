@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		">
+
+	
+	<!-- Scans the classpath of this application for @Components to deploy as
+		beans -->
+	<context:component-scan base-package="
+		org.archboy.clobaframe,
+		org.archboy.clobaframe.web.demo.controller"/>
+
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<!-- JSR-303 support will be detected on classpath and enabled automatically -->
+	<mvc:annotation-driven/>
+	
+	<bean id="propertyPlaceholderConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:clobaframe.properties</value>
+				<value>classpath:web.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Apache Velocity -->
+	<bean id="velocityConfig"
+		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property name="resourceLoaderPath" value="/WEB-INF/view/"/>
+		<property name="configLocation" value="/WEB-INF/velocity.properties"/>
+	</bean>
+	
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">
+		<property name="cache" value="true"/>
+		<property name="prefix" value=""/>
+		<property name="suffix" value=".vm"/>
+		<property name="contentType" value="text/html; charset=UTF-8"/>
+		<property name="layoutUrl" value="layout/default.vm"/>
+		<property name="attributesMap">
+			<map>
+				<!-- from the clobaframe-webresource -->
+				<entry key="res" value-ref="webResourceManagerImpl"/>
+				
+				<!-- from the package org.archboy.clobaframe.web.view.tool.impl -->
+				<entry key="esc" value-ref="extendedEscapeTool"/>
+				<entry key="json" value-ref="jsonObjectWriterImpl"/>
+				<entry key="date" value-ref="localeAwareComparisonDateTool"/>
+				<entry key="num" value-ref="localeAwareNumberTool"/>
+				<entry key="msg" value-ref="messageSourceToolImpl"/>
+				<entry key="scriptMsgLocate" value-ref="scriptMessageResourceLocationToolImpl"/>
+				<entry key="header" value-ref="webResourceLocationHTMLTagWriterImpl"/>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- Application Message Bundle -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="classpath:org/archboy/clobaframe/web/demo/i18n/messages"/>
+		<property name="cacheSeconds" value="-1"/>
+		<!--
+			Set the number of seconds to cache loaded properties files.
+			Default is "-1", indicating to cache forever (just like java.util.ResourceBundle).
+			A positive number will cache loaded properties files for the given number of seconds. This is essentially the interval between refresh checks. Note that a refresh attempt will first check the last-modified timestamp of the file before actually reloading it; so if files don't change, this interval can be set rather low, as refresh attempts will not actually reload.
+			A value of "0" will check the last-modified timestamp of the file on every message access. Do not use this in a production environment!
+		-->
+	</bean>
+	
+	<!-- Configures Handler Interceptors -->
+	<mvc:interceptors>
+		<!-- Changes the locale when a 'locale' request parameter is sent; e.g.
+			/?locale=de -->
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
+	</mvc:interceptors>
+
+	<!-- Saves locale change by cookie -->
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+		<property name="cookieName" value="LOCALE"/>
+		<!-- one month, 30 days -->
+		<property name="cookieMaxAge" value="2592000"/>
+		<property name="cookieDomain" value="localhost"/>
+	</bean>
+</beans>

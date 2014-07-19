@@ -1,0 +1,12 @@
+<!-- footer -->
+<ul>
+	<li><a href="/about">$msg.get('index.about')</a></li>
+	<li><a href="/terms">$msg.get('index.terms')</a></li>
+	<li><a href="/privacy">$msg.get('index.privacy')</a></li>
+</ul>
+
+<ul>
+	<li><a href="/changelocale?locale=en">$msg.get('common.language.en')</a></li>
+	<li><a href="/changelocale?locale=ja">$msg.get('common.language.ja')</a></li>
+	<li><a href="/changelocale?locale=zh_CN">$msg.get('common.language.zh_CN')</a></li>
+</ul>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment></comment>
+	<entry key="common.language">日本語</entry>
+
+	<entry key="test.text1">これはテストテキストです。</entry>
+	<entry key="test.text2">こんにちは {0}、今の時間 {1,date,long}。</entry>
+	
+	<entry key="index.about">について</entry>
+	<entry key="index.terms">使用条件</entry>
+	<entry key="index.privacy">プライバシー</entry>
+</properties>
