@@ -43,17 +43,8 @@
 	
 	</head>
 	<body>
-		<div class="page-header-frame">
-			#parse('share/header.vm')
-		</div>		
-		
-		<div class="page-body-frame">
-			$screen_content
-		</div>
-		
-		<div class="page-footer-frame">
-			#parse('share/footer.vm')
-		</div>
-		
+		#parse('share/header.vm')
+		$screen_content
+		#parse('share/footer.vm')
 	</body>
 </html>
