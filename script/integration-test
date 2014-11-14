@@ -1,0 +1,4 @@
+#!/bin/bash
+# details see http://maven.apache.org/plugins/maven-surefire-plugin/
+# http://maven.apache.org/plugins/maven-failsafe-plugin/examples/single-test.html
+mvn clean verify

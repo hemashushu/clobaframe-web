@@ -1,7 +1,7 @@
 #set ($layout = 'layout/default.vm')
 #set ($pageTitle = 'Clobaframe-web Demo page')
 #set ($metaKeywords = 'clobaframe web')
-#set ($metaDescription = 'a min web application template that using clobaframe.')
+#set ($metaDescription = 'a simple web application template that using clobaframe.')
 #set ($pageResources = ['css/index.css'])
 
 <h1>$msg.get('test.text2', 'clobaframe-web', $now)</h1>
