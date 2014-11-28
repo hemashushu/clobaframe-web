@@ -47,12 +47,25 @@ public class ResourcesController {
 	@RequestMapping("/favicon.ico")
 	public void sendFavoriteIcon(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		webResourceSender.send("root/logo-16x16.ico", request, response);
+		webResourceSender.send("root/favicon-16x16.ico", request, response);
+	}
+	
+	@RequestMapping("/favicon.png")
+	public void sendFavoriteIconWithPNG(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		webResourceSender.send("root/favicon-16x16.png", request, response);
 	}
 	
 	@RequestMapping("/apple-touch-icon.png")
 	public void sendAppleTouchIcon(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		webResourceSender.send("root/logo-152x152.png", request, response);
+		webResourceSender.send("root/apple-touch-icon-120x120.png", request, response);
 	}
+	
+	@RequestMapping("/launcher-icon-192x192.png")
+	public void sendLauncherIcon(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		webResourceSender.send("root/launcher-icon-192x192.png", request, response);
+	}
+	
 }

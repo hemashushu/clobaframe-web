@@ -7,6 +7,15 @@
 <h1>$msg.get('test.text2', 'clobaframe-web', $now)</h1>
 <div class="text"></div>
 
+<h3>Web resources</h3>
+<ul>
+	<li><a href="/robots.txt">robots.txt</a></li>
+	<li><a href="/favicon.ico">favicon.ico</a></li>
+	<li><a href="/favicon.png">favicon.png</a></li>
+	<li><a href="/apple-touch-icon.png">apple-touch-icon.png</a></li>
+	<li><a href="/launcher-icon-192x192.png">launcher-icon-192x192.png</a></li>
+</ul>
+
 <script>
 	(function(){
 		var user = $json.write($user);
