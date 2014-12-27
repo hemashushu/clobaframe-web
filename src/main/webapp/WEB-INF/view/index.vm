@@ -1,13 +1,21 @@
 #set ($layout = 'layout/default.vm')
 #set ($pageTitle = 'Clobaframe-web Demo page')
 #set ($metaKeywords = 'clobaframe web')
-#set ($metaDescription = 'a simple web application template that using clobaframe.')
-#set ($pageResources = ['css/index.css'])
+#set ($metaDescription = 'a web application template that using clobaframe.')
+#set ($pageResources = ['css/common.css'])
 
 <h1>$msg.get('test.text2', 'clobaframe-web', $now)</h1>
-<div class="text"></div>
 
-<h3>Web resources</h3>
+<div class="text">
+	$msg.get('index.testGetObjectByScript') <em></em>
+</div>
+
+<p>
+	$msg.get('index.testGetLocale') $msg.locale
+</p>
+
+<h3>$msg.get('index.webResource.title')</h3>
+
 <ul>
 	<li><a href="/robots.txt">robots.txt</a></li>
 	<li><a href="/favicon.ico">favicon.ico</a></li>
@@ -19,6 +27,6 @@
 <script>
 	(function(){
 		var user = $json.write($user);
-		$('.text').text('Test object from controller throught script: id=' + user.id + ', name=' + user.name);
+		$('.text em').text('{id:' + user.id + ', name:' + user.name + '}');
 	})(this);
 </script>

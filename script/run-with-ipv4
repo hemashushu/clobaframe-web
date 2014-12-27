@@ -1,0 +1,6 @@
+#!/bin/bash
+# Install Apache Maven.
+# Build and install clobaframe.
+# Then run this script.
+# for details see http://docs.codehaus.org/display/JETTY/Maven+Jetty+Plugin
+mvn  -Djava.net.preferIPv4Stack=true clean jetty:run

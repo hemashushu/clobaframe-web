@@ -1,25 +1,30 @@
 clobaframe-web
-=============
+==============
 
-The min web application template that using clobaframe.
-Includes a demo page.
-
-Compile and install
--------------------
- * Install Apache Maven
- * Compile and install clobaframe.
- * Run this command to package (generate a jar lib file and javadoc and source package ): 
-
-    $ mvn clean javadoc:jar source:jar package
-
- * Run this command to install into local Maven repository
-
-    $ mvn clean javadoc:jar source:jar install
+A web application template that using clobaframe.
 
 Run the Demo
 ------------
- * Run this command in the source folder
+
+1. Complete all clobaframe unit tests first.
+
+2. Check out source code into any folder
+
+3. Run with the embed Jetty web server:
 
     $ mvn clean jetty:run
 
-   Then open http://localhost:8080/ in the web browser.
+Or perfer IPv4:
+
+    $ mvn -Djava.net.preferIPv4Stack=true clean jetty:run
+
+Then open http://localhost:8080/ in the web browser.
+
+
+Install library
+-------------------
+
+Install clobaframe into Apache Maven local repository:
+
+    $ mvn clean javadoc:jar source:jar install
+

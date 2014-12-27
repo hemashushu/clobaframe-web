@@ -15,4 +15,8 @@
 	<entry key="index.about">About</entry>
 	<entry key="index.terms">Terms of Service</entry>
 	<entry key="index.privacy">Privacy Policy</entry>
+	
+	<entry key="index.webResource.title">Web Resource</entry>
+	<entry key="index.testGetObjectByScript">Test get view object from MVC by script:</entry>
+	<entry key="index.testGetLocale">Test get current locale language tag:</entry>
 </properties>

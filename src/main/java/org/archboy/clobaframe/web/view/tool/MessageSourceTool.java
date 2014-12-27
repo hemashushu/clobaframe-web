@@ -20,4 +20,11 @@ public interface MessageSourceTool {
 
 	String get(String code, List<Object> args);
 
+	/**
+	 * Return current locale language tag.
+	 * Such as 'en-US', 'zh-CN'.
+	 * 
+	 * @return 
+	 */
+	String getLocale();
 }

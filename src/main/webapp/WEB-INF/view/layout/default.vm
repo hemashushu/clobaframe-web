@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8"/>
+		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
@@ -28,16 +28,16 @@
 		
 		<!-- meta keywords and meta description -->
 		#if ($metaKeywords)
-		<meta name="keywords" content="$esc.html($metaKeywords)"/>
+		<meta name="keywords" content="$esc.html($metaKeywords)">
 		#end
 		
 		#if ($metaDescription)
-		<meta name="description" content="$esc.html($metaDescription)"/>
+		<meta name="description" content="$esc.html($metaDescription)">
 		#end
 
 		<!-- for home screen icon, iphone-retina with 120 x 120 px -->
 		<!-- see also: https://developer.apple.com/library/mac/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
-		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 		
 		<!-- favicon with 16 x 16 px, see http://www.w3.org/2005/10/howto-favicon -->
 		<link rel="icon" type="image/png" href="/favicon.png">
