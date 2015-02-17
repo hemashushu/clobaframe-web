@@ -1,6 +1,6 @@
 package org.archboy.clobaframe.web.view.tool.impl;
 
-import org.archboy.clobaframe.web.view.tool.WebResourceLocationHTMLTagWriter;
+import org.archboy.clobaframe.web.view.tool.PageWebResourceHeaderTool;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +15,7 @@ import org.archboy.clobaframe.webresource.WebResourceManager;
  * @author yang
  */
 @Named
-public class WebResourceLocationHTMLTagWriterImpl implements WebResourceLocationHTMLTagWriter {
+public class PageWebResourceHeaderToolImpl implements PageWebResourceHeaderTool {
 
 	private static final String MIME_TYPE_APPLICATION_JAVASCRIPT = "application/javascript";
 	private static final String MIME_TYPE_APPLICATION_X_JAVASCRIPT = "application/x-javascript";
@@ -28,14 +28,15 @@ public class WebResourceLocationHTMLTagWriterImpl implements WebResourceLocation
 	//private static final String SCIRPT_TEMPLATE = "<script src=\"%s\" type=\"text/javascript\"></script>";
 	//private static final String STYLESHEEP_TEMPLATE = "<link href=\"%s\" rel=\"stylesheet\" type=\"text/css\"/>";
 
-	private static final String SCIRPT_TEMPLATE = "<script src=\"%s\"></script>";
-	private static final String STYLESHEEP_TEMPLATE = "<link href=\"%s\" rel=\"stylesheet\"/>";
-
+	private static final String SCRIPT_TEMPLATE = "<script src=\"%s\"></script>";
+	private static final String STYLESHEET_TEMPLATE = "<link href=\"%s\" rel=\"stylesheet\">";
+	//private static final String CUSTOM_TEMPLATE = "<%s %s>";
+	
 	@Inject
 	private WebResourceManager webResourceManager;
-
+	
 	@Override
-	public String write(String name) {
+	public String getHeader(String name) {
 		String result = null;
 		try{
 			WebResourceInfo resource = webResourceManager.getResource(name);
@@ -44,9 +45,9 @@ public class WebResourceLocationHTMLTagWriterImpl implements WebResourceLocation
 			if (contentType.equals(MIME_TYPE_APPLICATION_JAVASCRIPT) ||
 					contentType.equals(MIME_TYPE_APPLICATION_X_JAVASCRIPT) ||
 					contentType.equals(MIME_TYPE_TEXT_JAVASCRIPT)){
-				result = String.format(SCIRPT_TEMPLATE, webResourceManager.getLocation(resource));
+				result = String.format(SCRIPT_TEMPLATE, webResourceManager.getLocation(resource));
 			}else if (contentType.equals(MIME_TYPE_TEXT_CSS)){
-				result = String.format(STYLESHEEP_TEMPLATE, webResourceManager.getLocation(resource));
+				result = String.format(STYLESHEET_TEMPLATE, webResourceManager.getLocation(resource));
 			}
 		}catch(FileNotFoundException e){
 			//
@@ -56,11 +57,11 @@ public class WebResourceLocationHTMLTagWriterImpl implements WebResourceLocation
 	}
 
 	@Override
-	public List<String> write(Collection<String> names) {
+	public List<String> getHeaders(Collection<String> names) {
 		List<String> results = new ArrayList<String>();
 
 		for(String name : names){
-			String result = write(name);
+			String result = getHeader(name);
 			if (result != null){
 				results.add(result);
 			}
@@ -68,4 +69,21 @@ public class WebResourceLocationHTMLTagWriterImpl implements WebResourceLocation
 
 		return results;
 	}
+
+//	@Override
+//	public String getHeader(String name, Collection<String> nameValues) {
+//		StringBuilder builder = new StringBuilder();
+//		for(String nameValue : nameValues){
+//			int pos = nameValue.indexOf('=');
+//			if (pos > 0){
+//				builder.append(' ');
+//				builder.append(nameValue.substring(0, pos));
+//				builder.append("=\"");
+//				builder.append(nameValue.substring(pos+1));
+//				builder.append('"');
+//			}
+//		}
+//		
+//		return String.format(CUSTOM_TEMPLATE, name, builder.toString());
+//	}
 }

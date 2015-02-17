@@ -3,18 +3,18 @@
 #set ($metaKeywords = 'clobaframe web')
 #set ($metaDescription = 'a web application template that using clobaframe.')
 #set ($pageResources = ['css/common.css'])
-
-<h1>$msg.get('test.text2', 'clobaframe-web', $now)</h1>
+#set ($customHeaders = ['<link href="/atom.xml" type="application/atom+xml" rel="alternate" title="ATOM Feed" />'])
+<h1>$msg.message('test.text2', 'clobaframe-web', $now)</h1>
 
 <div class="text">
-	$msg.get('index.testGetObjectByScript') <em></em>
+	$msg.message('index.testGetObjectByScript') <em></em>
 </div>
 
 <p>
-	$msg.get('index.testGetLocale') $msg.locale
+	$msg.message('index.testGetLocale') $msg.locale
 </p>
 
-<h3>$msg.get('index.webResource.title')</h3>
+<h3>$msg.message('index.webResource.title')</h3>
 
 <ul>
 	<li><a href="/robots.txt">robots.txt</a></li>

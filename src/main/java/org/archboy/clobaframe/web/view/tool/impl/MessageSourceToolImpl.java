@@ -20,12 +20,12 @@ public class MessageSourceToolImpl implements MessageSourceTool {
 	private MessageSource messageSource;
 
 	@Override
-	public String get(String code, Object... args){
+	public String message(String code, Object... args){
 		return messageSource.getMessage(code, args, LocaleContextHolder.getLocale());
 	}
 
 	@Override
-	public String get(String code, List<Object> args){
+	public String message(String code, List<Object> args){
 		return messageSource.getMessage(code, args.toArray(), LocaleContextHolder.getLocale());
 	}
 	

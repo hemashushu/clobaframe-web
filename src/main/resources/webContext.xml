@@ -59,8 +59,8 @@
 				<entry key="date" value-ref="localeAwareComparisonDateTool"/>
 				<entry key="num" value-ref="localeAwareNumberTool"/>
 				<entry key="msg" value-ref="messageSourceToolImpl"/>
-				<entry key="scriptMsgLocate" value-ref="scriptMessageResourceLocationToolImpl"/>
-				<entry key="header" value-ref="webResourceLocationHTMLTagWriterImpl"/>
+				<entry key="scriptLocale" value-ref="scriptMessageResourceLocationToolImpl"/>
+				<entry key="pageResource" value-ref="pageWebResourceHeaderToolImpl"/>
 			</map>
 		</property>
 	</bean>

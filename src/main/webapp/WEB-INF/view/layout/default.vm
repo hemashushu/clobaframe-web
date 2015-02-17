@@ -13,16 +13,23 @@
 		<script src="$res.getLocation('js/jquery-1.11.1.js')"></script>
 		
 		<!-- Script i18n -->
-		<script src="$scriptMsgLocate.getDefaultMessageLocation()"></script>
-		#set ($localMessage = $scriptMsgLocate.getLocalMessageLocation())
+		<script src="$scriptLocale.getDefaultMessageLocation()"></script>
+		#set ($localMessage = $scriptLocale.getLocalMessageLocation())
 		#if ($localMessage)
 			<script src="$localMessage"></script>
 		#end
 		
 		<!-- other style sheet and script -->
 		#if ($pageResources)
-			#foreach($pageResource in $header.write($pageResources)) 
-				$pageResource 
+			#foreach($resourceHeader in $pageResource.getHeaders($pageResources)) 
+				$resourceHeader 
+			#end
+		#end
+		
+		<!-- other headers -->
+		#if ($customHeaders)
+			#foreach($customHeader in $customHeaders) 
+				$customHeader 
 			#end
 		#end
 		

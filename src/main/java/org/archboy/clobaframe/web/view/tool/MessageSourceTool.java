@@ -16,9 +16,9 @@ public interface MessageSourceTool {
 	 * @param args
 	 * @return 
 	 */
-	String get(String code, Object... args);
+	String message(String code, Object... args);
 
-	String get(String code, List<Object> args);
+	String message(String code, List<Object> args);
 
 	/**
 	 * Return current locale language tag.
