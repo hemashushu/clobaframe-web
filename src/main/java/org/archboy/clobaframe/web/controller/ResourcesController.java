@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  *
  * Using Spring Web MVC template URL to catch all web resource request
- * that under "/resources/web/", then @RequestMapping("/resource/web/{resourceUniqueName:.+}")
+ * that under "/resources/", then @RequestMapping("/resource/{resourceVersionName:.+}")
  *
  * @author yang
  */
@@ -24,18 +24,18 @@ public class ResourcesController {
 	private WebResourceSender webResourceSender;
 
 	/**
-	 * Send static web resource. only avaliable while web resource using 'local' strategy.
+	 * Send web resource.
 	 *
-	 * @param resourceUniqueName
+	 * @param resourceVersionName
 	 * @param request
 	 * @param response
 	 * @throws IOException
 	 */
-	@RequestMapping("/resource/{resourceUniqueName:.+}")
-	public void sendResource(@PathVariable("resourceUniqueName") String resourceUniqueName,
+	@RequestMapping("/resource/{resourceVersionName:.+}")
+	public void sendResource(@PathVariable("resourceVersionName") String resourceVersionName,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		webResourceSender.sendByUniqueName(resourceUniqueName, request, response);
+		webResourceSender.sendByVersionName(resourceVersionName, request, response);
 	}
 
 	@RequestMapping("/robots.txt")
@@ -51,7 +51,7 @@ public class ResourcesController {
 	}
 	
 	@RequestMapping("/favicon.png")
-	public void sendFavoriteIconWithPNG(HttpServletRequest request,
+	public void sendFavoriteIconInPNG(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		webResourceSender.send("root/favicon-16x16.png", request, response);
 	}

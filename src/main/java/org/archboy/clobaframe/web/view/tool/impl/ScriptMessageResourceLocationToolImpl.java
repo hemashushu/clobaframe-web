@@ -1,10 +1,13 @@
 package org.archboy.clobaframe.web.view.tool.impl;
 
+import java.io.FileNotFoundException;
 import org.archboy.clobaframe.web.view.tool.ScriptMessageResourceLocationTool;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
@@ -22,31 +25,30 @@ import org.archboy.clobaframe.webresource.WebResourceManager;
 @Named
 public class ScriptMessageResourceLocationToolImpl implements ScriptMessageResourceLocationTool{
 
-	private static final String BASENAME = "js/i18n/messages";
+	private static final String DEFAULT_I18N_SCRIPT_BASENAME = "js/i18n/messages";
 
 	@Inject
-	private WebResourceManager webResourceService;
+	private WebResourceManager webResourceManager;
 
 	@Value("${web.scriptMessageResource.baseName}")
-	private String baseName = BASENAME;
+	private String i18nScriptBaseName = DEFAULT_I18N_SCRIPT_BASENAME;
 
-	private WebResourceInfo defaultResource;
-	private Map<Locale, WebResourceInfo> localResources = new HashMap<Locale, WebResourceInfo>();
+	private String defaultResourceName;
+	private Map<Locale, String> localResourceNames = new HashMap<Locale, String>();
 
 	@PostConstruct
 	public void init(){
 
-		Collection<WebResourceInfo> resources = webResourceService.getAllResources();
+		Collection<String> resourceNames = webResourceManager.getAllNames();
 
-		String defaultResourceName = baseName + ".js";
-		String regex = "^" + baseName + "_([a-z]{2})((_)([A-Z]{2}))?\\.js$";
+		String defaultResourceName = i18nScriptBaseName + ".js";
+		String regex = "^" + i18nScriptBaseName + "_([a-z]{2})((_)([A-Z]{2}))?\\.js$";
 		Pattern pattern = Pattern.compile(regex);
 
-		for(WebResourceInfo resource : resources){
-			String name = resource.getName();
+		for(String name : resourceNames){
 
 			if (name.equals(defaultResourceName)){
-				defaultResource = resource;
+				defaultResourceName = name;
 				continue;
 			}
 
@@ -63,38 +65,46 @@ public class ScriptMessageResourceLocationToolImpl implements ScriptMessageResou
 					locale = new Locale(langCode);
 				}
 
-				localResources.put(locale, resource);
+				localResourceNames.put(locale, name);
 			}
 		}
 	}
 
 	@Override
-	public WebResourceInfo getDefaultMessage() {
-		return defaultResource;
+	public String getDefaultMessageName() {
+		return defaultResourceName;
 	}
 
 	@Override
 	public String getDefaultMessageLocation() {
-		return webResourceService.getLocation(defaultResource);
+		try {
+			return webResourceManager.getLocation(defaultResourceName);
+		} catch (FileNotFoundException ex) {
+			return null;
+		}
 	}
 
 	@Override
-	public WebResourceInfo getLocalMessage() {
+	public String getLocalMessageName() {
 		Locale locale = LocaleContextHolder.getLocale();
 
 		if (locale.equals(Locale.ENGLISH)){
 			return null;
 		}
 
-		return localResources.get(locale);
+		return localResourceNames.get(locale);
 	}
 
 	@Override
 	public String getLocalMessageLocation() {
-		WebResourceInfo resource = getLocalMessage();
-		if (resource == null){
+		String resourceName = getLocalMessageName();
+		if (resourceName == null){
 			return null;
 		}
-		return webResourceService.getLocation(resource);
+		try {
+			return webResourceManager.getLocation(resourceName);
+		} catch (FileNotFoundException ex) {
+			return null;
+		}
 	}
 }

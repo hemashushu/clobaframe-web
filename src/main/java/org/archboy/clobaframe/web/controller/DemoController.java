@@ -1,5 +1,4 @@
-package org.archboy.clobaframe.web.demo.controller;
-
+package org.archboy.clobaframe.web.controller;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author yang
  */
 @Controller
-public class IndexController {
+public class DemoController {
 	
 	@RequestMapping("/")
 	public String index(Model model){

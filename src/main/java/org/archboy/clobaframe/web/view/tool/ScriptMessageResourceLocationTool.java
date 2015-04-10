@@ -16,7 +16,7 @@ public interface ScriptMessageResourceLocationTool {
 	 *
 	 * @return
 	 */
-	WebResourceInfo getDefaultMessage();
+	String getDefaultMessageName();
 
 	/**
 	 *
@@ -29,7 +29,7 @@ public interface ScriptMessageResourceLocationTool {
 	 *
 	 * @return
 	 */
-	WebResourceInfo getLocalMessage();
+	String getLocalMessageName();
 
 	/**
 	 * Return null if no local message resource.

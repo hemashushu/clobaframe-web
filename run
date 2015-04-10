@@ -1,6 +1,5 @@
 #!/bin/bash
-# Install Apache Maven.
-# Build and install clobaframe.
-# Then run this script.
-# for details see http://docs.codehaus.org/display/JETTY/Maven+Jetty+Plugin
-mvn clean jetty:run
+# details:
+#	https://tomcat.apache.org/maven-plugin-trunk/tomcat7-maven-plugin/usage.html
+#	http://tomcat.apache.org/maven-plugin-trunk/tomcat7-maven-plugin/plugin-info.html
+mvn clean tomcat7:run

@@ -41,12 +41,12 @@ public class PageWebResourceHeaderToolImpl implements PageWebResourceHeaderTool 
 		try{
 			WebResourceInfo resource = webResourceManager.getResource(name);
 			
-			String contentType = resource.getContentType();
-			if (contentType.equals(MIME_TYPE_APPLICATION_JAVASCRIPT) ||
-					contentType.equals(MIME_TYPE_APPLICATION_X_JAVASCRIPT) ||
-					contentType.equals(MIME_TYPE_TEXT_JAVASCRIPT)){
+			String mimeType = resource.getMimeType();
+			if (mimeType.equals(MIME_TYPE_APPLICATION_JAVASCRIPT) ||
+					mimeType.equals(MIME_TYPE_APPLICATION_X_JAVASCRIPT) ||
+					mimeType.equals(MIME_TYPE_TEXT_JAVASCRIPT)){
 				result = String.format(SCRIPT_TEMPLATE, webResourceManager.getLocation(resource));
-			}else if (contentType.equals(MIME_TYPE_TEXT_CSS)){
+			}else if (mimeType.equals(MIME_TYPE_TEXT_CSS)){
 				result = String.format(STYLESHEET_TEMPLATE, webResourceManager.getLocation(resource));
 			}
 		}catch(FileNotFoundException e){
