@@ -14,10 +14,8 @@
 	
 	<!-- Scans the classpath of this application for @Components to deploy as
 		beans -->
-	<context:component-scan base-package="
-		org.archboy.clobaframe,
-		org.archboy.clobaframe.web.demo.controller"/>
-
+	<context:component-scan base-package="org.archboy.clobaframe.web"/>
+		
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<!-- JSR-303 support will be detected on classpath and enabled automatically -->
 	<mvc:annotation-driven/>
@@ -26,7 +24,6 @@
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>classpath:clobaframe.properties</value>
 				<value>classpath:web.properties</value>
 			</list>
 		</property>
@@ -55,27 +52,14 @@
 				
 				<!-- from the package org.archboy.clobaframe.web.view.tool.impl -->
 				<entry key="esc" value-ref="extendedEscapeTool"/>
-				<entry key="json" value-ref="jsonObjectWriterImpl"/>
 				<entry key="date" value-ref="localeAwareComparisonDateTool"/>
 				<entry key="num" value-ref="localeAwareNumberTool"/>
+				<entry key="json" value-ref="jsonWriterImpl"/>
 				<entry key="msg" value-ref="messageSourceToolImpl"/>
-				<entry key="scriptLocale" value-ref="scriptMessageResourceLocationToolImpl"/>
-				<entry key="pageResource" value-ref="pageWebResourceHeaderToolImpl"/>
+				<entry key="header" value-ref="pageHeaderToolImpl"/>
+				<entry key="headres" value-ref="webResourcePageHeaderToolImpl"/>
 			</map>
 		</property>
-	</bean>
-	
-	<!-- Application Message Bundle -->
-	<bean id="messageSource"
-		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-		<property name="basename" value="classpath:org/archboy/clobaframe/web/demo/i18n/messages"/>
-		<property name="cacheSeconds" value="-1"/>
-		<!--
-			Set the number of seconds to cache loaded properties files.
-			Default is "-1", indicating to cache forever (just like java.util.ResourceBundle).
-			A positive number will cache loaded properties files for the given number of seconds. This is essentially the interval between refresh checks. Note that a refresh attempt will first check the last-modified timestamp of the file before actually reloading it; so if files don't change, this interval can be set rather low, as refresh attempts will not actually reload.
-			A value of "0" will check the last-modified timestamp of the file on every message access. Do not use this in a production environment!
-		-->
 	</bean>
 	
 	<!-- Configures Handler Interceptors -->

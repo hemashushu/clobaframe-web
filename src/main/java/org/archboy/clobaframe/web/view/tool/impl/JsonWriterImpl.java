@@ -1,7 +1,7 @@
 package org.archboy.clobaframe.web.view.tool.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.archboy.clobaframe.web.view.tool.JsonObjectWriter;
+import org.archboy.clobaframe.web.view.tool.JsonWriter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.inject.Named;
 
@@ -10,7 +10,7 @@ import javax.inject.Named;
  * @author yang
  */
 @Named
-public class JsonObjectWriterImpl implements JsonObjectWriter{
+public class JsonWriterImpl implements JsonWriter{
 
 	private ObjectMapper mapper = new ObjectMapper();
 

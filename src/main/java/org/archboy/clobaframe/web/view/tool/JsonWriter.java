@@ -5,12 +5,12 @@ package org.archboy.clobaframe.web.view.tool;
  * 
  * @author yang
  */
-public interface JsonObjectWriter {
+public interface JsonWriter {
 
 	/**
 	 * 
 	 * @param obj
-	 * @return such as {id:'xxx', name:'yyy'}.
+	 * @return JSON string such as {id:'xxx', name:'yyy'}.
 	 */
 	String write(Object obj);
 

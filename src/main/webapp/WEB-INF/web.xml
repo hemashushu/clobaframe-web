@@ -13,21 +13,34 @@
 		<param-value>clobaframe-web.root</param-value>
 	</context-param>
 
-	<!-- Processes application requests -->
-	<servlet>
-		<servlet-name>clobaframe-web</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
+	<!--
+		The definition of the Root Spring Container shared by all Servlets
+		and Filters
+	-->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath:applicationContext.xml
+			<!--
+				Using 'import resource' in the to import
+				other context files, such as security and task.
+			-->
+		</param-value>
+	</context-param>
+	
+	<!-- Spring Security filter here -->
+	
 
-	<servlet-mapping>
-		<servlet-name>clobaframe-web</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
-	
-	
-	<!-- A filter that sets character encoding that is used to decode, ONLY need by Tomcat -->
-	<!-- parameters in a POST request -->
+	<!-- Tomcat default form POST charset encoding, set to UTF-8, ONLY NEED BY TOMCAT, and
+	the best way is set this in the TOMCAT/conf/web.xml.
+	Note. Tomcat URI default encoding is ISO-8859-1, set up the Tomcat server.xml <Connector> and
+	add URIEncoding="UTF-8" attribute to change to UTF-8.
+	see more:
+	http://wiki.apache.org/tomcat/FAQ/CharacterEncoding
+	http://tomcat.apache.org/tomcat-7.0-doc/config/http.html
+	http://tomcat.apache.org/tomcat-7.0-doc/config/ajp.html
+	http://tomcat.apache.org/tomcat-7.0-doc/config/filter.html
+	-->
     <filter>
         <filter-name>setCharacterEncodingFilter</filter-name>
         <filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
@@ -55,15 +68,49 @@
 		<servlet-name>dispatcherServlet</servlet-name>
 	</filter-mapping>
 	
+	<!-- Loads the root application context of this web app at startup. -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<!-- Processes application requests -->
+	<servlet>
+		<servlet-name>clobaframe-web</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>clobaframe-web</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+	
+	<!-- Addition MIME types -->
+	<mime-mapping>
+		<extension>ico</extension>
+		<mime-type>image/x-icon</mime-type>
+	</mime-mapping>
+	
 	<!--
 		Disables Servlet Container welcome file handling. Needed for
 		compatibility with Servlet 3.0 and Tomcat 7.0
 	-->
 	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
+		<welcome-file></welcome-file>
 	</welcome-file-list>
 
 	<session-config>
 		<session-timeout>30</session-timeout>
 	</session-config>
+	
+	<!-- for cluster and load balance, add this node to enable session replication -->
+	<!--
+	<distributable/>
+	-->
+	
+	<error-page>
+		<error-code>404</error-code>
+		<location>/page-not-found</location>
+	</error-page>
 </web-app>

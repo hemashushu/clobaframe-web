@@ -1,21 +1,23 @@
 package org.archboy.clobaframe.web.view.tool.impl;
 
 import java.io.FileNotFoundException;
-import org.archboy.clobaframe.web.view.tool.ScriptMessageResourceLocationTool;
+import java.util.ArrayList;
+import org.archboy.clobaframe.web.view.tool.ScriptMessageResourceTool;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.archboy.clobaframe.web.view.tool.PageHeaderProvider;
+import org.archboy.clobaframe.web.view.tool.PageHeaderTool;
+import org.archboy.clobaframe.web.view.tool.WebResourcePageHeaderTool;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.archboy.clobaframe.webresource.WebResourceInfo;
 import org.archboy.clobaframe.webresource.WebResourceManager;
 
 /**
@@ -23,13 +25,19 @@ import org.archboy.clobaframe.webresource.WebResourceManager;
  * @author yang
  */
 @Named
-public class ScriptMessageResourceLocationToolImpl implements ScriptMessageResourceLocationTool{
+public class ScriptMessageResourceToolImpl implements ScriptMessageResourceTool, PageHeaderProvider{
 
 	private static final String DEFAULT_I18N_SCRIPT_BASENAME = "js/i18n/messages";
 
 	@Inject
 	private WebResourceManager webResourceManager;
 
+	@Inject
+	private PageHeaderTool pageHeaderTool;
+	
+	@Inject
+	private WebResourcePageHeaderTool webResourcePageHeaderTool;
+	
 	@Value("${web.scriptMessageResource.baseName}")
 	private String i18nScriptBaseName = DEFAULT_I18N_SCRIPT_BASENAME;
 
@@ -39,16 +47,21 @@ public class ScriptMessageResourceLocationToolImpl implements ScriptMessageResou
 	@PostConstruct
 	public void init(){
 
+		// register this instance as page header provider
+		pageHeaderTool.addPageHeaderProvider(this);
+		
+		// find all script message resource.
 		Collection<String> resourceNames = webResourceManager.getAllNames();
 
-		String defaultResourceName = i18nScriptBaseName + ".js";
+		String defaultName = i18nScriptBaseName + ".js";
 		String regex = "^" + i18nScriptBaseName + "_([a-z]{2})((_)([A-Z]{2}))?\\.js$";
 		Pattern pattern = Pattern.compile(regex);
 
 		for(String name : resourceNames){
 
-			if (name.equals(defaultResourceName)){
-				defaultResourceName = name;
+			// here equals to check whether exists the default message resource.
+			if (name.equals(defaultName)){
+				this.defaultResourceName = name;
 				continue;
 			}
 
@@ -71,21 +84,12 @@ public class ScriptMessageResourceLocationToolImpl implements ScriptMessageResou
 	}
 
 	@Override
-	public String getDefaultMessageName() {
+	public String getDefaultResourceName() {
 		return defaultResourceName;
 	}
 
 	@Override
-	public String getDefaultMessageLocation() {
-		try {
-			return webResourceManager.getLocation(defaultResourceName);
-		} catch (FileNotFoundException ex) {
-			return null;
-		}
-	}
-
-	@Override
-	public String getLocalMessageName() {
+	public String getLocalResourceName() {
 		Locale locale = LocaleContextHolder.getLocale();
 
 		if (locale.equals(Locale.ENGLISH)){
@@ -96,15 +100,18 @@ public class ScriptMessageResourceLocationToolImpl implements ScriptMessageResou
 	}
 
 	@Override
-	public String getLocalMessageLocation() {
-		String resourceName = getLocalMessageName();
-		if (resourceName == null){
-			return null;
+	public List<String> getHeaders() {
+		List<String> headers = new ArrayList<String>();
+		if (defaultResourceName != null){
+			headers.add(webResourcePageHeaderTool.writeHeader(defaultResourceName));
 		}
-		try {
-			return webResourceManager.getLocation(resourceName);
-		} catch (FileNotFoundException ex) {
-			return null;
+		
+		String localResourceName = getLocalResourceName();
+		if (localResourceName != null) {
+			headers.add(webResourcePageHeaderTool.writeHeader(localResourceName));
 		}
+		
+		return headers;
 	}
+
 }

@@ -16,7 +16,10 @@
 	<entry key="index.terms">Terms of Service</entry>
 	<entry key="index.privacy">Privacy Policy</entry>
 	
-	<entry key="index.webResource.title">Web Resource</entry>
-	<entry key="index.testGetObjectByScript">Test get view object from MVC by script:</entry>
-	<entry key="index.testGetLocale">Test get current locale language tag:</entry>
+	<entry key="index.testI18nMessage">Test i18n message</entry>
+	<entry key="index.testScriptI18nMessage">Test script i18n message</entry>
+	<entry key="index.testScriptI18nMessage.currentLanguageTag">Current language tag is:</entry>
+	<entry key="index.testWebResource">Test web resource</entry>
+	<entry key="index.testViewObject">Test view object</entry>
+	
 </properties>

@@ -9,27 +9,18 @@
 		<title>$esc.html($pageTitle)</title>
 		#end
 		
-		<!-- jQuery -->
-		<script src="$res.getLocation('js/jquery-1.11.1.js')"></script>
+		<!-- Common style-sheet and script -->
+		$headres.writeHeader('js/jquery-1.11.1.js')
 		
-		<!-- Script i18n -->
-		<script src="$scriptLocale.getDefaultMessageLocation()"></script>
-		#set ($localMessage = $scriptLocale.getLocalMessageLocation())
-		#if ($localMessage)
-			<script src="$localMessage"></script>
+		<!-- Headers -->
+		#foreach($header in $header.headers)
+			$header
 		#end
 		
-		<!-- other style sheet and script -->
+		<!-- Other style-sheet and script -->
 		#if ($pageResources)
-			#foreach($resourceHeader in $pageResource.getHeaders($pageResources)) 
-				$resourceHeader 
-			#end
-		#end
-		
-		<!-- other headers -->
-		#if ($customHeaders)
-			#foreach($customHeader in $customHeaders) 
-				$customHeader 
+			#foreach($pageResource in $pageResources) 
+				$headres.writeHeader($pageResource)
 			#end
 		#end
 		
@@ -51,7 +42,8 @@
 		
 		<!-- android chrome -->
 		<!-- see http://updates.html5rocks.com/2014/11/Support-for-theme-color-in-Chrome-39-for-Android -->
-		<meta name="theme-color" content="#4697d5">
+		<meta name="theme-color" content="#339900">
+		
 		<link rel="icon" type="image/png" sizes="192x192" href="/launcher-icon-192x192.png">
 		
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

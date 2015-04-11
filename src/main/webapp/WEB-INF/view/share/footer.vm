@@ -1,16 +1,7 @@
 <!-- footer -->
 <footer>
-	<ul>
-		<li><a href="/about">$msg.message('index.about')</a></li>
-		<li><a href="/terms">$msg.message('index.terms')</a></li>
-		<li><a href="/privacy">$msg.message('index.privacy')</a></li>
-		<li>
-			<ul>
-				<li><a href="/changelocale?locale=en">$msg.message('common.language.en')</a></li>
-				<li><a href="/changelocale?locale=ja">$msg.message('common.language.ja')</a></li>
-				<li><a href="/changelocale?locale=zh_CN">$msg.message('common.language.zh_CN')</a></li>
-			</ul>			
-		</li>
-	</ul>
-	
+	<hr>
+	<div>
+		<a href="https://github.com/ivarptr/clobaframe-web">Source on Github</a>
+	</div>
 </footer>

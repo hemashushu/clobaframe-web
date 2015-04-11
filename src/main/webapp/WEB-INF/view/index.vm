@@ -1,32 +1,56 @@
 #set ($layout = 'layout/default.vm')
-#set ($pageTitle = 'Clobaframe-web Demo page')
+#set ($pageTitle = 'Clobaframe-Web Demo page')
 #set ($metaKeywords = 'clobaframe web')
-#set ($metaDescription = 'a web application template that using clobaframe.')
-#set ($pageResources = ['css/common.css'])
-#set ($customHeaders = ['<link href="/atom.xml" type="application/atom+xml" rel="alternate" title="ATOM Feed" />'])
-<h1>$msg.message('test.text2', 'clobaframe-web', $now)</h1>
+#set ($metaDescription = 'a web application template that base on clobaframe.')
+#set ($pageResources = ['css/index.css'])
 
-<div class="text">
-	$msg.message('index.testGetObjectByScript') <em></em>
+<div>
+	<h2>$msg.message('index.testI18nMessage')</h2>
+	<p>$msg.message('test.text2', 'WORLD!', $now)</p>
+	
+	<p>Change language</p>
+	<ul>
+		<li><a href="/changelocale?locale=en">$msg.message('common.language.en')</a></li>
+		<li><a href="/changelocale?locale=ja">$msg.message('common.language.ja')</a></li>
+		<li><a href="/changelocale?locale=zh_CN">$msg.message('common.language.zh_CN')</a></li>
+	</ul>
 </div>
 
-<p>
-	$msg.message('index.testGetLocale') $msg.locale
-</p>
+<div class="test-script-i18n">
+	<h2>$msg.message('index.testScriptI18nMessage')</h2>
+	<p>$msg.message('index.testScriptI18nMessage.currentLanguageTag') <em>$msg.locale</em></p>
+	<p class="text"></p>
+</div>
 
-<h3>$msg.message('index.webResource.title')</h3>
+<div>
+	<h2>$msg.message('index.testWebResource')</h2>
+	<ul>
+		<li><a href="/robots.txt">robots.txt</a></li>
+		<li><a href="/favicon.ico">favicon.ico</a></li>
+		<li><a href="/favicon.png">favicon.png</a></li>
+		<li><a href="/apple-touch-icon.png">apple-touch-icon.png</a></li>
+		<li><a href="/launcher-icon-192x192.png">launcher-icon-192x192.png</a></li>
+	</ul>
+</div>
 
-<ul>
-	<li><a href="/robots.txt">robots.txt</a></li>
-	<li><a href="/favicon.ico">favicon.ico</a></li>
-	<li><a href="/favicon.png">favicon.png</a></li>
-	<li><a href="/apple-touch-icon.png">apple-touch-icon.png</a></li>
-	<li><a href="/launcher-icon-192x192.png">launcher-icon-192x192.png</a></li>
-</ul>
+<div class="test-view-object">
+	<h2>$msg.message('index.testViewObject')</h2>
+	<p class="text"></p>
+</div>
+
+<div>
+	<h2>Test Doc</h2>
+	<ul>
+		<li><a href="/doc/about">$msg.message('index.about')</a></li>
+		<li><a href="/doc/terms">$msg.message('index.terms')</a></li>
+		<li><a href="/doc/privacy">$msg.message('index.privacy')</a></li>
+	</ul>
+</div>
 
 <script>
-	(function(){
-		var user = $json.write($user);
-		$('.text em').text('{id:' + user.id + ', name:' + user.name + '}');
+	(function(window){
+		var viewObject = $json.write($viewObject);
+		$('.test-view-object .text').text(
+				'{id:' + viewObject.id + ', name:' + viewObject.name + '}');
 	})(this);
 </script>

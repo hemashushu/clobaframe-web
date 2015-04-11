@@ -31,10 +31,14 @@ public class ResourcesController {
 	 * @param response
 	 * @throws IOException
 	 */
-	@RequestMapping("/resource/{resourceVersionName:.+}")
-	public void sendResource(@PathVariable("resourceVersionName") String resourceVersionName,
+	//@RequestMapping("/resource/{resourceVersionName:.+}")
+	@RequestMapping("/resource/**")
+	public void sendResource(
+			//@PathVariable("resourceVersionName") String resourceVersionName,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
+		String path = request.getRequestURI();
+		String resourceVersionName = path.substring(10);
 		webResourceSender.sendByVersionName(resourceVersionName, request, response);
 	}
 
