@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0"
+		 xmlns="http://java.sun.com/xml/ns/javaee"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd
+	">
+
+	<display-name>clobaframe-web</display-name>
+
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>clobaframe-web.root</param-value>
+	</context-param>
+
+	<!--
+		The definition of the Root Spring Container shared by all Servlets
+		and Filters
+	-->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath:applicationContext.xml
+			<!--
+				Using 'import resource' in the to import
+				other context files, such as security and task.
+			-->
+		</param-value>
+	</context-param>
+	
+	<!-- Spring Security filter here -->
+	
+
+	<!-- Tomcat default form POST charset encoding, set to UTF-8, ONLY NEED BY TOMCAT, and
+	the best way is set this in the TOMCAT/conf/web.xml.
+	Note. Tomcat URI default encoding is ISO-8859-1, set up the Tomcat server.xml <Connector> and
+	add URIEncoding="UTF-8" attribute to change to UTF-8.
+	see more:
+	http://wiki.apache.org/tomcat/FAQ/CharacterEncoding
+	http://tomcat.apache.org/tomcat-7.0-doc/config/http.html
+	http://tomcat.apache.org/tomcat-7.0-doc/config/ajp.html
+	http://tomcat.apache.org/tomcat-7.0-doc/config/filter.html
+	-->
+    <filter>
+        <filter-name>setCharacterEncodingFilter</filter-name>
+        <filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <async-supported>true</async-supported>
+    </filter>
+
+	<!-- The mapping for the Set Character Encoding Filter -->
+    <filter-mapping>
+        <filter-name>setCharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+	<!-- handle PUT form, ONLY need by Tomcat -->
+	<filter>
+		<filter-name>httpPutFormFilter</filter-name>
+		<filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>httpPutFormFilter</filter-name>
+		<servlet-name>dispatcherServlet</servlet-name>
+	</filter-mapping>
+	
+	<!-- Loads the root application context of this web app at startup. -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<!-- Processes application requests -->
+	<servlet>
+		<servlet-name>clobaframe-web</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>clobaframe-web</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+	
+	<!-- Addition MIME types -->
+	<mime-mapping>
+		<extension>ico</extension>
+		<mime-type>image/x-icon</mime-type>
+	</mime-mapping>
+	
+	<!--
+		Disables Servlet Container welcome file handling. Needed for
+		compatibility with Servlet 3.0 and Tomcat 7.0
+	-->
+	<welcome-file-list>
+		<welcome-file></welcome-file>
+	</welcome-file-list>
+
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+	
+	<!-- for cluster and load balance, add this node to enable session replication -->
+	<!--
+	<distributable/>
+	-->
+	
+	<error-page>
+		<error-code>404</error-code>
+		<location>/page-not-found</location>
+	</error-page>
+</web-app>
