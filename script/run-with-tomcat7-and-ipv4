@@ -1,0 +1,5 @@
+#!/bin/bash
+# details:
+#	https://tomcat.apache.org/maven-plugin-trunk/tomcat7-maven-plugin/usage.html
+#	http://tomcat.apache.org/maven-plugin-trunk/tomcat7-maven-plugin/plugin-info.html
+mvn -Djava.net.preferIPv4Stack=true clean tomcat7:run
