@@ -2,7 +2,7 @@
 #set ($pageTitle = 'Clobaframe-Web Demo page')
 #set ($metaKeywords = 'clobaframe web')
 #set ($metaDescription = 'a web application template that base on clobaframe.')
-#set ($pageResources = ['css/index.css'])
+#set ($pageResources = ['css/index.css','js/index.js'])
 
 <div>
 	<h2>$msg.message('index.testI18nMessage')</h2>
@@ -49,8 +49,6 @@
 
 <script>
 	(function(window){
-		var viewObject = $json.write($viewObject);
-		$('.test-view-object .text').text(
-				'{id:' + viewObject.id + ', name:' + viewObject.name + '}');
+		window.viewObject = $json.write($viewObject);
 	})(this);
 </script>

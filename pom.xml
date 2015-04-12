@@ -6,7 +6,7 @@
 	<groupId>org.archboy.clobaframe</groupId>
 	<artifactId>clobaframe-web</artifactId>
 	<version>2.4</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>clobaframe-web</name>
 	<url>https://github.com/ivarptr/clobaframe-web</url>
@@ -383,7 +383,13 @@
 				<configuration>
 					<!-- <path>/${project.build.finalName}</path> -->
 					<path>/</path>
-					<ignorePackaging>true</ignorePackaging>
+					<!-- <ignorePackaging>true</ignorePackaging> -->
+					<uriEncoding>UTF-8</uriEncoding>
+					<protocol>org.apache.coyote.http11.Http11NioProtocol</protocol>
+					<httpPort>8080</httpPort>
+					<httpsPort>8443</httpsPort>
+					<keystoreFile>${basedir}/keystore.jks</keystoreFile>
+					<keystorePass>password</keystorePass>
 				</configuration>
 			</plugin>
 
