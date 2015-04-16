@@ -1,6 +1,0 @@
-#set ($layout = 'layout/default.vm')
-#set ($pageTitle = '404 - Page Not Found')
-
-<div>
-	<h2>404 - Page Not Found</h2>
-</div>

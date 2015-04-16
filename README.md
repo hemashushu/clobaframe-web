@@ -1,7 +1,8 @@
 clobaframe-web
 ==============
 
-A web application template that using clobaframe.
+A web application template that using clobaframe, includes
+site themes, site documents and the view tools.
 
 Run the Demo
 ------------
