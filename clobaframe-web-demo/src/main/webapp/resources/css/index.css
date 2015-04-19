@@ -5,3 +5,15 @@
 .text {
 	color: green;
 }
+
+.note img {
+	width: 120px;
+}
+
+.note .title {
+	font-weight: bold;
+}
+
+.note .description {
+	color: #777;
+}

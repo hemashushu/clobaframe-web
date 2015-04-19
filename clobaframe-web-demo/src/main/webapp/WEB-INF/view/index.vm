@@ -39,31 +39,36 @@
 	</ul>
 </div>
 
-<div class="test-upload">
-	<h2>Test RESTful</h2>
-	<form>
-		<label>Choose an image:
-			<input type="file" accept="image/*" name="file">
-		</label>
-		<br>
-		<label>title:
-			<input type="text" name="title">
-		</label>
-		<br>
-		<label>description:
-			<input type="text" name="description">
-		</label>
-		<br>
-		<input type="submit" value="Add">
-	</form>
-	<ul class="photos">
-		
-	</ul>
-</div>
-
 <div class="test-view-object">
 	<h2>Test view object</h2>
 	<p class="text"></p>
+</div>
+
+<div class="test-rest">
+	<h2>Test RESTful API</h2>
+	<form>
+		<div>
+			<label>Choose a photo
+				<input type="file" accept="image/*" name="file">
+			</label>
+		</div>
+		<div>
+			<label>title:
+				<input type="text" name="title">
+			</label>
+		</div>
+		<div>
+			<label>description:
+				<input type="text" name="description">
+			</label>
+		</div>
+		<div>
+			<input type="submit" value="Create a note">
+		</div>
+	</form>
+	<ul class="notes">
+		
+	</ul>
 </div>
 
 <div>

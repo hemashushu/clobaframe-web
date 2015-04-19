@@ -13,8 +13,10 @@ import javax.inject.Inject;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import org.archboy.clobaframe.io.ResourceInfo;
 import org.archboy.clobaframe.io.TemporaryResources;
+import org.archboy.clobaframe.io.http.CacheResourceSender;
 import org.archboy.clobaframe.io.http.MultipartFormResourceInfo;
 import org.archboy.clobaframe.io.http.MultipartFormResourceReceiver;
 import org.archboy.clobaframe.io.http.ResourceSender;
@@ -26,13 +28,17 @@ import org.archboy.clobaframe.media.image.Imaging;
 import org.archboy.clobaframe.media.image.OutputSettings;
 import org.archboy.clobaframe.media.image.Transform;
 import org.archboy.clobaframe.query.ViewModel;
-import org.archboy.clobaframe.web.domain.UserContent;
-import org.archboy.clobaframe.web.service.UserContentService;
+import org.archboy.clobaframe.web.controller.form.NoteUpdateForm;
+import org.archboy.clobaframe.web.domain.Note;
+import org.archboy.clobaframe.web.exception.NotFoundException;
+import org.archboy.clobaframe.web.service.NoteService;
 import org.archboy.clobaframe.web.view.tool.PageHeaderTool;
 import org.springframework.beans.propertyeditors.CurrencyEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,10 +52,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class DemoController {
 	
 	@Inject
-	private UserContentService userContentService;
+	private NoteService noteService;
 	
 	@Inject
-	private ResourceSender resourceSender;
+	private CacheResourceSender cacheResourceSender;
 	
 	@Inject
 	private MediaFactory mediaFactory;
@@ -87,8 +93,8 @@ public class DemoController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public UserContent createUpload(HttpServletRequest request) throws IOException{
+	@RequestMapping(value = "/note", method = RequestMethod.POST)
+	public Note createNote(HttpServletRequest request) throws IOException{
 		String contentType = request.getContentType();
 		
 		if (!"image/jpeg".equals(contentType) && !"image/png".equals(contentType)){
@@ -114,34 +120,71 @@ public class DemoController {
 			String title = request.getParameter("title");
 			String description = request.getParameter("description");
 			
-			return userContentService.create(resourceInfo, title, description);
+			return noteService.create(resourceInfo, title, description);
 			
 		}finally{
 			temporaryResources.close();
 		}
 	}
 	
-	@RequestMapping(value = "/upload/{id}", params = {"data"}, method = RequestMethod.GET)
-	public void getUpload(@PathVariable("id") String id, 
-			HttpServletRequest request, HttpServletResponse response) throws IOException {
-		ResourceInfo resourceInfo = userContentService.getData(id);
-		if (resourceInfo == null) {
-			throw new FileNotFoundException();
+	@ResponseBody
+	@RequestMapping(value = "/note/{id}", method = RequestMethod.GET)
+	public Note getNote(@PathVariable("id") String id) {
+		Note note = noteService.get(id);
+		if (note == null) {
+			throw new NotFoundException();
+		}
+		return note;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/note", method = RequestMethod.GET)
+	public Collection<Note> listNote(){
+		return noteService.list();
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/note/{id}", method = RequestMethod.DELETE)
+	public void deleteNote(@PathVariable("id") String id) {
+		noteService.delete(id);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/note/{id}", method = RequestMethod.PUT)
+	public Note updateNote(@PathVariable("id") String id,
+			@Valid @RequestBody NoteUpdateForm form,
+			BindingResult bindingResult
+			) {
+		
+		// check validation
+		if (bindingResult.hasErrors()){
+			throw new IllegalArgumentException("Form data error."); // should throws 400 - bad request
 		}
 		
-		resourceSender.send(resourceInfo, null, request, response);
+		System.out.println(form.getTitle());
+		System.out.println(form.getDescription());
+		
+		return noteService.update(id, form.getTitle(), form.getDescription());
 	}
 	
-	@ResponseBody
-	@RequestMapping(value = "/upload/{id}", method = RequestMethod.DELETE)
-	public void deleteUpload(@PathVariable("id") String id) {
-		userContentService.delete(id);
-	}
-	
-	@ResponseBody
-	@RequestMapping(value = "/upload", method = RequestMethod.GET)
-	public Collection<UserContent> listUpload(){
-		return userContentService.list();
+	@RequestMapping(value = "/note/{id}/photo", params = {"data"}, method = RequestMethod.GET)
+	public void getPhoto(@PathVariable("id") String id, 
+			HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		Note note = noteService.get(id);
+		if (note == null) {
+			throw new NotFoundException();
+		}
+		
+		ResourceInfo resourceInfo = noteService.getPhoto(note.getPhotoId());
+		if (resourceInfo == null) {
+			throw new NotFoundException();
+		}
+		
+		cacheResourceSender.send(resourceInfo, 
+				CacheResourceSender.CACHE_CONTROL_PUBLIC,
+				CacheResourceSender.ONE_MONTH_SECONDS,
+				null, request, response);
 	}
 	
 //	@ResponseBody

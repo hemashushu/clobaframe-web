@@ -105,6 +105,20 @@
 			<artifactId>clobaframe-web-view</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<!-- JSR 303 with Hibernate Validator -->
+		<!-- need by the (web MVC controller) form velidate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.3.1.Final</version>
+		</dependency>
+
+		<dependency>
+			<artifactId>validation-api</artifactId>
+			<groupId>javax.validation</groupId>
+			<version>1.0.0.GA</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>

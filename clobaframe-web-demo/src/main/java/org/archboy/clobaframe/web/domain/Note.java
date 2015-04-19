@@ -7,16 +7,15 @@ import java.util.Date;
  *
  * @author yang
  */
-public class UserContent implements Serializable {
+public class Note implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private String id;
 	private Date creationTime;
-	private String mimeType;
-	private Long contentLength;
 	private String title;
 	private String description;
+	private String photoId;
 
 	public String getId() {
 		return id;
@@ -34,20 +33,12 @@ public class UserContent implements Serializable {
 		this.creationTime = creationTime;
 	}
 
-	public String getMimeType() {
-		return mimeType;
+	public String getPhotoId() {
+		return photoId;
 	}
 
-	public void setMimeType(String mimeType) {
-		this.mimeType = mimeType;
-	}
-
-	public Long getContentLength() {
-		return contentLength;
-	}
-
-	public void setContentLength(Long contentLength) {
-		this.contentLength = contentLength;
+	public void setPhotoId(String photoId) {
+		this.photoId = photoId;
 	}
 
 	public String getTitle() {

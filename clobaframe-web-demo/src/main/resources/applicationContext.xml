@@ -26,7 +26,8 @@
 		<context:include-filter type="annotation" expression="org.aspectj.lang.annotation.Aspect"/>
 		-->
 		<!-- exclude the the web package -->
-		<context:exclude-filter type="regex" expression="org\.archboy\.clobaframe\.web\..*"/>
+		<context:exclude-filter type="regex" expression="org\.archboy\.clobaframe\.web\.view\..*"/>
+		<context:exclude-filter type="regex" expression="org\.archboy\.clobaframe\.web\.controller\..*"/>
 	</context:component-scan>
 
 	<!-- enable AspectJ annotation -->

@@ -65,7 +65,7 @@
 
 	<filter-mapping>
 		<filter-name>httpPutFormFilter</filter-name>
-		<servlet-name>dispatcherServlet</servlet-name>
+		<servlet-name>clobaframe-web</servlet-name>
 	</filter-mapping>
 	
 	<!-- Loads the root application context of this web app at startup. -->

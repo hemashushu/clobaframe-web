@@ -38,7 +38,7 @@ public class ScriptMessageResourceToolImpl implements ScriptMessageResourceTool,
 	@Inject
 	private WebResourcePageHeaderTool webResourcePageHeaderTool;
 	
-	@Value("${web.scriptMessageResource.baseName}")
+	@Value("${clobaframe.web.view.scriptMessageResource.baseName}")
 	private String i18nScriptBaseName = DEFAULT_I18N_SCRIPT_BASENAME;
 
 	private String defaultResourceName;

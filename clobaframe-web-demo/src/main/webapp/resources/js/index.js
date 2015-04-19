@@ -17,48 +17,12 @@
 			$('.test-view-object .text').text(viewObjectText);
 			
 			// test upload
-			$('.test-upload input[type="submit"]').click(function(event){
+			$('.test-rest input[type="submit"]').click(function(event){
 				event.preventDefault();
-				
-				var inputFileBox = $('.test-upload input[type="file"]');
-				var inputFileBoxDom = inputFileBox.get(0);
-				
-				if (inputFileBoxDom.files.length === 0) {
-					return;
-				}
-				
-				var file = inputFileBoxDom.files[0];
-				var type = file.type; // file.name, file.size, file.lastModifiedDate
-				var fileReader = new FileReader();
-				
-				// to slicing a file.
-				// see: http://www.html5rocks.com/en/tutorials/file/dndfiles/
-				//var blob = file.slice(startingByte, endindByte);
-				//reader.readAsBinaryString(blob);
-				
-				var success = function(data){
-					methods.showUpload(data);
-				};
-				
-				var fail = function(status, data){
-					console.log(status);
-					console.log(data);
-				};
-				
-				var title = $('.test-upload input[name="title"]').val();
-				var description = $('.test-upload input[name="description"]').val();
-				var url = '/upload?title=' + encodeURIComponent(title) +
-						'&description=' + encodeURIComponent(description);
-				
-				fileReader.onload = function(event){
-				   methods.upload(url, this.result, type, success, fail);
-				};
-
-				fileReader.readAsBinaryString(file);
-
+				methods.createNote();
 			});
 			
-			methods.showUploads();
+			methods.showNotes();
 		},
 		
 		getMessage:function(code){
@@ -75,7 +39,51 @@
 			return message;
 		},
 		
-		upload:function(url, data, type, success, fail, progress) {
+		createNote:function(){
+			var inputFileBox = $('.test-rest input[type="file"]');
+			var inputFileBoxDom = inputFileBox.get(0);
+
+			if (inputFileBoxDom.files.length === 0) {
+				return;
+			}
+
+			var file = inputFileBoxDom.files[0];
+			var type = file.type; // file.name, file.size, file.lastModifiedDate
+			var fileReader = new FileReader();
+
+			// to slicing a file.
+			// see: http://www.html5rocks.com/en/tutorials/file/dndfiles/
+			//var blob = file.slice(startingByte, endindByte);
+			//reader.readAsBinaryString(blob);
+
+			var titleBox = $('.test-rest input[name="title"]');
+			var descriptionBox = $('.test-rest input[name="description"]');
+			
+			var success = function(data){
+				methods.showNote(data);
+				titleBox.val('');
+				descriptionBox.val('');
+				inputFileBox.val('');
+			};
+
+			var fail = function(status, data){
+				console.log(status);
+				console.log(data);
+			};
+
+			var title = titleBox.val();
+			var description = descriptionBox.val();
+			var url = '/note?title=' + encodeURIComponent(title) +
+					'&description=' + encodeURIComponent(description);
+
+			fileReader.onload = function(event){
+			   methods.postNote(url, this.result, type, success, fail);
+			};
+
+			fileReader.readAsBinaryString(file);
+		},
+		
+		postNote:function(url, data, type, success, fail, progress) {
 
 			/*
 			 * var file = inputFileBoxDom.files[0];
@@ -126,39 +134,112 @@
 			}
 		},
 		
-		deleteUpload:function(id){
-			$.ajax('/upload/' + id, {
+		showNotes:function(){
+			$.getJSON('/note', null, function(data){
+				$.each(data, function(idx, item){
+					methods.showNote(item);
+				});
+			});
+		},
+		
+		showNote:function(item){
+			var photoUrl = '/note/' + item.id + "/photo?data";
+			var itemEle = $('<li class="note"><a href="' + photoUrl + '"><img src="' + photoUrl + '"></a>' +
+					'<div class="title"></div>' +
+					'<div class="description"></div>' +
+					'<div class="action">' +
+					'<button class="edit">edit</button>' +
+					'<button class="delete">delete</button>' +
+					'</div></li>');
+			itemEle.attr('data-id', item.id);
+			itemEle.find('.title').text(item.title);
+			itemEle.find('.description').text(item.description);
+			
+			itemEle.find('button.delete').on('click', function(){
+				methods.deleteNote(item.id);
+			});
+			
+			itemEle.find('button.edit').on('click', function(){
+				methods.editNote(item.id);
+			});
+			
+			$('.test-rest .notes').prepend(itemEle);
+		},
+		
+		deleteNote:function(id){
+			$.ajax('/note/' + id, {
 				method:'DELETE'
 			}).done(function(){
-				$('.test-upload .photos .photo[data-id="' + id + '"]').remove();
+				$('.test-rest .notes .note[data-id="' + id + '"]').remove();
 			}).fail(function(jqXHR, textStatus){
 				//
 			});
 		},
 		
-		showUploads:function(){
-			$.getJSON('/upload', null, function(data){
-				$.each(data, function(idx, item){
-					methods.showUpload(item);
+		editNote:function(id){
+			var item = $('.test-rest .notes .note[data-id="' + id + '"]');
+			var editor = $('<div class="editor">' +
+					'<div><input type="text" name="new-title"></div>' +
+					'<div><input type="text" name="new-description"></div>' +
+					'<button class="update">update</button>' +
+					'<button class="cancel">cancel</button>' +
+					'</div>');
+			
+			$.getJSON('/note/' + id, null, function(data){
+				editor.find('input[name="new-title"]').val(data.title);
+				editor.find('input[name="new-description"]').val(data.description);
+				
+				methods.toggleEditor(item, true);
+				item.append(editor);
+				
+				item.find('button.cancel').on('click', function(){
+					editor.remove();
+					methods.toggleEditor(item, false);
+				});
+				
+				item.find('button.update').on('click', function(){
+					methods.postUpdate(item);
 				});
 			});
 		},
 		
-		showUpload:function(item){
-			var itemEle = $('<li class="photo"><img>' +
-					'<strong class="title"></strong>' +
-					'<em class="description"></em>' +
-					'<button class="edit">edit</button>' +
-					'<button class="delete">delete</button></li>');
-			itemEle.attr('data-id', item.id);
-			itemEle.find('img').attr('src', '/upload/' + item.id + "?data");
-			itemEle.find('img').width(320);
-			itemEle.find('strong').text(item.title);
-			itemEle.find('em').text(item.description);
-			itemEle.find('button.delete').on('click', function(){
-				methods.deleteUpload(item.id);
+		postUpdate:function(item) {
+			var editor = item.find('.editor');
+			var title = editor.find('input[name="new-title"]').val();
+			var description = editor.find('input[name="new-description"]').val();
+			
+			var url = '/note/' + item.data('id');
+			
+			$.ajax(url, {
+				method:'PUT',
+				// the application/x-www-form-urlencoded way
+				//data: {title:title, description:description}
+				
+				// the JSON way
+				contentType: 'application/json; charset=utf-8',
+				data:JSON.stringify({title:title, description:description})
+			}).done(function(data, textStatus, jqXHR){
+				item.find('.title').text(data.title);
+				item.find('.description').text(data.description);
+				methods.toggleEditor(item, false);
+				editor.remove();
+			}).fail(function(jqXHR, textStatus){
+				console.log(jqXHR.status);
+				console.log(methods.parseResponseJson(jqXHR));
 			});
-			$('.test-upload .photos').prepend(itemEle);
+			
+		},
+		
+		toggleEditor:function(item, editMode){
+			if (editMode) {
+				item.find('.title').hide();
+				item.find('.description').hide();
+				item.find('.action').hide();
+			}else{
+				item.find('.title').show();
+				item.find('.description').show();
+				item.find('.action').show();
+			}
 		}
 	};
 	
