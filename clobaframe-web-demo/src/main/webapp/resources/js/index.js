@@ -7,6 +7,15 @@
 	
 	var methods = {
 		init:function(){
+			$('.test-i18n .action a').click(function(event){
+				event.preventDefault();
+				var url = $(this).attr('href');
+				$.getJSON(url, null, function(){
+					// refresh page
+					window.location.reload();
+				});
+			});
+			
 			// test script i18n message
 			var message = methods.getMessage('test.text1');
 			$('.test-script-i18n .text').text(message);

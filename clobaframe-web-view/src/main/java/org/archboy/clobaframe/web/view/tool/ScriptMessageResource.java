@@ -8,7 +8,7 @@ package org.archboy.clobaframe.web.view.tool;
  *
  * @author yang
  */
-public interface ScriptMessageResourceTool {
+public interface ScriptMessageResource {
 
 	/**
 	 *  Return null if no default message resource.

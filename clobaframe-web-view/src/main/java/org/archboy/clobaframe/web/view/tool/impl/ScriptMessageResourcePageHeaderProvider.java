@@ -1,8 +1,7 @@
 package org.archboy.clobaframe.web.view.tool.impl;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import org.archboy.clobaframe.web.view.tool.ScriptMessageResourceTool;
+import org.archboy.clobaframe.web.view.tool.ScriptMessageResource;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +14,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.archboy.clobaframe.web.view.tool.PageHeaderProvider;
 import org.archboy.clobaframe.web.view.tool.PageHeaderTool;
-import org.archboy.clobaframe.web.view.tool.WebResourcePageHeaderTool;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.archboy.clobaframe.webresource.WebResourceManager;
@@ -25,7 +23,7 @@ import org.archboy.clobaframe.webresource.WebResourceManager;
  * @author yang
  */
 @Named
-public class ScriptMessageResourceToolImpl implements ScriptMessageResourceTool, PageHeaderProvider{
+public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageResource, PageHeaderProvider{
 
 	private static final String DEFAULT_I18N_SCRIPT_BASENAME = "js/i18n/messages";
 
@@ -34,9 +32,6 @@ public class ScriptMessageResourceToolImpl implements ScriptMessageResourceTool,
 
 	@Inject
 	private PageHeaderTool pageHeaderTool;
-	
-	@Inject
-	private WebResourcePageHeaderTool webResourcePageHeaderTool;
 	
 	@Value("${clobaframe.web.view.scriptMessageResource.baseName}")
 	private String i18nScriptBaseName = DEFAULT_I18N_SCRIPT_BASENAME;
@@ -103,12 +98,12 @@ public class ScriptMessageResourceToolImpl implements ScriptMessageResourceTool,
 	public List<String> getHeaders() {
 		List<String> headers = new ArrayList<String>();
 		if (defaultResourceName != null){
-			headers.add(webResourcePageHeaderTool.writeHeader(defaultResourceName));
+			headers.add(pageHeaderTool.writeResource(defaultResourceName));
 		}
 		
 		String localResourceName = getLocalResourceName();
 		if (localResourceName != null) {
-			headers.add(webResourcePageHeaderTool.writeHeader(localResourceName));
+			headers.add(pageHeaderTool.writeResource(localResourceName));
 		}
 		
 		return headers;

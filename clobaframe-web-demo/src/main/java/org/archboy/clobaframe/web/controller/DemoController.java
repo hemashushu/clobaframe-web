@@ -1,39 +1,33 @@
 package org.archboy.clobaframe.web.controller;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.inject.Inject;
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.archboy.clobaframe.io.ResourceInfo;
 import org.archboy.clobaframe.io.TemporaryResources;
 import org.archboy.clobaframe.io.http.CacheResourceSender;
-import org.archboy.clobaframe.io.http.MultipartFormResourceInfo;
-import org.archboy.clobaframe.io.http.MultipartFormResourceReceiver;
-import org.archboy.clobaframe.io.http.ResourceSender;
 import org.archboy.clobaframe.io.impl.DefaultTemporaryResources;
-import org.archboy.clobaframe.media.Media;
 import org.archboy.clobaframe.media.MediaFactory;
 import org.archboy.clobaframe.media.image.Image;
 import org.archboy.clobaframe.media.image.Imaging;
 import org.archboy.clobaframe.media.image.OutputSettings;
 import org.archboy.clobaframe.media.image.Transform;
+import org.archboy.clobaframe.query.DefaultViewModel;
 import org.archboy.clobaframe.query.ViewModel;
 import org.archboy.clobaframe.web.controller.form.NoteUpdateForm;
 import org.archboy.clobaframe.web.domain.Note;
 import org.archboy.clobaframe.web.exception.NotFoundException;
 import org.archboy.clobaframe.web.service.NoteService;
 import org.archboy.clobaframe.web.view.tool.PageHeaderTool;
-import org.springframework.beans.propertyeditors.CurrencyEditor;
+import org.springframework.context.i18n.LocaleContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -41,7 +35,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -70,17 +63,17 @@ public class DemoController {
 	public String index(Model model){
 		
 		// add custom page header
-		Map<String, String> attributes = new HashMap<String, String>();
-		attributes.put("href", "/atom.xml");
-		attributes.put("type", "application/atom+xml");
-		attributes.put("rel", "alternate");
-		attributes.put("title", "Clobaframe-web ATOM Feed");
-		pageHeaderTool.addHeader("link", attributes);
+		ViewModel attributes = new DefaultViewModel()
+			.add("href", "/atom.xml")
+			.add("type", "application/atom+xml")
+			.add("rel", "alternate")
+			.add("title", "Clobaframe-web ATOM Feed");
+		pageHeaderTool.addHeader("link", attributes, false);
 		
 		// add model - current time
 		model.addAttribute("now", new Date());
 		model.addAttribute("html", "text contains <strong>html tags</strong>, 'single quotes' & \"double quotes\".");
-		model.addAttribute("currency", 1234.567D);
+		model.addAttribute("integer", 1234567);
 		
 		// add model - an object
 		Map<String, String> viewObject = new HashMap<String, String>();
@@ -152,7 +145,7 @@ public class DemoController {
 	@ResponseBody
 	@RequestMapping(value = "/note/{id}", method = RequestMethod.PUT)
 	public Note updateNote(@PathVariable("id") String id,
-			@Valid @RequestBody NoteUpdateForm form,
+			@Valid @RequestBody NoteUpdateForm form, // @RequestBody for JSON post
 			BindingResult bindingResult
 			) {
 		
@@ -160,10 +153,6 @@ public class DemoController {
 		if (bindingResult.hasErrors()){
 			throw new IllegalArgumentException("Form data error."); // should throws 400 - bad request
 		}
-		
-		System.out.println(form.getTitle());
-		System.out.println(form.getDescription());
-		
 		return noteService.update(id, form.getTitle(), form.getDescription());
 	}
 	
@@ -187,31 +176,12 @@ public class DemoController {
 				null, request, response);
 	}
 	
-//	@ResponseBody
-//	@RequestMapping(value = "/ajax", method = RequestMethod.GET)
-//	public Map<String, String> ajax(){
-//		Map<String, String> user = new HashMap<String, String>();
-//		user.put("id", "002");
-//		user.put("name", "bar");
-//		
-//		return user;
-//	}
-//	
-//	@ResponseBody
-//	@RequestMapping(value = "/ajax", method = RequestMethod.POST)
-//	public Map<String, Integer> ajaxPost(@RequestParam("a") int a, @RequestParam("b") int b){
-//		int value = a + b;
-//		Map<String, Integer> result = new HashMap<String, Integer>();
-//		result.put("a", a);
-//		result.put("b", b);
-//		result.put("value", value);
-//		
-//		return result;
-//	}
-	
+	@ResponseBody
 	@RequestMapping("/changelocale")
-	public String changeLocale(HttpServletRequest request) {
-		return "redirect:/";
+	public ViewModel changeLocale(Locale locale) {
+		// route for org.springframework.web.servlet.i18n.LocaleChangeInterceptor
+		return new DefaultViewModel()
+				.add("locale", locale.toLanguageTag());
 	}
 	
 	@RequestMapping("/error/page-not-found")

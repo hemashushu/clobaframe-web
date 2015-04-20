@@ -55,12 +55,13 @@
 				
 				<!-- from the package org.archboy.clobaframe.web.view.tool.impl -->
 				<entry key="esc" value-ref="extendedEscapeTool"/>
-				<entry key="date" value-ref="localeAwareComparisonDateTool"/>
-				<entry key="num" value-ref="localeAwareNumberTool"/>
 				<entry key="json" value-ref="jsonWriterImpl"/>
 				<entry key="msg" value-ref="messageSourceToolImpl"/>
 				<entry key="header" value-ref="pageHeaderToolImpl"/>
-				<entry key="headres" value-ref="webResourcePageHeaderToolImpl"/>
+				
+				<!-- rarely use -->
+				<entry key="date" value-ref="localeAwareComparisonDateTool"/>
+				<entry key="num" value-ref="localeAwareNumberTool"/>
 			</map>
 		</property>
 	</bean>

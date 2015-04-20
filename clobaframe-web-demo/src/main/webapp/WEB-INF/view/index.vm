@@ -1,15 +1,18 @@
 #set ($layout = 'layout/default.vm')
 #set ($pageTitle = 'Clobaframe-Web Demo page')
+#set ($pageResources = ['css/index.css','js/index.js'])
 #set ($metaKeywords = 'clobaframe web')
 #set ($metaDescription = 'a web application template that base on clobaframe.')
-#set ($pageResources = ['css/index.css','js/index.js'])
+
+## add custom header
+$header.addHeader('meta', {"name":"rebots", "content":"noodp"}, false)
 
 <div class="test-i18n">
 	<h2>$msg.message('index.testI18nMessage')</h2>
 	<p class="text">$msg.message('test.text2', 'WORLD!', $now)</p>
 	
 	<p>Change language</p>
-	<ul>
+	<ul class="action">
 		<li><a href="/changelocale?locale=en">$msg.message('common.language.en')</a></li>
 		<li><a href="/changelocale?locale=ja">$msg.message('common.language.ja')</a></li>
 		<li><a href="/changelocale?locale=zh_CN">$msg.message('common.language.zh_CN')</a></li>
@@ -25,7 +28,7 @@
 <div class="test-text-escape">
 	<h2>Test text escape and formatter</h2>
 	<p>HTML escape <em class="text">$esc.html($html)</em></p>
-	<p>Currency formatter <em class="text">$num.currency($currency)</em></p>
+	<p>Integer formatter <em class="text">$num.integer($integer)</em></p>
 </div>
 
 <div class="test-web-resource">
@@ -79,6 +82,9 @@
 		<li><a href="/doc/privacy">$msg.message('index.privacy')</a></li>
 	</ul>
 </div>
+
+<!-- write custom page resource -->
+$header.writeResource('script', 'src', 'jsx/helloworld.js', {'type':'text/jsx'}, true)
 
 <script>
 	(function(window){

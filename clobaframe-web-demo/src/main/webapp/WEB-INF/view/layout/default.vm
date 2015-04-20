@@ -10,17 +10,17 @@
 		#end
 		
 		<!-- Common style-sheet and script -->
-		$headres.writeHeader('js/jquery-1.11.1.js')
+		$header.writeResource('js/jquery-1.11.1.js')
 		
-		<!-- Headers -->
-		#foreach($header in $header.headers)
-			$header
+		<!-- Extra and custom headers -->
+		#foreach($line in $header.headers)
+			$line
 		#end
 		
-		<!-- Other style-sheet and script -->
+		<!-- Page special style-sheet and script -->
 		#if ($pageResources)
-			#foreach($pageResource in $pageResources) 
-				$headres.writeHeader($pageResource)
+			#foreach($line in $header.getResources($pageResources))
+				$line
 			#end
 		#end
 		

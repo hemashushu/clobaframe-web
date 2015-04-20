@@ -26,7 +26,6 @@ public class ResourcesController {
 	/**
 	 * Send web resource.
 	 *
-	 * @param resourceVersionName
 	 * @param request
 	 * @param response
 	 * @throws IOException
@@ -55,7 +54,7 @@ public class ResourcesController {
 	}
 	
 	@RequestMapping("/favicon.png")
-	public void sendFavoriteIconInPNG(HttpServletRequest request,
+	public void sendFavoriteIconWithPngImage(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		webResourceSender.send("root/favicon-16x16.png", request, response);
 	}
