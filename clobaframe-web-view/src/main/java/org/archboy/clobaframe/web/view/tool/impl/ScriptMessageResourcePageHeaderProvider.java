@@ -25,7 +25,7 @@ import org.archboy.clobaframe.webresource.WebResourceManager;
 @Named
 public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageResource, PageHeaderProvider{
 
-	private static final String DEFAULT_I18N_SCRIPT_BASENAME = "js/i18n/messages";
+	private static final String DEFAULT_I18N_SCRIPT_PATH = "js/i18n/messages";
 
 	@Inject
 	private WebResourceManager webResourceManager;
@@ -33,11 +33,15 @@ public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageRes
 	@Inject
 	private PageHeaderTool pageHeaderTool;
 	
-	@Value("${clobaframe.web.view.scriptMessageResource.baseName}")
-	private String i18nScriptBaseName = DEFAULT_I18N_SCRIPT_BASENAME;
+	@Value("${clobaframe.web.view.scriptMessageResource.path}")
+	private String i18nScriptPath = DEFAULT_I18N_SCRIPT_PATH;
 
-	private String defaultResourceName;
-	private Map<Locale, String> localResourceNames = new HashMap<Locale, String>();
+	private String defaultMessageResourceName = "message.js";
+	private String localMessageResourceNameRegex = "^message_([a-z]{2})((_)([A-Z]{2}))?\\.js$";
+	private Pattern localMessageResourceNamePattern = Pattern.compile(localMessageResourceNameRegex);
+		
+	private boolean existsDefaultMessageResource;
+	private Map<Locale, String> localMessageResourceNames = new HashMap<Locale, String>();
 
 	@PostConstruct
 	public void init(){
@@ -45,22 +49,26 @@ public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageRes
 		// register this instance as page header provider
 		pageHeaderTool.addPageHeaderProvider(this);
 		
+		String basePath = i18nScriptPath + "/";
+		
 		// find all script message resource.
 		Collection<String> resourceNames = webResourceManager.getAllNames();
 
-		String defaultName = i18nScriptBaseName + ".js";
-		String regex = "^" + i18nScriptBaseName + "_([a-z]{2})((_)([A-Z]{2}))?\\.js$";
-		Pattern pattern = Pattern.compile(regex);
+		for(String resourceName : resourceNames){
 
-		for(String name : resourceNames){
-
+			if (!resourceName.startsWith(basePath)) {
+				continue;
+			}
+			
+			String filename = resourceName.substring(basePath.length());
+			
 			// here equals to check whether exists the default message resource.
-			if (name.equals(defaultName)){
-				this.defaultResourceName = name;
+			if (filename.equals(defaultMessageResourceName)){
+				this.existsDefaultMessageResource = true;
 				continue;
 			}
 
-			Matcher matcher = pattern.matcher(name);
+			Matcher matcher = localMessageResourceNamePattern.matcher(filename);
 			if (matcher.find()){
 				String langCode = matcher.group(1);
 				String countryCode = matcher.group(4);
@@ -73,14 +81,14 @@ public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageRes
 					locale = new Locale(langCode);
 				}
 
-				localResourceNames.put(locale, name);
+				localMessageResourceNames.put(locale, filename);
 			}
 		}
 	}
 
 	@Override
 	public String getDefaultResourceName() {
-		return defaultResourceName;
+		return existsDefaultMessageResource ? defaultMessageResourceName : null;
 	}
 
 	@Override
@@ -91,14 +99,14 @@ public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageRes
 			return null;
 		}
 
-		return localResourceNames.get(locale);
+		return localMessageResourceNames.get(locale);
 	}
 
 	@Override
 	public List<String> getHeaders() {
 		List<String> headers = new ArrayList<String>();
-		if (defaultResourceName != null){
-			headers.add(pageHeaderTool.writeResource(defaultResourceName));
+		if (existsDefaultMessageResource){
+			headers.add(pageHeaderTool.writeResource(defaultMessageResourceName));
 		}
 		
 		String localResourceName = getLocalResourceName();

@@ -1,6 +1,5 @@
 package org.archboy.clobaframe.web.doc;
 
-import java.util.Collection;
 import java.util.Locale;
 
 /**
@@ -9,24 +8,32 @@ import java.util.Locale;
  */
 public interface DocRepository {
 	
-	public static final int PRIORITY_TOP = 0;
-	public static final int PRIORITY_LESS_THAN_TOP = 1;
-	public static final int PRIORITY_DEFAULT = 5;
+	/**
+	 * Add or update a doc.
+	 * 
+	 * @param name
+	 * @param parentName
+	 * @param locale
+	 * @param title
+	 * @param content
+	 * @param authorName
+	 * @param authorId
+	 * @return 
+	 * @throws IllegalArgumentException if the parent doc does not found.
+	 */
+	Doc save(String name, String parentName,
+		Locale locale,
+		String title, String content, 
+		String authorName, String authorId);
 	
 	/**
-	 * Get the priority of repository.
-	 * The high priority repository will be check first when get a resource by
-	 * name.
-	 * I.e. when there are resources that with duplicate name, the resource
-	 * resist in the high priority repository will be selected.
+	 * Delete a doc.
 	 * 
-	 * @return 
+	 * It will NOT raise an exception if the specify doc does not found.
+	 * 
+	 * @param name
+	 * @param locale 
 	 */
-	int getPriority();
+	void delete(String name, Locale locale);
 	
-	Doc get(String name, Locale locale);
-	
-	Doc get(String name, Locale locale, int revision);
-	
-	Collection<Doc> listLocale(String name);
 }

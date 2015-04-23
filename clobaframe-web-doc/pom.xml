@@ -90,94 +90,11 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 		</dependency>
-		
-		<!-- Jackson JSON Mapper -->
-		<!-- need by Spring Web MVC -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-annotations</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-		</dependency>
-
-		<!-- Apache Velocity -->
-		<dependency>
-			<groupId>org.apache.velocity</groupId>
-			<artifactId>velocity</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.velocity</groupId>
-			<artifactId>velocity-tools</artifactId>
-		</dependency>
-		
-		<!-- need by Apache Velocity, new artifact is commons-lang3 -->
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-		</dependency>
-
-		<!-- need by Apache Velocity, Velocity Tools, new artifact is commons-collections4 -->
-		<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
-		</dependency>
-
-		<!-- need by Apache Velocity Tools, new artifact is commons-digester3 -->
-		<dependency>
-			<groupId>commons-digester</groupId>
-			<artifactId>commons-digester</artifactId>
-		</dependency>
-		
-		<!-- need by Apache Velocity Tools -->
-		<dependency>
-			<groupId>commons-beanutils</groupId>
-			<artifactId>commons-beanutils</artifactId>
-		</dependency>
-
-		<!-- need by Apache Velocity Tools -->
-		<dependency>
-			<groupId>commons-validator</groupId>
-			<artifactId>commons-validator</artifactId>
-		</dependency>
-		
-		<!-- need by Apache Velocity Tools -->
-		<dependency>
-			<groupId>commons-chain</groupId>
-			<artifactId>commons-chain</artifactId>
-		</dependency>
-
-		<!-- need by Apache Velocity Tools -->
-		<dependency>
-			<groupId>dom4j</groupId>
-			<artifactId>dom4j</artifactId>
-		</dependency>
-
-		<!-- XML Parser -->
-		<!-- need by Apache Velocity Tools -->
-		<dependency>
-			<groupId>xml-apis</groupId>
-			<artifactId>xml-apis</artifactId>
-		</dependency>
-		
-		<!-- javax servlet -->
-		<dependency>
-			<groupId>org.mortbay.jetty</groupId>
-			<artifactId>servlet-api</artifactId>
-		</dependency>
 
 		<!-- Clobaframe -->
 		<dependency>
 			<groupId>org.archboy.clobaframe</groupId>
-			<artifactId>clobaframe-io</artifactId>
+			<artifactId>clobaframe-query</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
