@@ -81,25 +81,13 @@ public class RevisionDocManagerImpl implements RevisionDocManager {
 	}
 	
 	@Override
-	public Collection<Integer> listRevision(String name, Locale locale) {
+	public Collection<RevisionDoc> listRevision(String name, Locale locale) {
 		Map<Locale, Set<RevisionDoc>> localeDocs = docMap.get(name);
 		if (localeDocs == null) {
 			return null;
 		}
 		
-		Set<RevisionDoc> revisionDocs = localeDocs.get(locale);
-		if (revisionDocs == null){
-			return null;
-		}
-		
-			List<Integer> revisions = new ArrayList<Integer>();
-			for (RevisionDoc doc : revisionDocs){
-				revisions.add(doc.getRevision());
-			}
-
-			return revisions;
-		}
-		
+		return localeDocs.get(locale);
 	}
 
 	@Override
@@ -133,7 +121,7 @@ public class RevisionDocManagerImpl implements RevisionDocManager {
 	}
 
 	@Override
-	public Doc add(String name, String parentName, Locale locale, String title, String content, String authorName, String authorId) {
+	public Doc save(String name, String parentName, Locale locale, String title, String content, String templateName, String authorName, String authorId, String updateNote) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 

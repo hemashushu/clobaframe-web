@@ -25,7 +25,7 @@ public interface RevisionDocManager extends DocManager {
 	 * @param locale
 	 * @return NULL if it does not found.
 	 */
-	Collection<Integer> listRevision(String name, Locale locale);
+	Collection<RevisionDoc> listRevision(String name, Locale locale);
 	
 	/**
 	 * 

@@ -8,23 +8,26 @@ import java.util.Locale;
  */
 public interface DocRepository {
 	
-	/**
+/**
 	 * Add or update a doc.
 	 * 
 	 * @param name
-	 * @param parentName
+	 * @param parentName NULL for the top most level doc.
 	 * @param locale
 	 * @param title
 	 * @param content
-	 * @param authorName
-	 * @param authorId
+	 * @param templateName Optional
+	 * @param authorName Optional.
+	 * @param authorId Optional.
+	 * @param updateNote Optional
 	 * @return 
-	 * @throws IllegalArgumentException if the parent doc does not found.
+	 * @throws IllegalArgumentException if parent doc does not found.
 	 */
 	Doc save(String name, String parentName,
 		Locale locale,
 		String title, String content, 
-		String authorName, String authorId);
+		String templateName,
+		String authorName, String authorId, String updateNote);
 	
 	/**
 	 * Delete a doc.

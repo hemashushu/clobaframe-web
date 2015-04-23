@@ -9,5 +9,11 @@ import org.archboy.clobaframe.web.doc.DocRepository;
  */
 public interface RevisionDocRepository extends DocRepository {
 	
+	/**
+	 * 
+	 * @param name
+	 * @param locale
+	 * @param revision 
+	 */
 	void delete(String name, Locale locale, int revision);
 }

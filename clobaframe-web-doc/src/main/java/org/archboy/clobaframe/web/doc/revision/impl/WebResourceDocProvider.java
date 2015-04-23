@@ -36,19 +36,27 @@ public class WebResourceDocProvider implements DocProvider {
 	private String docResourcePath = DEFAULT_DOC_RESOURCE_PATH;
 	
 	/**
-	 * The doc name example.
-	 * terms.md // default English language
-	 * terms_ja.md
-	 * terms_zh_CN.md
-	 * terms_zh_CN.23.md
+	 * The resource name can specify some properties, includes language code,
+	 * revision number, rendering template name.
 	 * 
-	 * groups:
+	 * Example:
+	 * 
+	 * terms.md // default English language
+	 * terms_ja.md // for Japanese language
+	 * terms_zh_CN.md // for Simplified Chinese language
+	 * terms_zh_CN.r23.md // the revision 23
+	 * terms@doc-view$default.md // using the template "doc-view/default" 
+	 *							 // for rendering, the slash mark is replaced with
+	 *							 // the dollar mark.
+	 * 
+	 * Regex match groups:
 	 * 1 - name
-	 * 3 - lang code
-	 * 6 - country code
-	 * 8 - revision
+	 * 3 - lang code (optional)
+	 * 6 - country code (optional)
+	 * 8 - revision (optional)
+	 * 10 - template name (optional)
 	 */
-	private static final String docResourceNameRegex = "^([a-zA-Z0-9-]+)(_([a-z]{2})((_)([A-Z]{2}))?)?(.(\\d+))?\\.md$";
+	private static final String docResourceNameRegex = "^([a-zA-Z0-9-]+)(_([a-z]{2})((_)([A-Z]{2}))?)?(.r(\\d+))?(@([a-zA-Z0-9$-]+))?\\.md$";
 	private Pattern docResourceNamePattern = Pattern.compile(docResourceNameRegex);
 	
 	@Inject
@@ -98,7 +106,8 @@ public class WebResourceDocProvider implements DocProvider {
 				String langCode = matcher.group(3);
 				String countryCode = matcher.group(6);
 				String revision = matcher.group(8);
-
+				String templateName = matcher.group(10);
+				
 				Locale locale = null;
 
 				if (langCode != null && countryCode != null){
@@ -139,7 +148,7 @@ public class WebResourceDocProvider implements DocProvider {
 					
 					RevisionDoc revisionDoc = convertResourceInfo(
 								webResourceInfo, 
-								name, locale, revisionNumber, 
+								name, locale, revisionNumber, templateName,
 								parentName);
 				
 					docs.add(revisionDoc);
@@ -153,7 +162,7 @@ public class WebResourceDocProvider implements DocProvider {
 	}
 	
 	private RevisionDoc convertResourceInfo(WebResourceInfo webResourceInfo, 
-			String name, Locale locale, int revision, String parentName) throws IOException{
+			String name, Locale locale, int revision, String templateName, String parentName) throws IOException{
 		
 		InputStream in = null;
 		try{
@@ -168,6 +177,7 @@ public class WebResourceDocProvider implements DocProvider {
 			doc.setName(name);
 			doc.setParentName(parentName);
 			doc.setRevision(revision);
+			doc.setTemplateName(templateName);
 			doc.setTitle(title);
 			
 			return doc;

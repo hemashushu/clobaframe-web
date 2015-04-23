@@ -37,15 +37,18 @@ public interface DocManager {
 	 * @param locale
 	 * @param title
 	 * @param content
+	 * @param templateName Optional
 	 * @param authorName Optional.
 	 * @param authorId Optional.
+	 * @param updateNote Optional
 	 * @return 
 	 * @throws IllegalArgumentException if parent doc does not found.
 	 */
 	Doc save(String name, String parentName,
 		Locale locale,
 		String title, String content, 
-		String authorName, String authorId);
+		String templateName,
+		String authorName, String authorId, String updateNote);
 	
 	/**
 	 * Delete a doc.

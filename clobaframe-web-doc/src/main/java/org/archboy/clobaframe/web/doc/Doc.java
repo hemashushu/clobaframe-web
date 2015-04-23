@@ -35,6 +35,19 @@ public class Doc {
 	private String authorName;
 	private String authorId;
 
+	/**
+	 * The name of template that used for render this doc.
+	 * Optional.
+	 */
+	private String templateName;
+	
+	/**
+	 * The update note.
+	 * Optional.
+	 */
+	private String updateNote;
+	
+	
 	public String getName() {
 		return name;
 	}
@@ -97,6 +110,22 @@ public class Doc {
 
 	public void setAuthorId(String authorId) {
 		this.authorId = authorId;
+	}
+
+	public String getTemplateName() {
+		return templateName;
+	}
+
+	public void setTemplateName(String templateName) {
+		this.templateName = templateName;
+	}
+
+	public String getUpdateNote() {
+		return updateNote;
+	}
+
+	public void setUpdateNote(String updateNote) {
+		this.updateNote = updateNote;
 	}
 
 	@Override
