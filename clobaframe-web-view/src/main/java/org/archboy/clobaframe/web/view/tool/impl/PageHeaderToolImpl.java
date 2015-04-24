@@ -116,21 +116,20 @@ public class PageHeaderToolImpl implements PageHeaderTool {
 	
 	@Override
 	public String writeResource(String name) {
-		try{
-			WebResourceInfo resource = webResourceManager.getResource(name);
-			
-			String mimeType = resource.getMimeType();
-			if (WebResourceManager.MIME_TYPE_JAVA_SCRIPT.contains(mimeType)){
-				return String.format(SCRIPT_TEMPLATE, webResourceManager.getLocation(resource));
-				
-			}else if (WebResourceManager.MIME_TYPE_STYLE_SHEET.equals(mimeType)){
-				return String.format(STYLESHEET_TEMPLATE, webResourceManager.getLocation(resource));
-			}else{
-				// unsupport resource type
-				return null;
-			}
-			
-		}catch(FileNotFoundException e){
+
+		WebResourceInfo resource = webResourceManager.getResource(name);
+		if (resource == null) {
+			return null;
+		}
+		
+		String mimeType = resource.getMimeType();
+		if (WebResourceManager.MIME_TYPE_JAVA_SCRIPT.contains(mimeType)){
+			return String.format(SCRIPT_TEMPLATE, webResourceManager.getLocation(resource));
+
+		}else if (WebResourceManager.MIME_TYPE_STYLE_SHEET.equals(mimeType)){
+			return String.format(STYLESHEET_TEMPLATE, webResourceManager.getLocation(resource));
+		}else{
+			// unsupport resource type
 			return null;
 		}
 	}
@@ -154,20 +153,20 @@ public class PageHeaderToolImpl implements PageHeaderTool {
 			String locationAttributeName, String resourceName, 
 			Map<String, Object> otherAttributes,
 			boolean closeTag) {
-		try{
-			WebResourceInfo resource = webResourceManager.getResource(resourceName);
-			String location = webResourceManager.getLocation(resource);
-			
-			if (otherAttributes == null){
-				otherAttributes = new HashMap<String, Object>();
-			}
-			
-			otherAttributes.put(locationAttributeName, location);
-			return writeHeader(tagName, otherAttributes, closeTag);
-			
-		}catch(FileNotFoundException e){
+		
+		WebResourceInfo resource = webResourceManager.getResource(resourceName);
+
+		if (resource == null) {
 			return null;
 		}
+		String location = webResourceManager.getLocation(resource);
+
+		if (otherAttributes == null){
+			otherAttributes = new HashMap<String, Object>();
+		}
+
+		otherAttributes.put(locationAttributeName, location);
+		return writeHeader(tagName, otherAttributes, closeTag);
 	}
 	
 }

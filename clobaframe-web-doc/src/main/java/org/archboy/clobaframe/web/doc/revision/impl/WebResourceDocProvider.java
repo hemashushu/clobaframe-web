@@ -1,21 +1,16 @@
 package org.archboy.clobaframe.web.doc.revision.impl;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.web.doc.Doc;
 import org.archboy.clobaframe.web.doc.DocProvider;
 import org.archboy.clobaframe.web.doc.revision.RevisionDoc;

@@ -18,6 +18,7 @@ import org.archboy.clobaframe.web.doc.DocProvider;
 import org.archboy.clobaframe.web.doc.DocRepository;
 import org.archboy.clobaframe.web.doc.revision.RevisionDoc;
 import org.archboy.clobaframe.web.doc.revision.RevisionDocManager;
+import org.archboy.clobaframe.web.doc.revision.RevisionDocRepository;
 
 /**
  *
@@ -30,7 +31,7 @@ public class RevisionDocManagerImpl implements RevisionDocManager {
 	private List<DocProvider> docProviders;
 	
 	@Inject
-	private DocRepository docRepository;
+	private RevisionDocRepository revisionDocRepository;
 	
 	private Map<String, Map<Locale, Set<RevisionDoc>>> docMap = 
 			new HashMap<String, Map<Locale, Set<RevisionDoc>>>();
@@ -92,42 +93,64 @@ public class RevisionDocManagerImpl implements RevisionDocManager {
 
 	@Override
 	public int getActiveRevision(String name, Locale locale) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return revisionDocRepository.getActiveRevision(name, locale);
 	}
 
 	@Override
 	public RevisionDoc get(String name, Locale locale, int revision) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		Collection<RevisionDoc> revisionDocs = listRevision(name, locale);
+		if (revisionDocs != null) {
+			for (RevisionDoc revisionDoc : revisionDocs) {
+				if (revisionDoc.getRevision() == revision) {
+					return revisionDoc;
+				}
+			}
+		}
+		
+		return null;
 	}
 
 	@Override
 	public void setActiveRevision(String name, Locale locale, int revision) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		revisionDocRepository.setActiveRevision(name, locale, revision);
 	}
 
 	@Override
 	public void delete(String name, Locale locale, int revision) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		revisionDocRepository.delete(name, locale, revision);
 	}
 
 	@Override
 	public Doc get(String name, Locale locale) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		int currentRevision = revisionDocRepository.getActiveRevision(name, locale);
+		return get(name, locale, currentRevision);
 	}
 
 	@Override
 	public Collection<Locale> listLocale(String name) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		Map<Locale, Set<RevisionDoc>> localeDocs = docMap.get(name);
+		if (localeDocs == null){
+			return localeDocs.keySet();
+		}else{
+			return null;
+		}
 	}
 
 	@Override
-	public Doc save(String name, String parentName, Locale locale, String title, String content, String templateName, String authorName, String authorId, String updateNote) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public Doc save(String name, String parentName, Locale locale, 
+			String title, String content, 
+			String templateName, 
+			String authorName, String authorId, String updateNote) {
+		
+		return revisionDocRepository.save(name, parentName, locale, 
+				title, content, 
+				templateName, 
+				authorName, authorId, updateNote);
 	}
 
 	@Override
 	public void delete(String name, Locale locale) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		revisionDocRepository.delete(name, locale);
 	}
 
 
