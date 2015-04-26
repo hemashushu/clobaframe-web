@@ -31,7 +31,7 @@
 	</developers>
 
 	<modules>
-		<module>clobaframe-web-doc</module>
+		<module>clobaframe-web-page</module>
 		<module>clobaframe-web-theme</module>
 		<module>clobaframe-web-view</module>
 		<module>clobaframe-web-demo</module>

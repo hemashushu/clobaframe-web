@@ -1,1 +1,9 @@
-target
+target/
+.metadata/
+.settings/
+.project
+.classpath
+.DS_Store
+.svn
+catalog.xml
+nb-configuration.xml
