@@ -15,11 +15,10 @@ public interface PageManager {
 	/**
 	 * Get the specify page by the name and locale.
 	 * 
-	 * @param name
-	 * @param locale
+	 * @param pageKey
 	 * @return NULL if it does not found.
 	 */
-	Page get(String name, Locale locale);
+	Page get(PageKey pageKey);
 	
 	/**
 	 * Get the page name by the URL name.
@@ -40,8 +39,7 @@ public interface PageManager {
 	/**
 	 * Add or update a doc.
 	 * 
-	 * @param name
-	 * @param locale
+	 * @param pageKey
 	 * @param title
 	 * @param content
 	 * @param urlName Optional.
@@ -52,7 +50,7 @@ public interface PageManager {
 	 * @return 
 	 * @throws IllegalArgumentException if parent doc does not found.
 	 */
-	Page save(String name, Locale locale,
+	Page update(PageKey pageKey,
 		String title, String content, 
 		String urlName, String templateName,
 		String authorName, String authorId, String updateNote);
@@ -62,10 +60,9 @@ public interface PageManager {
 	 * 
 	 * It will NOT raise an exception if the specify page does not found.
 	 * 
-	 * @param name
-	 * @param locale 
+	 * @param pageKey
 	 */
-	void delete(String name, Locale locale);
+	void delete(PageKey pageKey);
 	
 	Locale getDefaultLocale();
 }

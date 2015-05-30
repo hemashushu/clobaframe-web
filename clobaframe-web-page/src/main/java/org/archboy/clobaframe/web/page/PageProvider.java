@@ -10,9 +10,11 @@ import java.util.Locale;
 public interface PageProvider {
 	
 	public static final int PRIORITY_HIGHEST = 0;
-	public static final int PRIORITY_HIGHER = 2;
-	public static final int PRIORITY_HIGH = 4;
-	public static final int PRIORITY_NORMAL = 5;
+	public static final int PRIORITY_HIGHER = 20;
+	public static final int PRIORITY_HIGH = 40;
+	public static final int PRIORITY_NORMAL = 60;
+	public static final int PRIORITY_LOW = 80;
+	public static final int PRIORITY_LOWER = 100;
 	
 	/**
 	 * Get the priority of the current provider.

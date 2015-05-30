@@ -11,8 +11,7 @@ public interface PageRepository {
 /**
 	 * Add or update a page.
 	 * 
-	 * @param name
-	 * @param locale
+	 * @param pageKey
 	 * @param title
 	 * @param content
 	 * @param urlName Optional.
@@ -23,7 +22,7 @@ public interface PageRepository {
 	 * @return 
 	 * @throws IllegalArgumentException if parent doc does not found.
 	 */
-	Page save(String name, Locale locale,
+	Page update(PageKey pageKey,
 		String title, String content, 
 		String urlName, String templateName,
 		String authorName, String authorId, String updateNote);
@@ -33,9 +32,8 @@ public interface PageRepository {
 	 * 
 	 * It will NOT raise an exception if the specify page does not found.
 	 * 
-	 * @param name
-	 * @param locale 
+	 * @param pageKey
 	 */
-	void delete(String name, Locale locale);
+	void delete(PageKey pageKey);
 	
 }

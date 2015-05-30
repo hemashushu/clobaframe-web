@@ -12,18 +12,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class Page {
 	
-	/**
-	 * Page name that includes path.
-	 * The default page URL is /page/[path-name1]/[path-name2]/[path-nameX]/name.
-	 * This value combines the locale act as page id.
-	 * Only a-z, A-Z, 0-9 and '-' and '/' are allowed.
-	 */
-	private String name;
-	
-	/**
-	 * The default locale is 'en'.
-	 */
-	private Locale locale;
+	private PageKey pageKey;
 	
 	/**
 	 * URL name will override the default page URL that combined by page name and parent page names.
@@ -53,23 +42,15 @@ public class Page {
 	 */
 	private String authorName;
 	private String authorId;
+
+	public PageKey getPageKey() {
+		return pageKey;
+	}
+
+	public void setPageKey(PageKey pageKey) {
+		this.pageKey = pageKey;
+	}
 	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Locale getLocale() {
-		return locale;
-	}
-
-	public void setLocale(Locale locale) {
-		this.locale = locale;
-	}
-
 	public String getUrlName() {
 		return urlName;
 	}
@@ -137,8 +118,7 @@ public class Page {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder()
-				.append(getName())
-				.append(getLocale())
+				.append(getPageKey())
 				.toHashCode();
 	}
 
@@ -158,16 +138,14 @@ public class Page {
 
 		Page other = (Page)o;
 		return new EqualsBuilder()
-				.append(getName(), other.getName())
-				.append(getLocale(), other.getLocale())
+				.append(getPageKey(), other.getPageKey())
 				.isEquals();
 	}
 
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this)
-				.append("name", getName())
-				.append("locale", getLocale())
+				.append("pageKey", getPageKey())
 				.append("title", getTitle())
 				.toString();
 	}

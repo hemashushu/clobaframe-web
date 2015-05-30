@@ -24,8 +24,7 @@ public class RevisionPage extends Page {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder()
-				.append(getName())
-				.append(getLocale())
+				.append(getPageKey())
 				.append(getRevision())
 				.toHashCode();
 	}
@@ -46,8 +45,7 @@ public class RevisionPage extends Page {
 
 		RevisionPage other = (RevisionPage)o;
 		return new EqualsBuilder()
-				.append(getName(), other.getName())
-				.append(getLocale(), other.getLocale())
+				.append(getPageKey(), other.getPageKey())
 				.append(getRevision(), other.getRevision())
 				.isEquals();
 	}
@@ -55,8 +53,7 @@ public class RevisionPage extends Page {
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this)
-				.append("name", getName())
-				.append("locale", getLocale())
+				.append("pageKey", getPageKey())
 				.append("revision", getRevision())
 				.append("title", getTitle())
 				.toString();

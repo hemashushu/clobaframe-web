@@ -163,12 +163,12 @@ public class RevisionPageManagerImpl implements RevisionPageManager {
 	}
 
 	@Override
-	public Page save(String name, Locale locale, 
+	public Page update(String name, Locale locale, 
 			String title, String content, 
 			String urlName, String templateName, 
 			String authorName, String authorId, String updateNote) {
 		
-		return revisionPageRepository.save(name, locale, 
+		return revisionPageRepository.update(name, locale, 
 				title, content, 
 				urlName, templateName, 
 				authorName, authorId, updateNote);
