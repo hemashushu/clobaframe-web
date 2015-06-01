@@ -1,25 +1,26 @@
 package org.archboy.clobaframe.web.view.tool;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.io.IOUtils;
+import org.archboy.clobaframe.webresource.WebResourceManager;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import static org.junit.Assert.*;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.web.context.request.AbstractRequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  *
@@ -27,14 +28,23 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration("src/test/resources/webapp")
-@ContextConfiguration(locations = { "/applicationContext.xml"})
+@ContextConfiguration(locations = { "/webapp/WEB-INF/servlet.xml"})
 public class ResourcesControllerTest {
 
 	@Inject
-	private PageHeaderTool pageHeaderTool;
+	private WebResourceManager webResourceManager;
+	
+	@Inject
+	private ResourceLoader resourceLoader;
+	
+	@Inject
+	private WebApplicationContext webApplicationContext;
+
+    private MockMvc mock;
 
 	@Before
 	public void setUp() throws Exception {
+		this.mock = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
 	}
 
 	@After
@@ -42,78 +52,67 @@ public class ResourcesControllerTest {
 	}
 
 	@Test
-	public void getWrite()  {
-		// test build header
-		// expect: <meta charset="UTF-8">
-		Map<String, Object> attr1 = new LinkedHashMap<String, Object>();
-		attr1.put("charset", "UTF-8");
+	public void testSendResource() throws Exception {
+		String location1 = webResourceManager.getLocation("css/index.css");
+		String location2 = webResourceManager.getLocation("root/robots.txt");
+		String location3 = webResourceManager.getLocation("root/favicon-16x16.ico");
+		String location4 = webResourceManager.getLocation("root/favicon-16x16.png");
+		String location5 = webResourceManager.getLocation("root/apple-touch-icon-120x120.png");
+		String location6 = webResourceManager.getLocation("root/launcher-icon-192x192.png");
 		
-		String result1 = pageHeaderTool.write("meta", attr1, false);
-		String text1 = "<meta charset=\"UTF-8\">";
-		assertEquals(text1, result1);
+		mock.perform(get(location1))
+				.andExpect(status().isOk())
+				.andExpect(content().string(getFileTextContent("resources/css/index.css")));
 		
-		// expect: <link rel="icon" type="image/png" href="/favicon.png">
-		Map<String, Object> attr2 = new LinkedHashMap<String, Object>();
-		attr2.put("rel", "icon");
-		attr2.put("type", "image/png");
-		attr2.put("href", "/favicon.png");
+		mock.perform(get(location2))
+				.andExpect(status().isOk())
+				.andExpect(content().bytes(getFileContent("resources/root/robots.txt")));
 		
-		String result2 = pageHeaderTool.write("link", attr2, false);
-		String text2 = "<link rel=\"icon\" type=\"image/png\" href=\"/favicon.png\">";
-		assertEquals(text2, result2);
+		mock.perform(get(location3))
+				.andExpect(status().isOk())
+				.andExpect(content().bytes(getFileContent("resources/root/favicon-16x16.ico")));
 		
-		// expect: <script type="text/javascript" src="script.js"></script>
-		Map<String, Object> attr3 = new LinkedHashMap<String, Object>();
-		attr3.put("type", "text/javascript");
-		attr3.put("src", "script.js");
+		mock.perform(get(location4))
+				.andExpect(status().isOk())
+				.andExpect(content().bytes(getFileContent("resources/root/favicon-16x16.png")));
 		
-		String result3 = pageHeaderTool.write("script", attr3, true);
-		String text3 = "<script type=\"text/javascript\" src=\"script.js\"></script>";
-		assertEquals(text3, result3);
+		mock.perform(get(location5))
+				.andExpect(status().isOk())
+				.andExpect(content().bytes(getFileContent("resources/root/apple-touch-icon-120x120.png")));
 		
-		// test write resource
-		String res1 = pageHeaderTool.writeResource("css/index.css");
-		assertEquals("<link href=\"/resource/css/index.css?v4b2739ce\" rel=\"stylesheet\">", res1);
-		
-		String res2 = pageHeaderTool.writeResource("js/jquery-1.11.1.js");
-		assertEquals("<script src=\"/resource/js/jquery-1.11.1.js?v3029834a\"></script>", res2);
-		
-		// test write resource with custom attr
-		Map<String, Object> attr4 = new LinkedHashMap<String, Object>();
-		attr4.put("type", "text/jsx");
-		String res3 = pageHeaderTool.writeResource("js/index.js", "script", "src", attr4, true);
-		assertEquals("<script type=\"text/jsx\" src=\"/resource/js/index.js?v5e02a258\"></script>", res3);
-		
-		// test get resources
-		List<String> ress1 = pageHeaderTool.getResources(Arrays.asList("css/index.css", "js/jquery-1.11.1.js"));
-		assertEquals(res1, ress1.get(0));
-		assertEquals(res2, ress1.get(1));
-		
-		// test getHeaders
-		// build mock
-		HttpServletRequest httpServletRequest = new MockHttpServletRequest();
-		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(httpServletRequest));
-		
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		
-		List<String> headers1 = pageHeaderTool.getHeaders();
-		assertEquals(1, headers1.size());
-		assertEquals(pageHeaderTool.writeResource("js/i18n/messages.js"), headers1.get(0));
-		
-		LocaleContextHolder.setLocale(Locale.SIMPLIFIED_CHINESE);
-		
-		List<String> headers2 = pageHeaderTool.getHeaders();
-		assertEquals(2, headers2.size());
-		assertEquals(pageHeaderTool.writeResource("js/i18n/messages.js"), headers2.get(0));
-		assertEquals(pageHeaderTool.writeResource("js/i18n/messages_zh_CN.js"), headers2.get(1));
-		
-		// test add header
-		// expect: "<meta charset=\"UTF-8\">"
-		pageHeaderTool.addHeader("meta", attr1, false);
-		List<String> headers3 = pageHeaderTool.getHeaders();
-		assertEquals(3, headers3.size());
-		assertEquals("<meta charset=\"UTF-8\">", headers3.get(2));
-		
+		mock.perform(get(location6))
+				.andExpect(status().isOk())
+				.andExpect(content().bytes(getFileContent("resources/root/launcher-icon-192x192.png")));
 	}
 
+	private String getFileTextContent(String name) throws IOException {
+		byte[] content = getFileContent(name);
+		return new String(content, "UTF-8");
+	}
+	
+	/**
+	 *
+	 * @param name Relate to the 'src/test/resources' folder.
+	 * @return
+	 * @throws IOException
+	 */
+	private byte[] getFileContent(String name) throws IOException {
+		File file = getFileByName(name);
+		InputStream in = new FileInputStream(file);
+		byte[] data = IOUtils.toByteArray(in);
+		in.close();
+		return data;
+	}
+
+	/**
+	 * Get the test resources by file name.
+	 *
+	 * @param name Relate to the 'src/test/resources' folder.
+	 * @return
+	 * @throws IOException
+	 */
+	private File getFileByName(String name) throws IOException{
+		Resource resource = resourceLoader.getResource(name); //"file:target/test-classes/" +
+		return resource.getFile();
+	}	
 }

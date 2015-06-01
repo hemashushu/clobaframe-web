@@ -40,7 +40,7 @@ public class PageHeaderToolTest {
 	}
 
 	@Test
-	public void getWrite()  {
+	public void testWrite()  {
 		// test build header
 		// expect: <meta charset="UTF-8">
 		Map<String, Object> attr1 = new LinkedHashMap<String, Object>();
