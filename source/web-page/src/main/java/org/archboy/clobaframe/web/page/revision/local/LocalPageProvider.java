@@ -1,5 +1,6 @@
-package org.archboy.clobaframe.web.page.revision.impl;
+package org.archboy.clobaframe.web.page.revision.local;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -8,28 +9,44 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.io.IOUtils;
+import org.archboy.clobaframe.io.MimeTypeDetector;
+import org.archboy.clobaframe.io.ResourceInfo;
+import org.archboy.clobaframe.io.file.ResourceScanner;
 import org.archboy.clobaframe.web.page.Page;
+import org.archboy.clobaframe.web.page.PageKey;
 import org.archboy.clobaframe.web.page.PageProvider;
 import org.archboy.clobaframe.web.page.revision.RevisionPage;
-import org.archboy.clobaframe.webresource.WebResourceInfo;
-import org.archboy.clobaframe.webresource.WebResourceManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
 /**
  *
  * @author yang
  */
 @Named
-public class WebResourcePageProvider implements PageProvider {
+public class LocalPageProvider implements PageProvider {
 
-	private static final String DEFAULT_PAGE_RESOURCE_PATH = "page";
+	@Inject
+	private ResourceLoader resourceLoader;
+
+	@Inject
+	private MimeTypeDetector mimeTypeDetector;
 	
-	@Value("${clobaframe.web.page.resource.path}")
-	private String pageResourcePath = DEFAULT_PAGE_RESOURCE_PATH;
+	@Inject
+	private ResourceScanner resourceScanner;
+	
+	// local resource path, usually relative to the 'src/main/webapp' folder.
+	// to using this repository, the web application war package must be expended when running.
+	private static final String DEFAULT_PAGE_RESOURCE_PATH = "" ; //"page";
+	
+	@Value("${clobaframe.web.page.resource.path:" + DEFAULT_PAGE_RESOURCE_PATH + "}")
+	private String pageResourcePath;
 	
 	/**
 	 * The resource name can specify some properties, includes language code,
@@ -44,9 +61,9 @@ public class WebResourcePageProvider implements PageProvider {
 	 * terms_ja.md // for Japanese language
 	 * terms_zh_CN.md // for Simplified Chinese language
 	 * terms.r23.md // the revision 23
-	 * terms@path#name.md // using the specify URL to override the default page URL.
+	 * terms@path#name.md // using the specify URL "path/name" to override the default page URL.
 	 *						// the slash mark is replaced with the hash mask.
-	 * terms[template#name].md // using the template "doc-view/default" for rendering, 
+	 * terms[templatepath#name].md // using the template "templatepath/name" for rendering, 
 	 *								//the slash mark is replaced with the hash mark.
 	 * A full name example:
 	 * terms@developers#api[template#dev]_zh_CN.r23.md
@@ -61,54 +78,60 @@ public class WebResourcePageProvider implements PageProvider {
 	 
 	 * 
 	 */
-	private static final String pageResourceNameRegex = 
+	private static final String resourceNameRegex = 
 			"^([a-zA-Z0-9-]+)(@([a-zA-Z0-9#-]+))?(\\[([a-zA-Z0-9#-]+)\\])?(_([a-z]{2})((_)([A-Z]{2}))?)?(.r(\\d+))?\\.md$";
-	private Pattern pageResourceNamePattern = Pattern.compile(pageResourceNameRegex);
 	
-	@Inject
-	private WebResourceManager webResourceManager;
+	private Pattern resourceNamePattern = Pattern.compile(resourceNameRegex);
 	
-	private static final String DEFAULT_LOCALE_NAME = "en";
+	private static final String DEFAULT_LOCALE = "en";
 	
-	@Value("${clobaframe.web.page.defaultLocale}")
-	private String localeName = DEFAULT_LOCALE_NAME;
-	
+	@Value("${clobaframe.web.page.defaultLocale:" + DEFAULT_LOCALE + "}")
 	private Locale defaultLocale;
-	
+
+	// content header
 	private static final String regexHeader1a = "^(.+)\\n(={3,})(\\n|$)";
 	private static final String regexHeader1b = "^(#.+#?)(\\n|$)";
 	
 	private static final Pattern patternHeader1a = Pattern.compile(regexHeader1a);
 	private static final Pattern patternHeader1b = Pattern.compile(regexHeader1b);
 
-	@PostConstruct
-	public void init(){
-		defaultLocale = Locale.forLanguageTag(localeName);
-	} 
-	
-	@Override
-	public int getPriority() {
-		return PRIORITY_NORMAL;
-	}
+	private final Logger logger = LoggerFactory.getLogger(LocalPageProvider.class);
 	
 	@Override
 	public Collection<Page> getAll() {
-		List<Page> pages = new ArrayList<Page>();
+		Resource resource = resourceLoader.getResource(pageResourcePath);
 		
-		String basePath = pageResourcePath + "/";
-		
-		// find all script message resource.
-		Collection<String> resourceNames = webResourceManager.getAllNames();
-
-		for(String resourceName : resourceNames){
-
-			if (!resourceName.startsWith(basePath)) {
-				continue;
+		try{
+			File baseDir = resource.getFile();
+			
+			// Do not throws exception because the web application maybe running in the
+			// WAR package.
+			if (!baseDir.exists()){
+				logger.error("Can not find the local page resource folder [{}], please ensure " +
+						"unpackage the WAR if you are running web application.", pageResourcePath);
+				return new ArrayList<Page>();
 			}
 			
-			// the fullname will excludes the slash mark.
-			// e.g. "developers/api/user.md"
-			String fullname = resourceName.substring(basePath.length() + 1); 
+			return scan(baseDir);
+			
+		}catch(IOException e){
+			logger.error("Load local page resource repository error, {}", e.getMessage());
+		}
+		
+		return new ArrayList<Page>();
+	}
+	
+	private Collection<Page> scan(File baseDir) {
+		
+		LocalPageResourceNameStrategy localPageResourceNameStrategy = new DefaultLocalPageResourceNameStrategy(baseDir);
+		LocalPageResourceInfoFactory localPageResourceInfoFactory = new LocalPageResourceInfoFactory(mimeTypeDetector, localPageResourceNameStrategy);
+		
+		List<Page> pages = new ArrayList<Page>();
+		
+		Collection<ResourceInfo> resourceInfos = resourceScanner.scan(baseDir, localPageResourceInfoFactory);
+		for(ResourceInfo resourceInfo : resourceInfos) {
+			LocalPageResourceInfo localPageResourceInfo = (LocalPageResourceInfo)resourceInfo;
+			String fullname = localPageResourceInfo.getName();
 			String path = null;
 			String filename = fullname;
 			
@@ -118,7 +141,7 @@ public class WebResourcePageProvider implements PageProvider {
 				filename = fullname.substring(pos + 1);
 			}
 			
-			Matcher matcher = pageResourceNamePattern.matcher(filename);
+			Matcher matcher = resourceNamePattern.matcher(filename);
 			if (matcher.find()){
 				String name = matcher.group(1);
 				String urlName = matcher.group(3);
@@ -127,8 +150,9 @@ public class WebResourcePageProvider implements PageProvider {
 				String countryCode = matcher.group(10);
 				String revision = matcher.group(12);
 				
-				// concat page name
-				String pageName = name;
+				// build page name
+				int extPos = name.lastIndexOf('.');
+				String pageName = name.substring(0, extPos); // exclude the file extension name
 				if (path != null) {
 					pageName = path + "/" + name;
 				}
@@ -162,11 +186,9 @@ public class WebResourcePageProvider implements PageProvider {
 				}
 				
 				try{
-					WebResourceInfo webResourceInfo = webResourceManager.getResource(resourceName);
-					
 					RevisionPage revisionDoc = convertResourceInfo(
-								webResourceInfo, 
-								name, locale, revisionNumber, 
+								resourceInfo, 
+								pageName, locale, revisionNumber, 
 								urlName, templateName);
 				
 					pages.add(revisionDoc);
@@ -179,21 +201,20 @@ public class WebResourcePageProvider implements PageProvider {
 		return pages;
 	}
 	
-	private RevisionPage convertResourceInfo(WebResourceInfo webResourceInfo, 
+	private RevisionPage convertResourceInfo(ResourceInfo resourceInfo, 
 			String name, Locale locale, int revision,
 			String urlName, String templateName) throws IOException{
 		
 		InputStream in = null;
 		try{
-			in = webResourceInfo.getContent();
+			in = resourceInfo.getContent();
 			String content = IOUtils.toString(in, "UTF-8");
 			String title = extractTitle(content);
 			
 			RevisionPage page = new RevisionPage();
 			page.setContent(content);
-			page.setLastModified(webResourceInfo.getLastModified());
-			page.setLocale(locale);
-			page.setName(name);
+			page.setLastModified(resourceInfo.getLastModified());
+			page.setPageKey(new PageKey(name, locale));
 			page.setRevision(revision);
 			page.setTemplateName(templateName);
 			page.setTitle(title);
@@ -266,4 +287,9 @@ public class WebResourcePageProvider implements PageProvider {
 		
 		return title.substring(start, end +1).trim();
 	}	
+
+	@Override
+	public int getOrder() {
+		return PRIORITY_LOWER;
+	}
 }

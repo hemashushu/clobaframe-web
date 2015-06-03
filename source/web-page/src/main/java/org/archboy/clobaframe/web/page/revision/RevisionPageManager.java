@@ -35,7 +35,7 @@ public interface RevisionPageManager extends PageManager {
 	 * @param pageKey
 	 * @return 0 when there is no other revision.
 	 */
-	int getActiveRevision(PageKey pageKey);
+	int getCurrentRevision(PageKey pageKey);
 	
 	/**
 	 * Rollback a revision.

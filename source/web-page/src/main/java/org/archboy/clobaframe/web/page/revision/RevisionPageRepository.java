@@ -17,7 +17,7 @@ public interface RevisionPageRepository extends PageRepository {
 	 * @param pageKey
 	 * @return 0 when there is no other revision.
 	 */
-	int getActiveRevision(PageKey pageKey);
+	int getCurrentRevision(PageKey pageKey);
 	
 	/**
 	 * 

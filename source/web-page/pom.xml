@@ -106,16 +106,15 @@
 
 		<dependency>
 			<groupId>org.archboy.clobaframe</groupId>
+			<artifactId>clobaframe-io</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.archboy.clobaframe</groupId>
 			<artifactId>clobaframe-webresource</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 
-	<repositories>
-	</repositories>
-
-	<build>
-		<plugins>
-		</plugins>
-	</build>
 </project>

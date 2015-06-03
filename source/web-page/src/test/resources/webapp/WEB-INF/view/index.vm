@@ -1,0 +1,93 @@
+#set ($layout = 'layout/default.vm')
+#set ($pageTitle = 'Clobaframe-Web Demo page')
+#set ($pageResources = ['css/index.css','js/index.js'])
+#set ($metaKeywords = 'clobaframe web')
+#set ($metaDescription = 'a web application template that base on clobaframe.')
+
+## add custom header
+$header.addHeader('meta', {"name":"rebots", "content":"noodp"}, false)
+
+<div class="test-i18n">
+	<h2>$msg.message('index.testI18nMessage')</h2>
+	<p class="text">$msg.message('test.text2', 'WORLD!', $now)</p>
+	
+	<p>Change language</p>
+	<ul class="action">
+		<li><a href="/changelocale?locale=en">$msg.message('common.language.en')</a></li>
+		<li><a href="/changelocale?locale=ja">$msg.message('common.language.ja')</a></li>
+		<li><a href="/changelocale?locale=zh_CN">$msg.message('common.language.zh_CN')</a></li>
+	</ul>
+</div>
+
+<div class="test-script-i18n">
+	<h2>$msg.message('index.testScriptI18nMessage')</h2>
+	<p>$msg.message('index.testScriptI18nMessage.currentLanguageTag') <em>$msg.locale</em></p>
+	<p class="text"></p>
+</div>
+
+<div class="test-text-escape">
+	<h2>Test text escape and formatter</h2>
+	<p>HTML escape <em class="text">$esc.html($html)</em></p>
+	<p>Integer formatter <em class="text">$num.integer($integer)</em></p>
+</div>
+
+<div class="test-web-resource">
+	<h2>Test web resource</h2>
+	<ul>
+		<li><a href="/robots.txt">robots.txt</a></li>
+		<li><a href="/favicon.ico">favicon.ico</a></li>
+		<li><a href="/favicon.png">favicon.png</a></li>
+		<li><a href="/apple-touch-icon.png">apple-touch-icon.png</a></li>
+		<li><a href="/launcher-icon-192x192.png">launcher-icon-192x192.png</a></li>
+	</ul>
+</div>
+
+<div class="test-view-object">
+	<h2>Test view object</h2>
+	<p class="text"></p>
+</div>
+
+<div class="test-rest">
+	<h2>Test RESTful API</h2>
+	<form>
+		<div>
+			<label>Choose a photo
+				<input type="file" accept="image/*" name="file">
+			</label>
+		</div>
+		<div>
+			<label>title:
+				<input type="text" name="title">
+			</label>
+		</div>
+		<div>
+			<label>description:
+				<input type="text" name="description">
+			</label>
+		</div>
+		<div>
+			<input type="submit" value="Create a note">
+		</div>
+	</form>
+	<ul class="notes">
+		
+	</ul>
+</div>
+
+<div>
+	<h2>Test Doc</h2>
+	<ul>
+		<li><a href="/doc/about">$msg.message('index.about')</a></li>
+		<li><a href="/doc/terms">$msg.message('index.terms')</a></li>
+		<li><a href="/doc/privacy">$msg.message('index.privacy')</a></li>
+	</ul>
+</div>
+
+<!-- write custom page resource -->
+$header.writeResource('script', 'src', 'jsx/helloworld.js', {'type':'text/jsx'}, true)
+
+<script>
+	(function(window){
+		window.viewObject = $json.write($viewObject);
+	})(this);
+</script>

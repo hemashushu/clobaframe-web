@@ -1,4 +1,4 @@
-package org.archboy.clobaframe.web.page.revision.impl;
+package org.archboy.clobaframe.web.page.revision.local;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -12,7 +12,9 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.lang3.StringUtils;
+import org.archboy.clobaframe.query.simplequery.SimpleQuery;
 import org.archboy.clobaframe.web.page.Page;
+import org.archboy.clobaframe.web.page.PageKey;
 import org.archboy.clobaframe.web.page.PageProvider;
 import org.archboy.clobaframe.web.page.PageRepository;
 import org.archboy.clobaframe.web.page.revision.RevisionPage;
@@ -27,7 +29,7 @@ import org.springframework.beans.factory.annotation.Value;
  * @author yang
  */
 @Named
-public class RevisionPageManagerImpl implements RevisionPageManager {
+public class LocalRevisionPageManagerImpl implements RevisionPageManager {
 
 	@Inject
 	private List<RevisionPageProvider> revisionPageProviders;
@@ -35,11 +37,9 @@ public class RevisionPageManagerImpl implements RevisionPageManager {
 	@Autowired(required = false)
 	private RevisionPageRepository revisionPageRepository;
 	
-	private static final String DEFAULT_LOCALE_NAME = "en";
+	private static final String DEFAULT_LOCALE = "en";
 	
-	@Value("${clobaframe.web.page.defaultLocale}")
-	private String localeName = DEFAULT_LOCALE_NAME;
-	
+	@Value("${clobaframe.web.page.defaultLocale:" + DEFAULT_LOCALE + "}")
 	private Locale defaultLocale;
 	
 	/**
@@ -55,19 +55,6 @@ public class RevisionPageManagerImpl implements RevisionPageManager {
 	
 	@PostConstruct
 	public void init(){
-		
-		defaultLocale = Locale.forLanguageTag(localeName);
-		
-		// sort the page providers by the priority.
-		// the highest priorty (that with less number) will put to the head.
-		revisionPageProviders.sort(new Comparator<PageProvider>() {
-
-			@Override
-			public int compare(PageProvider o1, PageProvider o2) {
-				return o1.getPriority() - o2.getPriority();
-			}
-		});
-		
 		// get all pages and build page map and url name map.
 		// try to get from the lower priorty proiver first.
 		for (int idx=revisionPageProviders.size() - 1; idx>=0; idx--){
@@ -83,70 +70,78 @@ public class RevisionPageManagerImpl implements RevisionPageManager {
 				RevisionPage revisionPage = (RevisionPage)page;
 				
 				// get locale doc
-				Map<Locale, Set<RevisionPage>> localePages = pageMap.get(revisionPage.getName());
+				Map<Locale, Set<RevisionPage>> localePages = pageMap.get(revisionPage.getPageKey().getName());
 				if (localePages == null){
 					localePages = new HashMap<Locale, Set<RevisionPage>>();
-					pageMap.put(revisionPage.getName(), localePages);
+					pageMap.put(revisionPage.getPageKey().getName(), localePages);
 				}
 				
 				// get revisions
-				Set<RevisionPage> revisionPages = localePages.get(revisionPage.getLocale());
+				Set<RevisionPage> revisionPages = localePages.get(revisionPage.getPageKey().getLocale());
 				if (revisionPages == null) {
 					revisionPages = new HashSet<RevisionPage>();
-					localePages.put(revisionPage.getLocale(), revisionPages);
+					localePages.put(revisionPage.getPageKey().getLocale(), revisionPages);
 				}
 				
 				// add (or replace) the page.
 				revisionPages.add(revisionPage);
 				
 				if (StringUtils.isNotEmpty(revisionPage.getUrlName())){
-					urlMap.put(revisionPage.getUrlName(), revisionPage.getName());
+					urlMap.put(revisionPage.getUrlName(), revisionPage.getPageKey().getName());
 				}
 			}
 		}
 	}
 	
 	@Override
-	public Collection<RevisionPage> listRevision(String name, Locale locale) {
-		Map<Locale, Set<RevisionPage>> localePages = pageMap.get(name);
+	public Collection<RevisionPage> listRevision(PageKey pageKey) {
+		Map<Locale, Set<RevisionPage>> localePages = pageMap.get(pageKey.getName());
 		if (localePages == null) {
 			return null;
 		}
 		
-		return localePages.get(locale);
+		return localePages.get(pageKey.getLocale());
 	}
 
 	@Override
-	public int getActiveRevision(String name, Locale locale) {
-		return revisionPageRepository.getActiveRevision(name, locale);
-	}
-
-	@Override
-	public RevisionPage get(String name, Locale locale, int revision) {
-		Collection<RevisionPage> revisionPages = listRevision(name, locale);
-		if (revisionPages != null) {
-			for (RevisionPage revisionPage : revisionPages) {
-				if (revisionPage.getRevision() == revision) {
-					return revisionPage;
-				}
-			}
+	public int getCurrentRevision(PageKey pageKey) {
+		Collection<RevisionPage> revisionPages = listRevision(pageKey);
+		if (revisionPages == null) {
+			return 0;
 		}
-		return null;
+		
+		RevisionPage page = SimpleQuery.from(revisionPages).orderBy("revision").first();
+		return page.getRevision();
 	}
 
 	@Override
-	public void setActiveRevision(String name, Locale locale, int revision) {
-		revisionPageRepository.setActiveRevision(name, locale, revision);
+	public RevisionPage get(PageKey pageKey, int revision) {
+		Collection<RevisionPage> revisionPages = listRevision(pageKey);
+		if (revisionPages == null) {
+			return null;
+		}
+		
+		return SimpleQuery.from(revisionPages).whereEquals("revision", revision).first();
 	}
 
 	@Override
-	public void delete(String name, Locale locale, int revision) {
-		revisionPageRepository.delete(name, locale, revision);
+	public void rollbackRevision(PageKey pageKey, int revision) {
+		revisionPageRepository.rollbackRevision(pageKey, revision);
 	}
 
 	@Override
-	public Page get(String name, Locale locale) {
-		return get(name, locale, 0);
+	public void delete(PageKey pageKey, int revision) {
+		revisionPageRepository.delete(pageKey, revision);
+	}
+
+	@Override
+	public Page get(PageKey pageKey) {
+		Collection<RevisionPage> revisionPages = listRevision(pageKey);
+		if (revisionPages == null) {
+			return null;
+		}
+		
+		return SimpleQuery.from(revisionPages).orderByDesc("revision").first();
 	}
 
 	@Override
@@ -165,25 +160,19 @@ public class RevisionPageManagerImpl implements RevisionPageManager {
 	}
 
 	@Override
-	public Page update(String name, Locale locale, 
-			String title, String content, 
-			String urlName, String templateName, 
-			String authorName, String authorId, String updateNote) {
+	public Page update(PageKey pageKey,
+		String title, String content, 
+		String urlName, String templateName,
+		String authorName, String authorId, String comment) {
 		
-		return revisionPageRepository.update(name, locale, 
-				title, content, 
+		return revisionPageRepository.update(pageKey, title, content, 
 				urlName, templateName, 
-				authorName, authorId, updateNote);
+				authorName, authorId, comment);
 	}
 
 	@Override
-	public void delete(String name, Locale locale) {
-		Collection<RevisionPage> revisionPages = listRevision(name, locale);
-		if (revisionPages != null) {
-			for (RevisionPage revisionPage : revisionPages) {
-				revisionPageRepository.delete(name, locale, revisionPage.getRevision());
-			}
-		}
+	public void delete(PageKey pageKey) {
+		revisionPageRepository.delete(pageKey);
 	}
 
 	@Override

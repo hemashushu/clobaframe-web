@@ -42,19 +42,22 @@ public class PageController {
 		
 		System.out.println(">>>>>> Page:" + pageName + ", locale:" + locale);
 		
-		Page page = getCompatiblePage(pageName, locale, path);
+		Page page = getCompatiblePage(pageName, locale);
 		if (page == null){
 			throw new PageNotFound(path);
 		}
 		
 		model.addAttribute("page", page);
 		
-		String templateName = StringUtils.isEmpty(page.getTemplateName()) ? defaultTemplateName : page.getTemplateName();
+		String templateName = StringUtils.isEmpty(page.getTemplateName()) ? 
+				defaultTemplateName : 
+				page.getTemplateName();
+		
 		return templateName;
 	}
 	
 	@RequestMapping("/**")
-	public String sendCustomUrlPage(
+	public String sendUrlPage(
 			HttpServletRequest request,
 			Locale locale,
 			Model model) throws IOException {
@@ -67,14 +70,17 @@ public class PageController {
 		
 		System.out.println(">>>>>> Custom url page:" + pageName + ", locale:" + locale);
 		
-		Page page = getCompatiblePage(pageName, locale, path);
+		Page page = getCompatiblePage(pageName, locale);
 		if (page == null){
 			throw new PageNotFound(path);
 		}
 		
 		model.addAttribute("page", page);
 		
-		String templateName = StringUtils.isEmpty(page.getTemplateName()) ? defaultTemplateName : page.getTemplateName();
+		String templateName = StringUtils.isEmpty(page.getTemplateName()) ? 
+				defaultTemplateName : 
+				page.getTemplateName();
+		
 		return templateName;
 	}
 
@@ -86,10 +92,11 @@ public class PageController {
 	 * @return 
 	 */
 	private Page getCompatiblePage(String pageName, Locale locale) {
+		
 		PageKey pageKey = new PageKey(pageName, locale);
 		Page page = pageManager.get(pageKey);
 		
-		if (page == null) {
+		if (page != null) {
 			return page;
 		}
 		
@@ -107,8 +114,8 @@ public class PageController {
 				}
 			}
 			
-			// try to get the page without local
-			pageKey = new PageKey(pageName, null);
+			// try to get the page with default locale
+			pageKey = new PageKey(pageName, pageManager.getDefaultLocale());
 			page = pageManager.get(pageKey);
 		}
 		
