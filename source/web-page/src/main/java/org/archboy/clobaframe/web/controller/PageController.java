@@ -40,8 +40,6 @@ public class PageController {
 		String path = request.getRequestURI();
 		String pageName = path.substring(pagePathLength);
 		
-		System.out.println(">>>>>> Page:" + pageName + ", locale:" + locale);
-		
 		Page page = getCompatiblePage(pageName, locale);
 		if (page == null){
 			throw new PageNotFound(path);
@@ -62,13 +60,12 @@ public class PageController {
 			Locale locale,
 			Model model) throws IOException {
 		String path = request.getRequestURI();
-		String pageName = pageManager.getName(path);
+		String pathName = path.substring(1);
+		String pageName = pageManager.getByUrlName(pathName);
 		
 		if (pageName == null) {
 			throw new PageNotFound(path);
 		}
-		
-		System.out.println(">>>>>> Custom url page:" + pageName + ", locale:" + locale);
 		
 		Page page = getCompatiblePage(pageName, locale);
 		if (page == null){

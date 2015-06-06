@@ -13,6 +13,14 @@ import java.util.Locale;
 public interface PageManager {
 	
 	/**
+	 * List all available locale for the specify page.
+	 * 
+	 * @param name
+	 * @return NULL when the page name does not exist.
+	 */
+	Collection<Locale> listLocale(String name);
+	
+	/**
 	 * Get the specify page by the key (page name and locale).
 	 * 
 	 * @param pageKey
@@ -26,18 +34,13 @@ public interface PageManager {
 	 * @param urlName
 	 * @return NULL when the specify URL name page does not exist.
 	 */
-	String getName(String urlName);
-	
-	/**
-	 * List all available locale for the specify page.
-	 * 
-	 * @param name
-	 * @return NULL when the page name does not exist.
-	 */
-	Collection<Locale> listLocale(String name);
+	String getByUrlName(String urlName);
 
 	/**
-	 * Add or update a doc.
+	 * Create or update a page.
+	 * In some extend manager that supports the revision, this method
+	 * always create new page or new revision, it would not update a page or
+	 * a revision.
 	 * 
 	 * @param pageKey
 	 * @param title
@@ -49,13 +52,19 @@ public interface PageManager {
 	 * @param comment Optional.
 	 * @return 
 	 */
-	Page update(PageKey pageKey,
+	Page save(PageKey pageKey,
 		String title, String content, 
 		String urlName, String templateName,
 		String authorName, String authorId, String comment);
+
+	/**
+	 * 
+	 * @param name 
+	 */
+	void delete(String name);
 	
 	/**
-	 * Delete a page.
+	 * Delete a specify locale page.
 	 * 
 	 * When the specify page does not found, it will NOT occurs an exception.
 	 * 

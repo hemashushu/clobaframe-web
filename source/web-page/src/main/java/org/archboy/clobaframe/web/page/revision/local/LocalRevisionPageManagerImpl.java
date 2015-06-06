@@ -1,22 +1,15 @@
 package org.archboy.clobaframe.web.page.revision.local;
 
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.apache.commons.lang3.StringUtils;
-import org.archboy.clobaframe.query.simplequery.SimpleQuery;
 import org.archboy.clobaframe.web.page.Page;
 import org.archboy.clobaframe.web.page.PageKey;
 import org.archboy.clobaframe.web.page.PageProvider;
-import org.archboy.clobaframe.web.page.PageRepository;
+import org.archboy.clobaframe.web.page.revision.AbstractRevisionPageCollection;
 import org.archboy.clobaframe.web.page.revision.RevisionPage;
 import org.archboy.clobaframe.web.page.revision.RevisionPageManager;
 import org.archboy.clobaframe.web.page.revision.RevisionPageProvider;
@@ -29,7 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
  * @author yang
  */
 @Named
-public class LocalRevisionPageManagerImpl implements RevisionPageManager {
+public class LocalRevisionPageManagerImpl extends AbstractRevisionPageCollection implements RevisionPageManager {
 
 	@Inject
 	private List<RevisionPageProvider> revisionPageProviders;
@@ -42,17 +35,6 @@ public class LocalRevisionPageManagerImpl implements RevisionPageManager {
 	@Value("${clobaframe.web.page.defaultLocale:" + DEFAULT_LOCALE + "}")
 	private Locale defaultLocale;
 	
-	/**
-	 * The map key is: "page name, locale, revision".
-	 */
-	private Map<String, Map<Locale, Set<RevisionPage>>> pageMap = 
-			new HashMap<String, Map<Locale, Set<RevisionPage>>>();
-	
-	/**
-	 * The URL name - page name map.
-	 */
-	private Map<String, String> urlMap = new HashMap<String, String>();
-	
 	@PostConstruct
 	public void init(){
 		// get all pages and build page map and url name map.
@@ -63,120 +45,92 @@ public class LocalRevisionPageManagerImpl implements RevisionPageManager {
 			Collection<Page> pages = pageProvider.getAll();
 			
 			for(Page page : pages){
-				if (!(page instanceof RevisionPage)) {
-					continue; // skip none revision page
-				}
-				
-				RevisionPage revisionPage = (RevisionPage)page;
-				
-				// get locale doc
-				Map<Locale, Set<RevisionPage>> localePages = pageMap.get(revisionPage.getPageKey().getName());
-				if (localePages == null){
-					localePages = new HashMap<Locale, Set<RevisionPage>>();
-					pageMap.put(revisionPage.getPageKey().getName(), localePages);
-				}
-				
-				// get revisions
-				Set<RevisionPage> revisionPages = localePages.get(revisionPage.getPageKey().getLocale());
-				if (revisionPages == null) {
-					revisionPages = new HashSet<RevisionPage>();
-					localePages.put(revisionPage.getPageKey().getLocale(), revisionPages);
-				}
-				
-				// add (or replace) the page.
-				revisionPages.add(revisionPage);
-				
-				if (StringUtils.isNotEmpty(revisionPage.getUrlName())){
-					urlMap.put(revisionPage.getUrlName(), revisionPage.getPageKey().getName());
+				if (page instanceof RevisionPage) {
+					// skip none revision page
+					save((RevisionPage)page);
 				}
 			}
 		}
 	}
-	
-	@Override
-	public Collection<RevisionPage> listRevision(PageKey pageKey) {
-		Map<Locale, Set<RevisionPage>> localePages = pageMap.get(pageKey.getName());
-		if (localePages == null) {
-			return null;
-		}
-		
-		return localePages.get(pageKey.getLocale());
-	}
 
 	@Override
-	public int getCurrentRevision(PageKey pageKey) {
-		Collection<RevisionPage> revisionPages = listRevision(pageKey);
-		if (revisionPages == null) {
-			return 0;
+	public Page save(PageKey pageKey,
+		String title, String content, 
+		String urlName, String templateName,
+		String authorName, String authorId, String comment) {
+		
+		int revision = 0;
+		RevisionPage exist = (RevisionPage)get(pageKey);
+		if (exist != null) {
+			revision = exist.getRevision() + 1;
 		}
 		
-		RevisionPage page = SimpleQuery.from(revisionPages).orderBy("revision").first();
-		return page.getRevision();
-	}
-
-	@Override
-	public RevisionPage get(PageKey pageKey, int revision) {
-		Collection<RevisionPage> revisionPages = listRevision(pageKey);
-		if (revisionPages == null) {
-			return null;
-		}
-		
-		return SimpleQuery.from(revisionPages).whereEquals("revision", revision).first();
-	}
-
-	@Override
-	public void rollbackRevision(PageKey pageKey, int revision) {
-		revisionPageRepository.rollbackRevision(pageKey, revision);
+		RevisionPage revisionPage = (RevisionPage)revisionPageRepository.save(
+				pageKey, revision, title, content, 
+				urlName, templateName, 
+				authorName, authorId, comment);
+		super.save(revisionPage);
+		return revisionPage;
 	}
 
 	@Override
 	public void delete(PageKey pageKey, int revision) {
 		revisionPageRepository.delete(pageKey, revision);
-	}
-
-	@Override
-	public Page get(PageKey pageKey) {
-		Collection<RevisionPage> revisionPages = listRevision(pageKey);
-		if (revisionPages == null) {
-			return null;
-		}
-		
-		return SimpleQuery.from(revisionPages).orderByDesc("revision").first();
-	}
-
-	@Override
-	public String getName(String urlName) {
-		return urlMap.get(urlName);
+		super.delete(pageKey, revision);
 	}
 	
 	@Override
-	public Collection<Locale> listLocale(String name) {
-		Map<Locale, Set<RevisionPage>> localeDocs = pageMap.get(name);
-		if (localeDocs == null) {
-			return null;
-		}
-		
-		return localeDocs.keySet();
-	}
-
-	@Override
-	public Page update(PageKey pageKey,
-		String title, String content, 
-		String urlName, String templateName,
-		String authorName, String authorId, String comment) {
-		
-		return revisionPageRepository.update(pageKey, title, content, 
-				urlName, templateName, 
-				authorName, authorId, comment);
-	}
-
-	@Override
 	public void delete(PageKey pageKey) {
 		revisionPageRepository.delete(pageKey);
+		super.delete(pageKey);
 	}
 
+	@Override
+	public void delete(String name) {
+		revisionPageRepository.delete(name);
+		super.delete(name);
+	}
+	
+	@Override
+	public RevisionPage rollbackRevision(PageKey pageKey, int revision) {
+		int v = getCurrentRevision(pageKey);
+		if (v == revision) {
+			throw new IllegalArgumentException("This is already the current revision");
+		}
+		
+		v++;
+			
+		RevisionPage old = get(pageKey, revision);
+
+		RevisionPage page = new RevisionPage();
+		page.setAuthorId(old.getAuthorId());
+		page.setAuthorName(old.getAuthorName());
+		page.setComment(old.getComment());
+		page.setContent(old.getContent());
+		page.setLastModified(old.getLastModified());
+		page.setPageKey(old.getPageKey());
+		page.setRevision(v);
+		page.setTemplateName(old.getTemplateName());
+		page.setTitle(old.getTitle());
+		page.setUrlName(old.getUrlName());
+			
+		revisionPageRepository.delete(pageKey, revision);
+		revisionPageRepository.save(pageKey, revision, 
+				page.getTitle(), page.getContent(),
+				page.getUrlName(), page.getTemplateName(),
+				page.getAuthorName(), page.getAuthorId(),
+				page.getComment());
+				
+		super.delete(pageKey, revision);
+		super.save(page);
+		return page;
+	}
+
+	
+	
 	@Override
 	public Locale getDefaultLocale() {
 		return defaultLocale;
 	}
+	
 }

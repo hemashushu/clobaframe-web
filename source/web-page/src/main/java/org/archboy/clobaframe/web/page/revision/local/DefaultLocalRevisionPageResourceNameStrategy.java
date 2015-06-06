@@ -15,11 +15,11 @@ import org.archboy.clobaframe.webresource.local.LocalWebResourceNameStrategy;
  * 
  * @author yang
  */
-public class DefaultLocalPageResourceNameStrategy implements LocalPageResourceNameStrategy {
+public class DefaultLocalRevisionPageResourceNameStrategy implements LocalRevisionPageResourceNameStrategy {
 	
 	private int basePathLength;
 
-	public DefaultLocalPageResourceNameStrategy(File basePath) {
+	public DefaultLocalRevisionPageResourceNameStrategy(File basePath) {
 		// the base path length plus 1 to exclude the resource file name path
 		// '/' prefix character.
 		this.basePathLength = basePath.getPath().length() + 1; 
@@ -30,7 +30,4 @@ public class DefaultLocalPageResourceNameStrategy implements LocalPageResourceNa
 		String name = file.getPath().substring(basePathLength);
 		return name.replace('\\', '/');
 	}
-	
-	
-	
 }

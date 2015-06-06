@@ -1,6 +1,7 @@
 package org.archboy.clobaframe.web.page.revision;
 
 import java.util.Locale;
+import org.archboy.clobaframe.web.page.Page;
 import org.archboy.clobaframe.web.page.PageKey;
 import org.archboy.clobaframe.web.page.PageRepository;
 
@@ -11,20 +12,17 @@ import org.archboy.clobaframe.web.page.PageRepository;
 public interface RevisionPageRepository extends PageRepository {
 	
 	/**
-	 * Get the active revision.
-	 * Normally the active revision is the latest revision number.
-	 * 
-	 * @param pageKey
-	 * @return 0 when there is no other revision.
-	 */
-	int getCurrentRevision(PageKey pageKey);
-	
-	/**
-	 * 
+	 * TODO::// DELETE THIS METHOD, REPLACE WITH THE ALTERNATIVE save(int revision, ...).
 	 * @param pageKey
 	 * @param revision 
+	 * @return  
 	 */
-	void rollbackRevision(PageKey pageKey, int revision);
+	//RevisionPage rollbackRevision(PageKey pageKey, int revision);
+	
+	Page save(PageKey pageKey, int revision,
+		String title, String content, 
+		String urlName, String templateName,
+		String authorName, String authorId, String comment);
 	
 	/**
 	 * 

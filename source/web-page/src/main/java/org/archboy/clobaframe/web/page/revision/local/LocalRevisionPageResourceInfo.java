@@ -7,7 +7,7 @@ import org.archboy.clobaframe.io.file.FileBaseResourceInfo;
  *
  * @author yang
  */
-public interface LocalPageResourceInfo extends ResourceInfo {
+public interface LocalRevisionPageResourceInfo extends ResourceInfo {
 	
 	/**
 	 * The page resource name, include relative path.

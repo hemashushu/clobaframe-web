@@ -19,6 +19,7 @@ import org.archboy.clobaframe.web.page.Page;
 import org.archboy.clobaframe.web.page.PageKey;
 import org.archboy.clobaframe.web.page.PageProvider;
 import org.archboy.clobaframe.web.page.revision.RevisionPage;
+import org.archboy.clobaframe.web.page.revision.RevisionPageProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +31,7 @@ import org.springframework.core.io.ResourceLoader;
  * @author yang
  */
 @Named
-public class LocalPageProvider implements PageProvider {
+public class LocalRevisionPageProvider implements RevisionPageProvider {
 
 	@Inject
 	private ResourceLoader resourceLoader;
@@ -95,7 +96,7 @@ public class LocalPageProvider implements PageProvider {
 	private static final Pattern patternHeader1a = Pattern.compile(regexHeader1a);
 	private static final Pattern patternHeader1b = Pattern.compile(regexHeader1b);
 
-	private final Logger logger = LoggerFactory.getLogger(LocalPageProvider.class);
+	private final Logger logger = LoggerFactory.getLogger(LocalRevisionPageProvider.class);
 	
 	@Override
 	public Collection<Page> getAll() {
@@ -123,14 +124,14 @@ public class LocalPageProvider implements PageProvider {
 	
 	private Collection<Page> scan(File baseDir) {
 		
-		LocalPageResourceNameStrategy localPageResourceNameStrategy = new DefaultLocalPageResourceNameStrategy(baseDir);
-		LocalPageResourceInfoFactory localPageResourceInfoFactory = new LocalPageResourceInfoFactory(mimeTypeDetector, localPageResourceNameStrategy);
+		LocalRevisionPageResourceNameStrategy localPageResourceNameStrategy = new DefaultLocalRevisionPageResourceNameStrategy(baseDir);
+		LocalRevisionPageResourceInfoFactory localPageResourceInfoFactory = new LocalRevisionPageResourceInfoFactory(mimeTypeDetector, localPageResourceNameStrategy);
 		
 		List<Page> pages = new ArrayList<Page>();
 		
 		Collection<ResourceInfo> resourceInfos = resourceScanner.scan(baseDir, localPageResourceInfoFactory);
 		for(ResourceInfo resourceInfo : resourceInfos) {
-			LocalPageResourceInfo localPageResourceInfo = (LocalPageResourceInfo)resourceInfo;
+			LocalRevisionPageResourceInfo localPageResourceInfo = (LocalRevisionPageResourceInfo)resourceInfo;
 			String fullname = localPageResourceInfo.getName();
 			String path = null;
 			String filename = fullname;
@@ -151,11 +152,7 @@ public class LocalPageProvider implements PageProvider {
 				String revision = matcher.group(12);
 				
 				// build page name
-				int extPos = name.lastIndexOf('.');
-				String pageName = name.substring(0, extPos); // exclude the file extension name
-				if (path != null) {
-					pageName = path + "/" + name;
-				}
+				String pageName = (path != null) ? pageName = path + "/" + name : name;
 				
 				// get the locale value
 				Locale locale = null;
@@ -291,5 +288,15 @@ public class LocalPageProvider implements PageProvider {
 	@Override
 	public int getOrder() {
 		return PRIORITY_LOWER;
+	}
+
+	@Override
+	public RevisionPage get(PageKey pageKey, int revision) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public Collection<RevisionPage> listRevision(PageKey pageKey) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 }

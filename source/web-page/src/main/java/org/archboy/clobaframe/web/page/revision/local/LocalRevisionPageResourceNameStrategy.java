@@ -7,7 +7,7 @@ import java.io.File;
  * 
  * @author yang
  */
-public interface LocalPageResourceNameStrategy {
+public interface LocalRevisionPageResourceNameStrategy {
 	
 	String getName(File file);
 	
