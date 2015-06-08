@@ -22,7 +22,7 @@ public interface PageRepository {
 	 * @param comment Optional.
 	 * @return 
 	 */
-	Page save(PageKey pageKey,
+	PageInfo save(PageKey pageKey,
 		String title, String content, 
 		String urlName, String templateName,
 		String authorName, String authorId, String comment);

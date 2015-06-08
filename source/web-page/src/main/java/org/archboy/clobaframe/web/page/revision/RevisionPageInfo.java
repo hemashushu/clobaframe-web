@@ -3,13 +3,13 @@ package org.archboy.clobaframe.web.page.revision;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.archboy.clobaframe.web.page.Page;
+import org.archboy.clobaframe.web.page.PageInfo;
 
 /**
  *
  * @author yang
  */
-public class RevisionPage extends Page {
+public class RevisionPageInfo extends PageInfo {
 	
 	/**
 	 * The page revision number.
@@ -47,7 +47,7 @@ public class RevisionPage extends Page {
 			return false;
 		}
 
-		RevisionPage other = (RevisionPage)o;
+		RevisionPageInfo other = (RevisionPageInfo)o;
 		return new EqualsBuilder()
 				.append(getPageKey(), other.getPageKey())
 				.append(getRevision(), other.getRevision())

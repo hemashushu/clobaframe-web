@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  *
  * @author yang
  */
-public class Page {
+public class PageInfo {
 	
 	private PageKey pageKey;
 	
@@ -149,7 +149,7 @@ public class Page {
 			return false;
 		}
 
-		Page other = (Page)o;
+		PageInfo other = (PageInfo)o;
 		return new EqualsBuilder()
 				.append(getPageKey(), other.getPageKey())
 				.isEquals();

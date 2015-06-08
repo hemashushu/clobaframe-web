@@ -4,9 +4,9 @@ import java.util.Collection;
 import java.util.Locale;
 
 /**
- * Page manager.
+ * PageInfo manager.
  * 
- * Page manager includes several providers and one repository. 
+ * PageInfo manager includes several providers and one repository. 
  * 
  * @author yang
  */
@@ -26,7 +26,7 @@ public interface PageManager {
 	 * @param pageKey
 	 * @return NULL when the page key does not exist.
 	 */
-	Page get(PageKey pageKey);
+	PageInfo get(PageKey pageKey);
 	
 	/**
 	 * Get the page name by the URL name.
@@ -52,7 +52,7 @@ public interface PageManager {
 	 * @param comment Optional.
 	 * @return 
 	 */
-	Page save(PageKey pageKey,
+	PageInfo save(PageKey pageKey,
 		String title, String content, 
 		String urlName, String templateName,
 		String authorName, String authorId, String comment);

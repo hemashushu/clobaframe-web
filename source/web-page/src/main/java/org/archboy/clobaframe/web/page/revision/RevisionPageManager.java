@@ -21,14 +21,14 @@ public interface RevisionPageManager extends PageManager {
 	 * @param revision
 	 * @return NULL when it does not found
 	 */
-	RevisionPage get(PageKey pageKey, int revision);
+	RevisionPageInfo get(PageKey pageKey, int revision);
 	
 	/**
 	 * 
 	 * @param pageKey
 	 * @return 
 	 */
-	Collection<RevisionPage> listRevision(PageKey pageKey);
+	Collection<RevisionPageInfo> listRevision(PageKey pageKey);
 	
 	/**
 	 * Get the active revision.
@@ -47,7 +47,7 @@ public interface RevisionPageManager extends PageManager {
 	 * @param revision 
 	 * @return  
 	 */
-	RevisionPage rollbackRevision(PageKey pageKey, int revision);
+	RevisionPageInfo rollbackRevision(PageKey pageKey, int revision);
 	
 	/**
 	 *

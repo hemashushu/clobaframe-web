@@ -1,7 +1,7 @@
 package org.archboy.clobaframe.web.page.revision;
 
 import java.util.Locale;
-import org.archboy.clobaframe.web.page.Page;
+import org.archboy.clobaframe.web.page.PageInfo;
 import org.archboy.clobaframe.web.page.PageKey;
 import org.archboy.clobaframe.web.page.PageRepository;
 
@@ -19,7 +19,7 @@ public interface RevisionPageRepository extends PageRepository {
 	 */
 	//RevisionPage rollbackRevision(PageKey pageKey, int revision);
 	
-	Page save(PageKey pageKey, int revision,
+	PageInfo save(PageKey pageKey, int revision,
 		String title, String content, 
 		String urlName, String templateName,
 		String authorName, String authorId, String comment);

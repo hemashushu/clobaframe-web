@@ -15,10 +15,10 @@ import org.apache.commons.io.IOUtils;
 import org.archboy.clobaframe.io.MimeTypeDetector;
 import org.archboy.clobaframe.io.ResourceInfo;
 import org.archboy.clobaframe.io.file.ResourceScanner;
-import org.archboy.clobaframe.web.page.Page;
+import org.archboy.clobaframe.web.page.PageInfo;
 import org.archboy.clobaframe.web.page.PageKey;
 import org.archboy.clobaframe.web.page.PageProvider;
-import org.archboy.clobaframe.web.page.revision.RevisionPage;
+import org.archboy.clobaframe.web.page.revision.RevisionPageInfo;
 import org.archboy.clobaframe.web.page.revision.RevisionPageProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,7 +99,7 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 	private final Logger logger = LoggerFactory.getLogger(LocalRevisionPageProvider.class);
 	
 	@Override
-	public Collection<Page> getAll() {
+	public Collection<PageInfo> getAll() {
 		Resource resource = resourceLoader.getResource(pageResourcePath);
 		
 		try{
@@ -110,7 +110,7 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 			if (!baseDir.exists()){
 				logger.error("Can not find the local page resource folder [{}], please ensure " +
 						"unpackage the WAR if you are running web application.", pageResourcePath);
-				return new ArrayList<Page>();
+				return new ArrayList<PageInfo>();
 			}
 			
 			return scan(baseDir);
@@ -119,15 +119,15 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 			logger.error("Load local page resource repository error, {}", e.getMessage());
 		}
 		
-		return new ArrayList<Page>();
+		return new ArrayList<PageInfo>();
 	}
 	
-	private Collection<Page> scan(File baseDir) {
+	private Collection<PageInfo> scan(File baseDir) {
 		
 		LocalRevisionPageResourceNameStrategy localPageResourceNameStrategy = new DefaultLocalRevisionPageResourceNameStrategy(baseDir);
 		LocalRevisionPageResourceInfoFactory localPageResourceInfoFactory = new LocalRevisionPageResourceInfoFactory(mimeTypeDetector, localPageResourceNameStrategy);
 		
-		List<Page> pages = new ArrayList<Page>();
+		List<PageInfo> pages = new ArrayList<PageInfo>();
 		
 		Collection<ResourceInfo> resourceInfos = resourceScanner.scan(baseDir, localPageResourceInfoFactory);
 		for(ResourceInfo resourceInfo : resourceInfos) {
@@ -183,7 +183,7 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 				}
 				
 				try{
-					RevisionPage revisionDoc = convertResourceInfo(
+					RevisionPageInfo revisionDoc = convertResourceInfo(
 								resourceInfo, 
 								pageName, locale, revisionNumber, 
 								urlName, templateName);
@@ -198,7 +198,7 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 		return pages;
 	}
 	
-	private RevisionPage convertResourceInfo(ResourceInfo resourceInfo, 
+	private RevisionPageInfo convertResourceInfo(ResourceInfo resourceInfo, 
 			String name, Locale locale, int revision,
 			String urlName, String templateName) throws IOException{
 		
@@ -208,7 +208,7 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 			String content = IOUtils.toString(in, "UTF-8");
 			String title = extractTitle(content);
 			
-			RevisionPage page = new RevisionPage();
+			RevisionPageInfo page = new RevisionPageInfo();
 			page.setContent(content);
 			page.setLastModified(resourceInfo.getLastModified());
 			page.setPageKey(new PageKey(name, locale));
@@ -291,12 +291,12 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 	}
 
 	@Override
-	public RevisionPage get(PageKey pageKey, int revision) {
+	public RevisionPageInfo get(PageKey pageKey, int revision) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override
-	public Collection<RevisionPage> listRevision(PageKey pageKey) {
+	public Collection<RevisionPageInfo> listRevision(PageKey pageKey) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 }

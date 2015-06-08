@@ -116,7 +116,7 @@ public class PageHeaderToolImpl implements PageHeaderTool {
 	@Override
 	public String writeResource(String name) {
 
-		WebResourceInfo resource = webResourceManager.getResource(name);
+		WebResourceInfo resource = webResourceManager.getServerResource(name);
 		if (resource == null) {
 			return null;
 		}
@@ -153,7 +153,7 @@ public class PageHeaderToolImpl implements PageHeaderTool {
 			Map<String, Object> otherAttributes,
 			boolean closeTag) {
 		
-		WebResourceInfo resource = webResourceManager.getResource(resourceName);
+		WebResourceInfo resource = webResourceManager.getServerResource(resourceName);
 
 		if (resource == null) {
 			return null;

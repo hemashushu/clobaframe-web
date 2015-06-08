@@ -6,11 +6,11 @@ import java.util.Locale;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.archboy.clobaframe.web.page.Page;
+import org.archboy.clobaframe.web.page.PageInfo;
 import org.archboy.clobaframe.web.page.PageKey;
 import org.archboy.clobaframe.web.page.PageProvider;
 import org.archboy.clobaframe.web.page.revision.AbstractRevisionPageCollection;
-import org.archboy.clobaframe.web.page.revision.RevisionPage;
+import org.archboy.clobaframe.web.page.revision.RevisionPageInfo;
 import org.archboy.clobaframe.web.page.revision.RevisionPageManager;
 import org.archboy.clobaframe.web.page.revision.RevisionPageProvider;
 import org.archboy.clobaframe.web.page.revision.RevisionPageRepository;
@@ -42,30 +42,30 @@ public class LocalRevisionPageManagerImpl extends AbstractRevisionPageCollection
 		for (int idx=revisionPageProviders.size() - 1; idx>=0; idx--){
 			PageProvider pageProvider = revisionPageProviders.get(idx);
 			
-			Collection<Page> pages = pageProvider.getAll();
+			Collection<PageInfo> pages = pageProvider.getAll();
 			
-			for(Page page : pages){
-				if (page instanceof RevisionPage) {
+			for(PageInfo page : pages){
+				if (page instanceof RevisionPageInfo) {
 					// skip none revision page
-					save((RevisionPage)page);
+					save((RevisionPageInfo)page);
 				}
 			}
 		}
 	}
 
 	@Override
-	public Page save(PageKey pageKey,
+	public PageInfo save(PageKey pageKey,
 		String title, String content, 
 		String urlName, String templateName,
 		String authorName, String authorId, String comment) {
 		
 		int revision = 0;
-		RevisionPage exist = (RevisionPage)get(pageKey);
+		RevisionPageInfo exist = (RevisionPageInfo)get(pageKey);
 		if (exist != null) {
 			revision = exist.getRevision() + 1;
 		}
 		
-		RevisionPage revisionPage = (RevisionPage)revisionPageRepository.save(
+		RevisionPageInfo revisionPage = (RevisionPageInfo)revisionPageRepository.save(
 				pageKey, revision, title, content, 
 				urlName, templateName, 
 				authorName, authorId, comment);
@@ -92,7 +92,7 @@ public class LocalRevisionPageManagerImpl extends AbstractRevisionPageCollection
 	}
 	
 	@Override
-	public RevisionPage rollbackRevision(PageKey pageKey, int revision) {
+	public RevisionPageInfo rollbackRevision(PageKey pageKey, int revision) {
 		int v = getCurrentRevision(pageKey);
 		if (v == revision) {
 			throw new IllegalArgumentException("This is already the current revision");
@@ -100,9 +100,9 @@ public class LocalRevisionPageManagerImpl extends AbstractRevisionPageCollection
 		
 		v++;
 			
-		RevisionPage old = get(pageKey, revision);
+		RevisionPageInfo old = get(pageKey, revision);
 
-		RevisionPage page = new RevisionPage();
+		RevisionPageInfo page = new RevisionPageInfo();
 		page.setAuthorId(old.getAuthorId());
 		page.setAuthorName(old.getAuthorName());
 		page.setComment(old.getComment());

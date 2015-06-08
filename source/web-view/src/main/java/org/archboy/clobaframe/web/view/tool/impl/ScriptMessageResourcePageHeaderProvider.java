@@ -127,7 +127,7 @@ public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageRes
 	 */
 	private String getCompatibleResourceName(String languageCode, String countryCode) {
 		String resourceName = buildResourceName(languageCode, countryCode);
-		if (webResourceManager.getResource(resourceName) != null){
+		if (webResourceManager.getServerResource(resourceName) != null){
 			return resourceName;
 			
 		}else if (StringUtils.isNotEmpty(languageCode)){
@@ -135,14 +135,14 @@ public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageRes
 			// try remove the country code.
 			if (StringUtils.isNotEmpty(countryCode)){
 				resourceName = buildResourceName(languageCode, null);
-				if (webResourceManager.getResource(resourceName) != null) {
+				if (webResourceManager.getServerResource(resourceName) != null) {
 					return resourceName;
 				}
 			}
 			
 			// try remove the language code.
 			resourceName = buildResourceName(null, null);
-			if (webResourceManager.getResource(resourceName) != null) {
+			if (webResourceManager.getServerResource(resourceName) != null) {
 				return resourceName;
 			}
 		}

@@ -18,13 +18,13 @@ public interface RevisionPageProvider extends PageProvider {
 	 * @param revision
 	 * @return NULL when it does not found
 	 */
-	RevisionPage get(PageKey pageKey, int revision);
+	RevisionPageInfo get(PageKey pageKey, int revision);
 	
 	/**
 	 * 
 	 * @param pageKey
 	 * @return 
 	 */
-	Collection<RevisionPage> listRevision(PageKey pageKey);
+	Collection<RevisionPageInfo> listRevision(PageKey pageKey);
 	
 }

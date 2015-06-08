@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.query.simplequery.SimpleQuery;
-import org.archboy.clobaframe.web.page.Page;
+import org.archboy.clobaframe.web.page.PageInfo;
 import org.archboy.clobaframe.web.page.PageKey;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -68,20 +68,20 @@ public class RevisionPageManagerTest {
 		assertNull(revisionPageManager.listLocale("none-exist"));
 		
 		// test list revision
-		Collection<RevisionPage> revisions1 = revisionPageManager.listRevision(new PageKey("about", Locale.ENGLISH));
+		Collection<RevisionPageInfo> revisions1 = revisionPageManager.listRevision(new PageKey("about", Locale.ENGLISH));
 		assertEquals(3, revisions1.size());
 		assertNotNull(SimpleQuery.from(revisions1).whereEquals("revision", 0).first());
 		assertNotNull(SimpleQuery.from(revisions1).whereEquals("revision", 1).first());
 		assertNotNull(SimpleQuery.from(revisions1).whereEquals("revision", 2).first());
 		
 		// test list revision - not continuous
-		Collection<RevisionPage> revisions2 = revisionPageManager.listRevision(new PageKey("about", Locale.SIMPLIFIED_CHINESE));
+		Collection<RevisionPageInfo> revisions2 = revisionPageManager.listRevision(new PageKey("about", Locale.SIMPLIFIED_CHINESE));
 		assertEquals(2, revisions2.size());
 		assertNotNull(SimpleQuery.from(revisions2).whereEquals("revision", 0).first());
 		assertNotNull(SimpleQuery.from(revisions2).whereEquals("revision", 8).first());
 		
 		// test list revision - no revision
-		Collection<RevisionPage> revisions3 = revisionPageManager.listRevision(new PageKey("about", Locale.JAPANESE));
+		Collection<RevisionPageInfo> revisions3 = revisionPageManager.listRevision(new PageKey("about", Locale.JAPANESE));
 		assertEquals(1, revisions3.size());
 		assertNotNull(SimpleQuery.from(revisions3).whereEquals("revision", 0).first());
 
@@ -89,25 +89,25 @@ public class RevisionPageManagerTest {
 		assertNull(revisionPageManager.listRevision(new PageKey("none-exist", Locale.ENGLISH)));
 		
 		// test get a page - by the current revison - latest revision
-		RevisionPage page1 = (RevisionPage)revisionPageManager.get(new PageKey("about", Locale.ENGLISH));
+		RevisionPageInfo page1 = (RevisionPageInfo)revisionPageManager.get(new PageKey("about", Locale.ENGLISH));
 		assertEquals(2, page1.getRevision());
 		assertEquals("about r2", page1.getTitle());
 		assertEquals(2, revisionPageManager.getCurrentRevision(new PageKey("about", Locale.ENGLISH)));
 		
 		// test get a page - by the current revison - latest revision - different locale
-		RevisionPage page2 = (RevisionPage)revisionPageManager.get(new PageKey("about", Locale.SIMPLIFIED_CHINESE));
+		RevisionPageInfo page2 = (RevisionPageInfo)revisionPageManager.get(new PageKey("about", Locale.SIMPLIFIED_CHINESE));
 		assertEquals(8, page2.getRevision());
 		assertEquals("about zh_CN r8", page2.getTitle());
 		assertEquals(8, revisionPageManager.getCurrentRevision(new PageKey("about", Locale.SIMPLIFIED_CHINESE)));
 		
 		// test get a page - by the current revison - no revision
-		RevisionPage page3 = (RevisionPage)revisionPageManager.get(new PageKey("about", Locale.JAPANESE));
+		RevisionPageInfo page3 = (RevisionPageInfo)revisionPageManager.get(new PageKey("about", Locale.JAPANESE));
 		assertEquals(0, page3.getRevision());
 		assertEquals("about ja", page3.getTitle());
 		assertEquals(0, revisionPageManager.getCurrentRevision(new PageKey("about", Locale.JAPANESE)));
 		
 		// test get get a page with path name
-		RevisionPage page4 = (RevisionPage)revisionPageManager.get(new PageKey("developers/api", Locale.ENGLISH));
+		RevisionPageInfo page4 = (RevisionPageInfo)revisionPageManager.get(new PageKey("developers/api", Locale.ENGLISH));
 		assertEquals(0, page4.getRevision());
 		assertEquals("api", page4.getTitle());
 		assertEquals(0, revisionPageManager.getCurrentRevision(new PageKey("developers/api", Locale.ENGLISH)));
@@ -116,12 +116,12 @@ public class RevisionPageManagerTest {
 		assertNull(revisionPageManager.get(new PageKey("about", Locale.FRENCH)));
 		
 		// test get a specify revision
-		RevisionPage revisionPage1 = (RevisionPage)revisionPageManager.get(new PageKey("about", Locale.ENGLISH), 1);
+		RevisionPageInfo revisionPage1 = (RevisionPageInfo)revisionPageManager.get(new PageKey("about", Locale.ENGLISH), 1);
 		assertEquals(1, revisionPage1.getRevision());
 		assertEquals("about r1", revisionPage1.getTitle());
 		
 		// test get a specify revision - no revision
-		RevisionPage revisionPage2 = (RevisionPage)revisionPageManager.get(new PageKey("about", Locale.JAPANESE), 0);
+		RevisionPageInfo revisionPage2 = (RevisionPageInfo)revisionPageManager.get(new PageKey("about", Locale.JAPANESE), 0);
 		assertEquals(0, revisionPage2.getRevision());
 		assertEquals("about ja", revisionPage2.getTitle());
 		
@@ -132,22 +132,22 @@ public class RevisionPageManagerTest {
 	@Test
 	public void testGet()  {
 		// check template name
-		RevisionPage page1 = (RevisionPage)revisionPageManager.get(new PageKey("contact", Locale.ENGLISH));
+		RevisionPageInfo page1 = (RevisionPageInfo)revisionPageManager.get(new PageKey("contact", Locale.ENGLISH));
 		assertEquals("share/page-mobile", page1.getTemplateName());
 		
 		// check url name
-		RevisionPage page2 = (RevisionPage)revisionPageManager.get(new PageKey("privacy", Locale.ENGLISH));
+		RevisionPageInfo page2 = (RevisionPageInfo)revisionPageManager.get(new PageKey("privacy", Locale.ENGLISH));
 		assertEquals("help/privacy", page2.getUrlName());
 		assertEquals(page2.getPageKey().getName(), revisionPageManager.getByUrlName("help/privacy"));
 		
 		// check both template name and url name
-		RevisionPage page3 = (RevisionPage)revisionPageManager.get(new PageKey("terms", Locale.SIMPLIFIED_CHINESE));
+		RevisionPageInfo page3 = (RevisionPageInfo)revisionPageManager.get(new PageKey("terms", Locale.SIMPLIFIED_CHINESE));
 		assertEquals("help/terms2", page3.getUrlName());
 		assertEquals("fullscreen/responsive2", page3.getTemplateName());
 		assertEquals(page3.getPageKey().getName(), revisionPageManager.getByUrlName("help/terms2"));
 		
 		// check the difference revision template name and url name.
-		RevisionPage page4 = (RevisionPage)revisionPageManager.get(new PageKey("terms", Locale.SIMPLIFIED_CHINESE), 23);
+		RevisionPageInfo page4 = (RevisionPageInfo)revisionPageManager.get(new PageKey("terms", Locale.SIMPLIFIED_CHINESE), 23);
 		assertEquals("help/terms", page4.getUrlName());
 		assertEquals("fullscreen/responsive", page4.getTemplateName());
 		assertEquals(page4.getPageKey().getName(), revisionPageManager.getByUrlName("help/terms"));
@@ -159,7 +159,7 @@ public class RevisionPageManagerTest {
 	@Test
 	public void testSave(){
 		// create new page
-		RevisionPage page1 = (RevisionPage)revisionPageManager.save(
+		RevisionPageInfo page1 = (RevisionPageInfo)revisionPageManager.save(
 				new PageKey("share", Locale.ENGLISH), 
 				"share", "share this", 
 				null, null, null, null, null);
@@ -177,11 +177,11 @@ public class RevisionPageManagerTest {
 		assertNotNull(page1.getLastModified());
 
 		// check
-		RevisionPage pageByGet1 = (RevisionPage)revisionPageManager.get(new PageKey("share", Locale.ENGLISH));
+		RevisionPageInfo pageByGet1 = (RevisionPageInfo)revisionPageManager.get(new PageKey("share", Locale.ENGLISH));
 		assertEquals(page1, pageByGet1);
 		
 		// create new revision
-		RevisionPage page2 = (RevisionPage)revisionPageManager.save(
+		RevisionPageInfo page2 = (RevisionPageInfo)revisionPageManager.save(
 				new PageKey("share", Locale.ENGLISH), 
 				"share r2", "share this r2", 
 				"share", "fullscreen", "authorName", "authorId", "second commit");
@@ -199,7 +199,7 @@ public class RevisionPageManagerTest {
 		assertNotNull(page2.getLastModified());
 		
 		// check
-		RevisionPage pageByGet2 = (RevisionPage)revisionPageManager.get(new PageKey("share", Locale.ENGLISH));
+		RevisionPageInfo pageByGet2 = (RevisionPageInfo)revisionPageManager.get(new PageKey("share", Locale.ENGLISH));
 		assertEquals(page2, pageByGet2);
 		
 		// check locale
@@ -208,13 +208,13 @@ public class RevisionPageManagerTest {
 		assertTrue(locales1.contains(Locale.ENGLISH));
 		
 		// check revision
-		Collection<RevisionPage> revisions1 = revisionPageManager.listRevision(new PageKey("share", Locale.ENGLISH));
+		Collection<RevisionPageInfo> revisions1 = revisionPageManager.listRevision(new PageKey("share", Locale.ENGLISH));
 		assertEquals(2, revisions1.size());
 		assertNotNull(SimpleQuery.from(revisions1).whereEquals("revision", 0).first());
 		assertNotNull(SimpleQuery.from(revisions1).whereEquals("revision", 1).first());
 		
 		// create another locale
-		RevisionPage pageLocale1 = (RevisionPage)revisionPageManager.save(
+		RevisionPageInfo pageLocale1 = (RevisionPageInfo)revisionPageManager.save(
 				new PageKey("share", Locale.SIMPLIFIED_CHINESE), 
 				"gong xiang", "gong xiang zhe ge ye mian", 
 				null, null, null, null, null);
@@ -225,7 +225,7 @@ public class RevisionPageManagerTest {
 		assertEquals(0, pageLocale1.getRevision());
 		
 		// check
-		RevisionPage pageByGetLocale1 = (RevisionPage)revisionPageManager.get(new PageKey("share", Locale.SIMPLIFIED_CHINESE));
+		RevisionPageInfo pageByGetLocale1 = (RevisionPageInfo)revisionPageManager.get(new PageKey("share", Locale.SIMPLIFIED_CHINESE));
 		assertEquals(pageLocale1, pageByGetLocale1);
 		
 		// check locale
@@ -235,14 +235,14 @@ public class RevisionPageManagerTest {
 		assertTrue(locales2.contains(Locale.SIMPLIFIED_CHINESE));
 		
 		// create another revision and prepare to test rollback
-		RevisionPage page3 = (RevisionPage)revisionPageManager.save(
+		RevisionPageInfo page3 = (RevisionPageInfo)revisionPageManager.save(
 				new PageKey("share", Locale.ENGLISH), 
 				"share r3", "share this r3", 
 				null, null, null, null, null);
 		
 		assertEquals(2, revisionPageManager.getCurrentRevision(new PageKey("share", Locale.ENGLISH)));
 		
-		RevisionPage pageByRollback1 = (RevisionPage)revisionPageManager.rollbackRevision(
+		RevisionPageInfo pageByRollback1 = (RevisionPageInfo)revisionPageManager.rollbackRevision(
 				new PageKey("share", Locale.ENGLISH), 1);
 		
 		assertEquals("share r2", pageByRollback1.getTitle());
@@ -250,25 +250,25 @@ public class RevisionPageManagerTest {
 		assertEquals(3, pageByRollback1.getRevision());
 		
 		// check
-		RevisionPage page4 = (RevisionPage)revisionPageManager.get(new PageKey("share", Locale.ENGLISH));
+		RevisionPageInfo page4 = (RevisionPageInfo)revisionPageManager.get(new PageKey("share", Locale.ENGLISH));
 		assertEquals(pageByRollback1	, page4);
 		
 		// check the old revision
 		assertNull(revisionPageManager.get(new PageKey("share", Locale.ENGLISH), 1));
 		
 		// rollback again
-		RevisionPage pageByRollback2 = (RevisionPage)revisionPageManager.rollbackRevision(
+		RevisionPageInfo pageByRollback2 = (RevisionPageInfo)revisionPageManager.rollbackRevision(
 				new PageKey("share", Locale.ENGLISH), 2);
 		
 		assertEquals("share r3", pageByRollback2.getTitle());
 		assertEquals("share this r3", pageByRollback2.getContent());
 		assertEquals(4, pageByRollback2.getRevision());
 		
-		RevisionPage page5 = (RevisionPage)revisionPageManager.get(new PageKey("share", Locale.ENGLISH));
+		RevisionPageInfo page5 = (RevisionPageInfo)revisionPageManager.get(new PageKey("share", Locale.ENGLISH));
 		assertEquals(pageByRollback2	, page5);
 		
 		// check the revisions
-		Collection<RevisionPage> revisions2 = revisionPageManager.listRevision(new PageKey("share", Locale.ENGLISH));
+		Collection<RevisionPageInfo> revisions2 = revisionPageManager.listRevision(new PageKey("share", Locale.ENGLISH));
 		assertEquals(3, revisions2.size());
 		assertNotNull(SimpleQuery.from(revisions2).whereEquals("revision", 0).first());
 		assertNotNull(SimpleQuery.from(revisions2).whereEquals("revision", 3).first());
@@ -279,7 +279,7 @@ public class RevisionPageManagerTest {
 		assertNull(revisionPageManager.get(new PageKey("share", Locale.ENGLISH), 0));
 		
 		// check the revisions
-		Collection<RevisionPage> revisions3 = revisionPageManager.listRevision(new PageKey("share", Locale.ENGLISH));
+		Collection<RevisionPageInfo> revisions3 = revisionPageManager.listRevision(new PageKey("share", Locale.ENGLISH));
 		assertEquals(2, revisions3.size());
 		assertNotNull(SimpleQuery.from(revisions3).whereEquals("revision", 3).first());
 		assertNotNull(SimpleQuery.from(revisions3).whereEquals("revision", 4).first());
@@ -291,7 +291,7 @@ public class RevisionPageManagerTest {
 		assertEquals(3, revisionPageManager.getCurrentRevision(new PageKey("share", Locale.ENGLISH)));
 		
 		// check the revisions
-		Collection<RevisionPage> revisions4 = revisionPageManager.listRevision(new PageKey("share", Locale.ENGLISH));
+		Collection<RevisionPageInfo> revisions4 = revisionPageManager.listRevision(new PageKey("share", Locale.ENGLISH));
 		assertEquals(1, revisions4.size());
 		assertNotNull(SimpleQuery.from(revisions4).whereEquals("revision", 3).first());
 		
@@ -314,12 +314,12 @@ public class RevisionPageManagerTest {
 	public static class TestingRevisionPageProviderAndRepository extends AbstractRevisionPageCollection implements RevisionPageProvider, RevisionPageRepository {
 
 		@Override
-		public Collection<Page> getAll() {
-			List<Page> pages = new ArrayList<Page>();
+		public Collection<PageInfo> getAll() {
+			List<PageInfo> pages = new ArrayList<PageInfo>();
 			
-			for(Map<Locale, Set<RevisionPage>> localePages : pageMap.values()){
-				for(Set<RevisionPage> revisionPages : localePages.values()) {
-					for (RevisionPage revisionPage : revisionPages) {
+			for(Map<Locale, Set<RevisionPageInfo>> localePages : pageMap.values()){
+				for(Set<RevisionPageInfo> revisionPages : localePages.values()) {
+					for (RevisionPageInfo revisionPage : revisionPages) {
 						pages.add(revisionPage);
 					}
 				}
@@ -334,12 +334,12 @@ public class RevisionPageManagerTest {
 		}
 
 //		@Override
-//		public RevisionPage rollbackRevision(PageKey pageKey, int revision) {
+//		public RevisionPageInfo rollbackRevision(PageKey pageKey, int revision) {
 //			int v = getCurrentRevision(pageKey) + 1;
 //			
-//			RevisionPage revisionPage = get(pageKey, revision);
+//			RevisionPageInfo revisionPage = get(pageKey, revision);
 //			
-//			RevisionPage page = new RevisionPage();
+//			RevisionPageInfo page = new RevisionPageInfo();
 //			page.setAuthorId(revisionPage.getAuthorId());
 //			page.setAuthorName(revisionPage.getAuthorName());
 //			page.setComment(revisionPage.getComment());
@@ -355,9 +355,9 @@ public class RevisionPageManagerTest {
 //		}
 
 		@Override
-		public Page save(PageKey pageKey, int revision, String title, String content, String urlName, String templateName, String authorName, String authorId, String comment) {
+		public PageInfo save(PageKey pageKey, int revision, String title, String content, String urlName, String templateName, String authorName, String authorId, String comment) {
 	
-			RevisionPage page = new RevisionPage();
+			RevisionPageInfo page = new RevisionPageInfo();
 			
 			page.setAuthorId(authorId);
 			page.setAuthorName(authorName);
@@ -375,7 +375,7 @@ public class RevisionPageManagerTest {
 		}
 
 		@Override
-		public Page save(PageKey pageKey, String title, String content, String urlName, String templateName, String authorName, String authorId, String comment) {
+		public PageInfo save(PageKey pageKey, String title, String content, String urlName, String templateName, String authorName, String authorId, String comment) {
 			throw new UnsupportedOperationException("Not supported yet.");
 		}
 

@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.web.controller.exception.PageNotFound;
-import org.archboy.clobaframe.web.page.Page;
+import org.archboy.clobaframe.web.page.PageInfo;
 import org.archboy.clobaframe.web.page.PageKey;
 import org.archboy.clobaframe.web.page.PageManager;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,7 +40,7 @@ public class PageController {
 		String path = request.getRequestURI();
 		String pageName = path.substring(pagePathLength);
 		
-		Page page = getCompatiblePage(pageName, locale);
+		PageInfo page = getCompatiblePage(pageName, locale);
 		if (page == null){
 			throw new PageNotFound(path);
 		}
@@ -67,7 +67,7 @@ public class PageController {
 			throw new PageNotFound(path);
 		}
 		
-		Page page = getCompatiblePage(pageName, locale);
+		PageInfo page = getCompatiblePage(pageName, locale);
 		if (page == null){
 			throw new PageNotFound(path);
 		}
@@ -88,10 +88,10 @@ public class PageController {
 	 * @param locale
 	 * @return 
 	 */
-	private Page getCompatiblePage(String pageName, Locale locale) {
+	private PageInfo getCompatiblePage(String pageName, Locale locale) {
 		
 		PageKey pageKey = new PageKey(pageName, locale);
-		Page page = pageManager.get(pageKey);
+		PageInfo page = pageManager.get(pageKey);
 		
 		if (page != null) {
 			return page;

@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.query.simplequery.SimpleQuery;
-import org.archboy.clobaframe.web.page.Page;
+import org.archboy.clobaframe.web.page.PageInfo;
 import org.archboy.clobaframe.web.page.PageKey;
 
 /**
@@ -22,8 +22,8 @@ public abstract class AbstractRevisionPageCollection {
 	/**
 	 * The map key is: "page name, locale, revision".
 	 */
-	protected Map<String, Map<Locale, Set<RevisionPage>>> pageMap = 
-			new HashMap<String, Map<Locale, Set<RevisionPage>>>();
+	protected Map<String, Map<Locale, Set<RevisionPageInfo>>> pageMap = 
+			new HashMap<String, Map<Locale, Set<RevisionPageInfo>>>();
 	
 	/**
 	 * The URL name - page name map.
@@ -31,7 +31,7 @@ public abstract class AbstractRevisionPageCollection {
 	protected Map<String, String> urlMap = new HashMap<String, String>();
 	
 	public Collection<Locale> listLocale(String name) {
-		Map<Locale, Set<RevisionPage>> localePages = pageMap.get(name);
+		Map<Locale, Set<RevisionPageInfo>> localePages = pageMap.get(name);
 		if (localePages == null) {
 			return null;
 		}
@@ -39,8 +39,8 @@ public abstract class AbstractRevisionPageCollection {
 		return localePages.keySet();
 	}
 	
-	public Collection<RevisionPage> listRevision(PageKey pageKey) {
-		Map<Locale, Set<RevisionPage>> localePages = pageMap.get(pageKey.getName());
+	public Collection<RevisionPageInfo> listRevision(PageKey pageKey) {
+		Map<Locale, Set<RevisionPageInfo>> localePages = pageMap.get(pageKey.getName());
 		if (localePages == null) {
 			return null;
 		}
@@ -48,8 +48,8 @@ public abstract class AbstractRevisionPageCollection {
 		return localePages.get(pageKey.getLocale());
 	}
 	
-	public Page get(PageKey pageKey) {
-		Collection<RevisionPage> revisionPages = listRevision(pageKey);
+	public PageInfo get(PageKey pageKey) {
+		Collection<RevisionPageInfo> revisionPages = listRevision(pageKey);
 		if (revisionPages == null) {
 			return null;
 		}
@@ -57,8 +57,8 @@ public abstract class AbstractRevisionPageCollection {
 		return SimpleQuery.from(revisionPages).orderByDesc("revision").first();
 	}
 	
-	public RevisionPage get(PageKey pageKey, int revision) {
-		Collection<RevisionPage> revisionPages = listRevision(pageKey);
+	public RevisionPageInfo get(PageKey pageKey, int revision) {
+		Collection<RevisionPageInfo> revisionPages = listRevision(pageKey);
 		if (revisionPages == null) {
 			return null;
 		}
@@ -67,12 +67,12 @@ public abstract class AbstractRevisionPageCollection {
 	}
 	
 	public int getCurrentRevision(PageKey pageKey) {
-		Collection<RevisionPage> revisionPages = listRevision(pageKey);
+		Collection<RevisionPageInfo> revisionPages = listRevision(pageKey);
 		if (revisionPages == null) {
 			throw new IllegalArgumentException("No this page key: " + pageKey);
 		}
 		
-		RevisionPage page = SimpleQuery.from(revisionPages).orderByDesc("revision").first();
+		RevisionPageInfo page = SimpleQuery.from(revisionPages).orderByDesc("revision").first();
 		return page.getRevision();
 	}
 
@@ -85,13 +85,13 @@ public abstract class AbstractRevisionPageCollection {
 		// get url names
 		List<String> urlNames = new ArrayList<String>();
 		
-		Map<Locale, Set<RevisionPage>> localePages = pageMap.get(name);
+		Map<Locale, Set<RevisionPageInfo>> localePages = pageMap.get(name);
 		if (localePages == null) {
 			return;
 		}
 		
-		for(Set<RevisionPage> revisionPages : localePages.values()) {
-			for (RevisionPage revisionPage : revisionPages) {
+		for(Set<RevisionPageInfo> revisionPages : localePages.values()) {
+			for (RevisionPageInfo revisionPage : revisionPages) {
 				String urlName = revisionPage.getUrlName();
 				if (StringUtils.isNotEmpty(urlName)){
 					urlNames.add(urlName);
@@ -109,12 +109,12 @@ public abstract class AbstractRevisionPageCollection {
 	}
 	
 	public void delete(PageKey pageKey) {
-		Map<Locale, Set<RevisionPage>> localePages = pageMap.get(pageKey.getName());
+		Map<Locale, Set<RevisionPageInfo>> localePages = pageMap.get(pageKey.getName());
 		if (localePages == null) {
 			return;
 		}
 		
-		Set<RevisionPage> revisionPages = localePages.get(pageKey.getLocale());
+		Set<RevisionPageInfo> revisionPages = localePages.get(pageKey.getLocale());
 		
 		if (revisionPages == null) {
 			return;
@@ -123,7 +123,7 @@ public abstract class AbstractRevisionPageCollection {
 		// get url names
 		List<String> urlNames = new ArrayList<String>();
 
-		for (RevisionPage revisionPage : revisionPages) {
+		for (RevisionPageInfo revisionPage : revisionPages) {
 			String urlName = revisionPage.getUrlName();
 			if (StringUtils.isNotEmpty(urlName)){
 				urlNames.add(urlName);
@@ -140,12 +140,12 @@ public abstract class AbstractRevisionPageCollection {
 	}
 	
 	public void delete(PageKey pageKey, int revision) {
-		Collection<RevisionPage> revisionPages = listRevision(pageKey);
+		Collection<RevisionPageInfo> revisionPages = listRevision(pageKey);
 		if (revisionPages == null) {
 			return;
 		}
 		
-		RevisionPage revisionPage = SimpleQuery.from(revisionPages).whereEquals("revision", revision).first();
+		RevisionPageInfo revisionPage = SimpleQuery.from(revisionPages).whereEquals("revision", revision).first();
 		if (revisionPage == null) {
 			return;
 		}
@@ -166,25 +166,25 @@ public abstract class AbstractRevisionPageCollection {
 	 * 
 	 * @param revisionPage 
 	 */
-	protected void save(RevisionPage revisionPage) {
+	protected void save(RevisionPageInfo revisionPage) {
 		PageKey pageKey = revisionPage.getPageKey();
 		
 		// get locale doc
-		Map<Locale, Set<RevisionPage>> localePages = pageMap.get(pageKey.getName());
+		Map<Locale, Set<RevisionPageInfo>> localePages = pageMap.get(pageKey.getName());
 		if (localePages == null){
-			localePages = new HashMap<Locale, Set<RevisionPage>>();
+			localePages = new HashMap<Locale, Set<RevisionPageInfo>>();
 			pageMap.put(pageKey.getName(), localePages);
 		}
 
 		// get revisions
-		Set<RevisionPage> revisionPages = localePages.get(pageKey.getLocale());
+		Set<RevisionPageInfo> revisionPages = localePages.get(pageKey.getLocale());
 		if (revisionPages == null) {
-			revisionPages = new HashSet<RevisionPage>();
+			revisionPages = new HashSet<RevisionPageInfo>();
 			localePages.put(pageKey.getLocale(), revisionPages);
 		}
 
 		// get the exist revision
-//		RevisionPage exists = SimpleQuery.from(revisionPages).whereEquals("revision", revisionPage.getRevision()).first();
+//		RevisionPageInfo exists = SimpleQuery.from(revisionPages).whereEquals("revision", revisionPage.getRevision()).first();
 //		if (exists != null) {
 //			
 //			// remove the exist page.

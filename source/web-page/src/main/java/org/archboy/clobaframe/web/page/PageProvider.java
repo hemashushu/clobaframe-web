@@ -31,5 +31,5 @@ public interface PageProvider extends Ordered{
 	 * 
 	 * @return 
 	 */
-	Collection<Page> getAll();
+	Collection<PageInfo> getAll();
 }
