@@ -62,7 +62,7 @@ public class ResourcesControllerTest {
 		
 		mock.perform(get(location1))
 				.andExpect(status().isOk())
-				.andExpect(content().string(getFileTextContent("resources/css/index.css")));
+				.andExpect(content().string(getFileTextContent("resources/default/css/index.css")));
 		
 		mock.perform(get(location2))
 				.andExpect(status().isOk())

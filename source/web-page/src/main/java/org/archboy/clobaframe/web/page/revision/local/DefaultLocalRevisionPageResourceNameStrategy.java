@@ -1,6 +1,7 @@
 package org.archboy.clobaframe.web.page.revision.local;
 
 import java.io.File;
+import org.archboy.clobaframe.io.file.local.DefaultLocalFileNameStrategy;
 import org.archboy.clobaframe.webresource.local.LocalWebResourceNameStrategy;
 
 /**
@@ -15,11 +16,14 @@ import org.archboy.clobaframe.webresource.local.LocalWebResourceNameStrategy;
  * 
  * @author yang
  */
-public class DefaultLocalRevisionPageResourceNameStrategy implements LocalRevisionPageResourceNameStrategy {
+public class DefaultLocalRevisionPageResourceNameStrategy 
+	extends DefaultLocalFileNameStrategy
+	implements LocalRevisionPageResourceNameStrategy {
 	
 	private int basePathLength;
 
 	public DefaultLocalRevisionPageResourceNameStrategy(File basePath) {
+		super(basePath);
 		// the base path length plus 1 to exclude the resource file name path
 		// '/' prefix character.
 		this.basePathLength = basePath.getPath().length() + 1; 

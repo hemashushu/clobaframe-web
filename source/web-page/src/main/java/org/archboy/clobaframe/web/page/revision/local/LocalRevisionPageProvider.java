@@ -14,7 +14,9 @@ import javax.inject.Named;
 import org.apache.commons.io.IOUtils;
 import org.archboy.clobaframe.io.MimeTypeDetector;
 import org.archboy.clobaframe.io.ResourceInfo;
-import org.archboy.clobaframe.io.file.ResourceScanner;
+import org.archboy.clobaframe.io.file.FileBaseResourceInfo;
+import org.archboy.clobaframe.io.file.local.DefaultLocalResourceScanner;
+import org.archboy.clobaframe.io.file.local.LocalResourceScanner;
 import org.archboy.clobaframe.web.page.PageInfo;
 import org.archboy.clobaframe.web.page.PageKey;
 import org.archboy.clobaframe.web.page.PageProvider;
@@ -39,8 +41,8 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 	@Inject
 	private MimeTypeDetector mimeTypeDetector;
 	
-	@Inject
-	private ResourceScanner resourceScanner;
+//	@Inject
+//	private LocalResourceScanner resourceScanner;
 	
 	// local resource path, usually relative to the 'src/main/webapp' folder.
 	// to using this repository, the web application war package must be expended when running.
@@ -126,12 +128,15 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 		
 		LocalRevisionPageResourceNameStrategy localPageResourceNameStrategy = new DefaultLocalRevisionPageResourceNameStrategy(baseDir);
 		LocalRevisionPageResourceInfoFactory localPageResourceInfoFactory = new LocalRevisionPageResourceInfoFactory(mimeTypeDetector, localPageResourceNameStrategy);
-		
+		LocalResourceScanner localResourceScanner = new DefaultLocalResourceScanner();
+				
 		List<PageInfo> pages = new ArrayList<PageInfo>();
 		
-		Collection<ResourceInfo> resourceInfos = resourceScanner.scan(baseDir, localPageResourceInfoFactory);
-		for(ResourceInfo resourceInfo : resourceInfos) {
-			LocalRevisionPageResourceInfo localPageResourceInfo = (LocalRevisionPageResourceInfo)resourceInfo;
+		
+		Collection<FileBaseResourceInfo> fileBaseResourceInfos = localResourceScanner.scan(baseDir, localPageResourceInfoFactory);
+		for(FileBaseResourceInfo fileBaseResourceInfo : fileBaseResourceInfos) {
+			LocalRevisionPageResourceInfo localPageResourceInfo = (LocalRevisionPageResourceInfo)fileBaseResourceInfo;
+			
 			String fullname = localPageResourceInfo.getName();
 			String path = null;
 			String filename = fullname;
@@ -184,7 +189,7 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 				
 				try{
 					RevisionPageInfo revisionDoc = convertResourceInfo(
-								resourceInfo, 
+								fileBaseResourceInfo, 
 								pageName, locale, revisionNumber, 
 								urlName, templateName);
 				
@@ -290,13 +295,4 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 		return PRIORITY_LOWER;
 	}
 
-	@Override
-	public RevisionPageInfo get(PageKey pageKey, int revision) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	public Collection<RevisionPageInfo> listRevision(PageKey pageKey) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
 }

@@ -10,21 +10,21 @@ import org.archboy.clobaframe.web.page.PageProvider;
  */
 public interface RevisionPageProvider extends PageProvider {
 	
-	/**
-	 * Get the specify page by the name and locale.
-	 * To get the active revision, use the {@link PageManager#get(PageKey)} method.
-	 * 
-	 * @param pageKey
-	 * @param revision
-	 * @return NULL when it does not found
-	 */
-	RevisionPageInfo get(PageKey pageKey, int revision);
-	
-	/**
-	 * 
-	 * @param pageKey
-	 * @return 
-	 */
-	Collection<RevisionPageInfo> listRevision(PageKey pageKey);
+//	/**
+//	 * Get the specify page by the name and locale.
+//	 * To get the active revision, use the {@link PageManager#get(PageKey)} method.
+//	 * 
+//	 * @param pageKey
+//	 * @param revision
+//	 * @return NULL when it does not found
+//	 */
+//	RevisionPageInfo get(PageKey pageKey, int revision);
+//	
+//	/**
+//	 * 
+//	 * @param pageKey
+//	 * @return 
+//	 */
+//	Collection<RevisionPageInfo> listRevision(PageKey pageKey);
 	
 }

@@ -24,15 +24,13 @@ public class ResourcesController {
 	private WebResourceSender webResourceSender;
 
 	private static final String DEFAULT_BASE_LOCATION = "/resource/";
-	private static final String DEFAULT_ROOT_RESOURCE_PATH = "root";
+	private static final String DEFAULT_ROOT_RESOURCE_NAME_PREFIX = "root";
 	
 	@Value("${clobaframe.webresource.baseLocation:" + DEFAULT_BASE_LOCATION + "}")
 	private String baseLocation;
 	
-	@Value("${clobaframe.webresource.rootResourcePath:" + DEFAULT_ROOT_RESOURCE_PATH + "}")
-	private String rootResourcePath;
-	
-	//private final int resourcePathLength = baseLocation.length();
+	@Value("${clobaframe.webresource.repository.localRoot.namePrefix:" + DEFAULT_ROOT_RESOURCE_NAME_PREFIX + "}")
+	private String rootResourceNamePrefix;
 	
 	/**
 	 * Send web resource.
@@ -56,31 +54,31 @@ public class ResourcesController {
 	@RequestMapping("/robots.txt")
 	public void sendRebots(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		webResourceSender.send(rootResourcePath + "/robots.txt", request, response);
+		webResourceSender.send(rootResourceNamePrefix + "robots.txt", request, response);
 	}
 
 	@RequestMapping("/favicon.ico")
 	public void sendFavoriteIcon(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		webResourceSender.send(rootResourcePath + "/favicon-16x16.ico", request, response);
+		webResourceSender.send(rootResourceNamePrefix + "favicon-16x16.ico", request, response);
 	}
 	
 	@RequestMapping("/favicon.png")
 	public void sendFavoriteIconInPNG(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		webResourceSender.send(rootResourcePath + "/favicon-16x16.png", request, response);
+		webResourceSender.send(rootResourceNamePrefix + "favicon-16x16.png", request, response);
 	}
 	
 	@RequestMapping("/apple-touch-icon.png")
 	public void sendAppleTouchIcon(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		webResourceSender.send(rootResourcePath + "/apple-touch-icon-120x120.png", request, response);
+		webResourceSender.send(rootResourceNamePrefix + "apple-touch-icon-120x120.png", request, response);
 	}
 	
 	@RequestMapping("/launcher-icon-192x192.png")
 	public void sendLauncherIcon(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		webResourceSender.send(rootResourcePath + "/launcher-icon-192x192.png", request, response);
+		webResourceSender.send(rootResourceNamePrefix + "launcher-icon-192x192.png", request, response);
 	}
 	
 }
