@@ -52,10 +52,18 @@ public class VelocityViewControllerTest {
 	public void testGetIndex() throws Exception {
 		mock.perform(get("/index").locale(Locale.ENGLISH))
 				.andExpect(status().isOk())
-				.andExpect(content().string(getFileTextContent("testResult/index.html")));
+				.andExpect(content().string(getFileTextContent("test/expect/index.html")));
 		
 	}
 
+	@Test
+	public void testGetIndexLocale() throws Exception {
+		mock.perform(get("/index").locale(Locale.SIMPLIFIED_CHINESE))
+				.andExpect(status().isOk())
+				.andExpect(content().string(getFileTextContent("test/expect/index_zh_CN.html")));
+		
+	}
+	
 	private String getFileTextContent(String name) throws IOException {
 		byte[] content = getFileContent(name);
 		return new String(content, "UTF-8");

@@ -71,7 +71,7 @@ public class PageHeaderToolTest {
 		
 		// test write resource
 		String res1 = pageHeaderTool.writeResource("css/index.css");
-		assertEquals("<link href=\"/resource/css/index.css?v4b2739ce\" rel=\"stylesheet\">", res1);
+		assertEquals("<link href=\"/resource/css/index.css?v0999d52a\" rel=\"stylesheet\">", res1);
 		
 		String res2 = pageHeaderTool.writeResource("js/jquery-1.11.1.js");
 		assertEquals("<script src=\"/resource/js/jquery-1.11.1.js?v3029834a\"></script>", res2);
@@ -80,7 +80,7 @@ public class PageHeaderToolTest {
 		Map<String, Object> attr4 = new LinkedHashMap<String, Object>();
 		attr4.put("type", "text/jsx");
 		String res3 = pageHeaderTool.writeResource("js/index.js", "script", "src", attr4, true);
-		assertEquals("<script type=\"text/jsx\" src=\"/resource/js/index.js?v5e02a258\"></script>", res3);
+		assertEquals("<script type=\"text/jsx\" src=\"/resource/js/index.js?v4a6ae5f4\"></script>", res3);
 		
 		// test get resources
 		List<String> ress1 = pageHeaderTool.getResources(Arrays.asList("css/index.css", "js/jquery-1.11.1.js"));

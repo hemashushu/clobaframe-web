@@ -133,7 +133,7 @@ public class RevisionPageManagerTest {
 	public void testGet()  {
 		// check template name
 		RevisionPageInfo page1 = (RevisionPageInfo)revisionPageManager.get(new PageKey("contact", Locale.ENGLISH));
-		assertEquals("share/page-mobile", page1.getTemplateName());
+		assertEquals("mobile-page", page1.getTemplateName());
 		
 		// check url name
 		RevisionPageInfo page2 = (RevisionPageInfo)revisionPageManager.get(new PageKey("privacy", Locale.ENGLISH));

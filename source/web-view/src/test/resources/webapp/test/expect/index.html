@@ -5,7 +5,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
-				<title>Clobaframe-Web Demo page</title>
+				<title>Test Page</title>
 				
 		<!-- Common style-sheet and script -->
 		<script src="/resource/js/jquery-1.11.1.js?v3029834a"></script>
@@ -22,7 +22,7 @@
 		<!-- meta keywords and meta description -->
 				<meta name="keywords" content="clobaframe web">
 				
-				<meta name="description" content="a web application template that base on clobaframe.">
+				<meta name="description" content="clobaframe web view test.">
 		
 		<!-- for home screen icon, iphone-retina with 120 x 120 px -->
 		<!-- see also: https://developer.apple.com/library/mac/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
@@ -48,30 +48,22 @@
 		<!-- header -->		
 
 
-<div class="test-i18n">
-	<h2>Test i18n message</h2>
-	<p class="text">Hello WORLD!, now is July 10, 2015.</p>
-	
-	<p>Change language</p>
-	<ul class="action">
-		<li><a href="/changelocale?locale=en">English</a></li>
-		<li><a href="/changelocale?locale=ja">日本語</a></li>
-		<li><a href="/changelocale?locale=zh_CN">中文(简体)</a></li>
-	</ul>
-</div>
+<section class="i18n">
+	<p>i18n message: Test i18n message</p>
+	<p>message with placeholder: Hello WORLD!, now is July 10, 2015.</p>
+</section>
 
-<div class="test-escape">
-	<h2>Test text escape and formatter</h2>
-	<p>HTML escape <em class="text">text contains &lt;strong&gt;html tags&lt;/strong&gt;, 'single quotes' &amp; &quot;double quotes&quot;.</em></p>
-	<p>HTML paragraph escape <em class="text">line one.<br>line two.</em></p>
-	<p>Integer formatter <em class="text">1,234,567</em></p>
-</div>
+<section class="escape">
+	<p>HTML escape: text contains &lt;strong&gt;html tags&lt;/strong&gt;, 'single quotes' &amp; &quot;double quotes&quot;.</p>
+	<p>HTML paragraph escape: line one.<br>line two.</p>
+</section>
 
 <!-- write custom page resource -->
 <script type="text/jsx" src="/resource/jsx/helloworld.js?vc1d5a5ce"></script>
 
 <script>
 	(function(window){
+		// write json
 		window.viewObject = {"name":"foo","id":"001"};
 	})(this);
 </script>

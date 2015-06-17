@@ -1,12 +1,12 @@
 package org.archboy.clobaframe.web.controller;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Locale;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
-import org.archboy.clobaframe.web.controller.exception.PageNotFound;
 import org.archboy.clobaframe.web.page.PageInfo;
 import org.archboy.clobaframe.web.page.PageKey;
 import org.archboy.clobaframe.web.page.PageManager;
@@ -24,7 +24,7 @@ public class PageController {
 
 	private final int pagePathLength = "/page/".length();
 
-	private static final String DEFAULT_TEMPLATE_NAME = "share/page";
+	private static final String DEFAULT_TEMPLATE_NAME = "page";
 	
 	@Value("${clobaframe.web.page.defaultTemplateName:" + DEFAULT_TEMPLATE_NAME + "}")
 	private String defaultTemplateName;
@@ -40,9 +40,9 @@ public class PageController {
 		String path = request.getRequestURI();
 		String pageName = path.substring(pagePathLength);
 		
-		PageInfo page = getCompatiblePage(pageName, locale);
+		PageInfo page = getCompatibleLocalePage(pageName, locale);
 		if (page == null){
-			throw new PageNotFound(path);
+			throw new FileNotFoundException(path);
 		}
 		
 		model.addAttribute("page", page);
@@ -64,12 +64,12 @@ public class PageController {
 		String pageName = pageManager.getByUrlName(pathName);
 		
 		if (pageName == null) {
-			throw new PageNotFound(path);
+			throw new FileNotFoundException(path);
 		}
 		
-		PageInfo page = getCompatiblePage(pageName, locale);
+		PageInfo page = getCompatibleLocalePage(pageName, locale);
 		if (page == null){
-			throw new PageNotFound(path);
+			throw new FileNotFoundException(path);
 		}
 		
 		model.addAttribute("page", page);
@@ -88,7 +88,7 @@ public class PageController {
 	 * @param locale
 	 * @return 
 	 */
-	private PageInfo getCompatiblePage(String pageName, Locale locale) {
+	private PageInfo getCompatibleLocalePage(String pageName, Locale locale) {
 		
 		PageKey pageKey = new PageKey(pageName, locale);
 		PageInfo page = pageManager.get(pageKey);

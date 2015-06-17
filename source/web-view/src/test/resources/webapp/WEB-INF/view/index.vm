@@ -1,36 +1,28 @@
 #set ($layout = 'layout/default.vm')
-#set ($pageTitle = 'Clobaframe-Web Demo page')
+#set ($pageTitle = 'Test Page')
 #set ($pageResources = ['css/index.css','js/index.js'])
 #set ($metaKeywords = 'clobaframe web')
-#set ($metaDescription = 'a web application template that base on clobaframe.')
+#set ($metaDescription = 'clobaframe web view test.')
 
 ## add custom header
 $header.addHeader('meta', {"name":"rebots", "content":"noodp"}, false)
 
-<div class="test-i18n">
-	<h2>$msg.write('index.testI18nMessage')</h2>
-	<p class="text">$msg.write('test.text2', 'WORLD!', $now)</p>
-	
-	<p>Change language</p>
-	<ul class="action">
-		<li><a href="/changelocale?locale=en">$msg.write('common.language.en')</a></li>
-		<li><a href="/changelocale?locale=ja">$msg.write('common.language.ja')</a></li>
-		<li><a href="/changelocale?locale=zh_CN">$msg.write('common.language.zh_CN')</a></li>
-	</ul>
-</div>
+<section class="i18n">
+	<p>i18n message: $msg.write('index.testI18nMessage')</p>
+	<p>message with placeholder: $msg.write('test.text2', 'WORLD!', $now)</p>
+</section>
 
-<div class="test-escape">
-	<h2>Test text escape and formatter</h2>
-	<p>HTML escape <em class="text">$esc.html($html)</em></p>
-	<p>HTML paragraph escape <em class="text">$esc.htmlP($htmlP)</em></p>
-	<p>Integer formatter <em class="text">$num.integer($integer)</em></p>
-</div>
+<section class="escape">
+	<p>HTML escape: $esc.html($html)</p>
+	<p>HTML paragraph escape: $esc.htmlP($htmlP)</p>
+</section>
 
 <!-- write custom page resource -->
 $header.writeResource('jsx/helloworld.js', 'script', 'src', {'type':'text/jsx'}, true)
 
 <script>
 	(function(window){
+		// write json
 		window.viewObject = $json.write($viewObject);
 	})(this);
 </script>
