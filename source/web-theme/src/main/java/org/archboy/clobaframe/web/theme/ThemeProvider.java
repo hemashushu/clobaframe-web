@@ -8,10 +8,8 @@ import java.util.Collection;
  */
 public interface ThemeProvider {
 	
-	Collection<String> getThemes();
+	Collection<ThemePackage> getPackages();
 	
-	ThemeInfo get(String name);
-	
-	
+	ThemePackage get(String catalog, String name);
 	
 }

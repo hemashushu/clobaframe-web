@@ -1,0 +1,179 @@
+package org.archboy.clobaframe.web.theme.local.impl;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Named;
+import org.apache.commons.lang3.StringUtils;
+import org.archboy.clobaframe.io.MimeTypeDetector;
+import org.archboy.clobaframe.web.theme.ThemeManager;
+import org.archboy.clobaframe.web.theme.ThemePackage;
+import org.archboy.clobaframe.web.theme.ThemeProvider;
+import org.archboy.clobaframe.webresource.WebResourceProvider;
+import org.archboy.clobaframe.webresource.WebResourceProviderSet;
+import org.archboy.clobaframe.webresource.local.DefaultLocalWebResourceNameStrategy;
+import org.archboy.clobaframe.webresource.local.LocalWebResourceNameStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+
+/**
+ *
+ * @author yang
+ */
+@Named
+public class LocalThemeProvider implements ThemeProvider {
+
+	@Inject
+	private ResourceLoader resourceLoader;
+
+	@Inject
+	private MimeTypeDetector mimeTypeDetector;
+
+	@Inject
+	private WebResourceProviderSet webResourceProviderSet;
+	
+	// local resource path, usually relative to the 'src/main/webapp' folder.
+	// to using this repository, the web application war package must be expended when running.
+	private static final String DEFAULT_BASE_RESOURCE_PATH = ""; // "resources/default"
+	private static final String DEFAULT_BASE_RESOURCE_NAME_PREFIX = "";
+
+	@Value("${clobaframe.web.theme.baseResource.path:" + DEFAULT_BASE_RESOURCE_PATH + "}")
+	private String baseResourcePath;
+
+	@Value("${clobaframe.web.theme.baseResource.resourceNamePrefix:" + DEFAULT_BASE_RESOURCE_NAME_PREFIX + "}")
+	private String baseResourceNamePrefix;
+
+	private static final String DEFAULT_THEME_RESOURCE_PATH = ""; // "resources/theme";
+	private static final String DEFAULT_THEME_RESOURCE_NAME_PREFIX = "";
+
+	@Value("${clobaframe.web.theme.themeResource.path:" + DEFAULT_THEME_RESOURCE_PATH + "}")
+	private String themeResourcePath;
+
+	@Value("${clobaframe.web.theme.themeResource.resourceNamePrefix:" + DEFAULT_THEME_RESOURCE_NAME_PREFIX + "}")
+	private String themeResourceNamePrefix;
+
+	private ThemePackage baseThemePackage;
+
+	private File localThemeResourcePath;
+
+	private final Logger logger = LoggerFactory.getLogger(LocalThemeProvider.class);
+
+	@PostConstruct
+	public void init() {
+		// add base local resource
+		if (StringUtils.isNotEmpty(baseResourcePath)) {
+			baseThemePackage = getThemePackage(ThemeManager.PACKAGE_CATALOG_BASE,
+					ThemeManager.PACKAGE_NAME_BASE,
+					baseResourcePath,
+					baseResourceNamePrefix);
+		}
+
+		// resolve local theme resource path
+		if (StringUtils.isNotEmpty(themeResourcePath)) {
+			localThemeResourcePath = getFile(themeResourcePath);
+			
+			if (localThemeResourcePath != null) {
+				// insert theme resource provider to web resource manager.
+				WebResourceProvider webResourceProvider = new LocalThemeWebResourceProvider(
+					localThemeResourcePath, themeResourceNamePrefix, mimeTypeDetector);
+				webResourceProviderSet.addProvider(webResourceProvider);
+			}
+		}
+	}
+
+	private File getFile(String resourcePath) {
+		Resource resource = resourceLoader.getResource(resourcePath);
+
+		try {
+			File path = resource.getFile();
+
+			if (!path.exists()) {
+				logger.error("Can not find the theme resource folder [{}], please ensure "
+						+ "unpackage the WAR if you are running web application.", resourcePath);
+				return null;
+			}
+		} catch (IOException e) {
+			logger.error("Load local theme resource repository error, {}", e.getMessage());
+		}
+
+		return null;
+	}
+
+	private ThemePackage getThemePackage(String catalog, String name, String resourcePath, String resourceNamePrefix) {
+		File path = getFile(resourcePath);
+		if (path == null) {
+			return null;
+		}
+		return getThemePackage(catalog, name, path, resourceNamePrefix);
+	}
+	
+	private ThemePackage getThemePackage(String catalog, String name, File path, String resourceNamePrefix) {
+		LocalWebResourceNameStrategy localWebResourceNameStrategy = new DefaultLocalWebResourceNameStrategy(path, resourceNamePrefix);
+		LocalThemeResourceInfoFactory localThemeResourceInfoFactory = new LocalThemeResourceInfoFactory(mimeTypeDetector, localWebResourceNameStrategy);
+		return new LocalThemePackage(catalog, name, path, localThemeResourceInfoFactory, localWebResourceNameStrategy);
+	}
+
+	@Override
+	public Collection<ThemePackage> getPackages() {
+		List<ThemePackage> themePackages = new ArrayList<ThemePackage>();
+		if (baseThemePackage != null) {
+			themePackages.add(baseThemePackage);
+		}
+		
+		if (localThemeResourcePath == null) {
+			return themePackages;
+		}
+
+		File[] files = localThemeResourcePath.listFiles(new FileFilter() {
+			@Override
+			public boolean accept(File pathname) {
+				return pathname.isDirectory();
+			}
+		});
+		
+		for(File file : files) {
+			ThemePackage themePackage = getThemePackage(
+					ThemeManager.PACKAGE_CATALOG_LOCAL, file.getName(), 
+					file, themeResourceNamePrefix);
+			
+			if (themePackage != null) {
+				themePackages.add(themePackage);
+			}
+		}
+		
+		return themePackages;
+	}
+
+	@Override
+	public ThemePackage get(String catalog, String name) {
+		
+		if (ThemeManager.PACKAGE_CATALOG_BASE.equals(catalog) &&
+				ThemeManager.PACKAGE_NAME_BASE.equals(name)) {
+			return baseThemePackage;
+		}
+		
+		if (!ThemeManager.PACKAGE_CATALOG_LOCAL.equals(catalog)) {
+			return null;
+		}
+		
+		if (localThemeResourcePath == null) {
+			return null;
+		}
+		
+		File path = new File(localThemeResourcePath, name);
+		if (!path.exists() || path.isFile()) {
+			return null;
+		}
+		
+		return getThemePackage(catalog, name, path, themeResourceNamePrefix);
+	}
+
+}

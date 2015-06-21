@@ -1,2 +1,0 @@
-#set ($layout = 'layout/empty.vm')
-<h1>$page.title</h1>

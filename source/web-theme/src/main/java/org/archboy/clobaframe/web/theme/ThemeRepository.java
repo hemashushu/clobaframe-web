@@ -1,7 +1,7 @@
 package org.archboy.clobaframe.web.theme;
 
 
-import org.archboy.clobaframe.web.theme.ThemeInfo;
+import org.archboy.clobaframe.web.theme.ThemePackage;
 import org.archboy.clobaframe.webresource.WebResourceInfo;
 
 /**
@@ -10,16 +10,17 @@ import org.archboy.clobaframe.webresource.WebResourceInfo;
  */
 public interface ThemeRepository {
 	
-	ThemeInfo create(String name, String description);
+	ThemePackage create(String catalog, String name);
 	
-	ThemeInfo update(ThemeInfo themeInfo, 
+	ThemePackage update(ThemePackage themePackage, 
+			String name,
 			String description, String version,
 			String authorName, String website);
 	
-	void delete(ThemeInfo themeInfo);
+	void delete(ThemePackage themePackage);
 	
-	void save(ThemeInfo themeInfo, ThemeInfo.ResourceType resourceType, WebResourceInfo webResourceInfo);
+	void save(ThemePackage themePackage, ThemeResourceInfo themeResourceInfo);
 	
-	void delete(ThemeInfo themeInfo, ThemeInfo.ResourceType resourceType, String name);
+	void delete(ThemePackage themePackage, String name);
 	
 }

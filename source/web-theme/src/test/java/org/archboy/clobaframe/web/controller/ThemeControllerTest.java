@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import javax.inject.Inject;
 import org.apache.commons.io.IOUtils;
-import org.archboy.clobaframe.web.page.revision.RevisionPageManager;
+import org.archboy.clobaframe.web.theme.ThemeManager;
 import org.archboy.clobaframe.webresource.WebResourceManager;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ThemeControllerTest {
 
 	@Inject
-	private RevisionPageManager revisionPageManager;
+	private ThemeManager themeManager;
 	
 	@Inject
 	private ResourceLoader resourceLoader;

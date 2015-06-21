@@ -3,6 +3,7 @@
  */
 
 React.render(
-  <h1>Hello, world!</h1>,
-  document.getElementById('example')
+		// just a test
+		//<h1>Hello, world!</h1>,
+		document.getElementById('example')
 );

@@ -1,1 +1,0 @@
-# terms zh_CN r23

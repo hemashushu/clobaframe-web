@@ -1,5 +1,6 @@
 package org.archboy.clobaframe.web.theme;
 
+import java.util.Collection;
 import java.util.Date;
 import org.archboy.clobaframe.webresource.WebResourceInfo;
 
@@ -9,20 +10,30 @@ import org.archboy.clobaframe.webresource.WebResourceInfo;
  */
 public interface ThemeManager {
 	
-	ThemeInfo get(String name);
+	public static final String PACKAGE_CATALOG_BASE = "base";
+	public static final String PACKAGE_CATALOG_LOCAL = "local";
 	
-	ThemeInfo create(String name, String description);
+	public static final String PACKAGE_NAME_BASE = "base";
 	
-	ThemeInfo update(ThemeInfo themeInfo, 
+	public static final String MIME_TYPE_VELOCITY_TEMPLATE = "text/x-velocity";
+	
+	Collection<ThemePackage> list(String catalog);
+	
+	ThemePackage get(String catalog, String name);
+	
+	ThemePackage create(String catalog, String name);
+	
+	ThemePackage update(ThemePackage themePackage, 
+			String name,
 			String description, String version,
 			String authorName, String website);
 	
-	ThemeInfo clone(ThemeInfo themeInfo, String name);
+	ThemePackage clone(ThemePackage themePackage, boolean includeTemplate, String catalog, String name);
 	
-	void save(ThemeInfo themeInfo, ThemeInfo.ResourceType resourceType, WebResourceInfo webResourceInfo);
+	void save(ThemePackage themePackage, ThemeResourceInfo themeResourceInfo);
 	
-	void delete(ThemeInfo themeInfo, ThemeInfo.ResourceType resourceType, String name);
+	void delete(ThemePackage themePackage, String name);
 	
-	void delete(ThemeInfo themeInfo);
+	void delete(ThemePackage themePackage);
 
 }

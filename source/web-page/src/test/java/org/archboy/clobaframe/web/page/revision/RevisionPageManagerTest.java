@@ -1,5 +1,6 @@
 package org.archboy.clobaframe.web.page.revision;
 
+import org.archboy.clobaframe.web.page.revision.impl.AbstractRevisionPageCollection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
