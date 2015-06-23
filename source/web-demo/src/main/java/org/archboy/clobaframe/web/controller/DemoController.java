@@ -26,6 +26,7 @@ import org.archboy.clobaframe.web.controller.form.NoteUpdateForm;
 import org.archboy.clobaframe.web.domain.Note;
 import org.archboy.clobaframe.web.exception.NotFoundException;
 import org.archboy.clobaframe.web.service.NoteService;
+import org.archboy.clobaframe.web.view.tool.PageHeaderContext;
 import org.archboy.clobaframe.web.view.tool.PageHeaderTool;
 import org.springframework.context.i18n.LocaleContext;
 import org.springframework.stereotype.Controller;
@@ -57,7 +58,7 @@ public class DemoController {
 	private Imaging imaging;
 	
 	@Inject
-	private PageHeaderTool pageHeaderTool;
+	private PageHeaderContext pageHeaderContext;
 	
 	@RequestMapping("/")
 	public String index(Model model){
@@ -68,7 +69,7 @@ public class DemoController {
 			.add("type", "application/atom+xml")
 			.add("rel", "alternate")
 			.add("title", "Clobaframe-web ATOM Feed");
-		pageHeaderTool.addHeader("link", attributes, false);
+		pageHeaderContext.addHeader("link", attributes, false);
 		
 		// add model - current time
 		model.addAttribute("now", new Date());
@@ -184,8 +185,8 @@ public class DemoController {
 				.add("locale", locale.toLanguageTag());
 	}
 	
-	@RequestMapping("/error/page-not-found")
-	public String pageNotFound(){
-		return "page-not-found";
+	@RequestMapping("/error")
+	public String error(){
+		return "error";
 	}
 }

@@ -1,1 +1,6 @@
-{}
+{
+	"css/common-index.css":[
+		"css/common.css",
+		"css/index.css"
+	]
+}

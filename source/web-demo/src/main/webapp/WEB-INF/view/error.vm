@@ -1,0 +1,6 @@
+#set ($layout = 'layout/default.vm')
+#set ($pageTitle = 'Error')
+
+<div>
+	<h1>Page Not Found</h1>
+</div>

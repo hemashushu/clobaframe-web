@@ -1,0 +1,2 @@
+#set ($layout = 'layout/default.vm')
+<h1 class="dark">$page.title</h1>
