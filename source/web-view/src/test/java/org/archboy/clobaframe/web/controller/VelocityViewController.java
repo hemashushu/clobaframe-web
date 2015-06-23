@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import org.archboy.clobaframe.query.DefaultViewModel;
 import org.archboy.clobaframe.query.ViewModel;
+import org.archboy.clobaframe.web.view.tool.PageHeaderContext;
 import org.archboy.clobaframe.web.view.tool.PageHeaderTool;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class VelocityViewController {
 	
 	@Inject
-	private PageHeaderTool pageHeaderTool;
+	private PageHeaderContext pageHeaderContext;
 	
 	@RequestMapping("/index")
 	public String index(Model model){
@@ -31,7 +32,7 @@ public class VelocityViewController {
 			.add("type", "application/atom+xml")
 			.add("rel", "alternate")
 			.add("title", "Clobaframe-web ATOM Feed");
-		pageHeaderTool.addHeader("link", attributes, false);
+		pageHeaderContext.addHeader("link", attributes, false);
 		
 		// add model - current time
 		Calendar calendar = Calendar.getInstance();

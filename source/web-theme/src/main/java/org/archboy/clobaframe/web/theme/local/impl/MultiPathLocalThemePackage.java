@@ -3,14 +3,13 @@ package org.archboy.clobaframe.web.theme.local.impl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationConfig;
-import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -25,6 +24,7 @@ import org.archboy.clobaframe.io.file.local.LocalResourceProvider;
 import org.archboy.clobaframe.web.theme.ThemePackage;
 import org.archboy.clobaframe.web.theme.ThemeResourceInfo;
 import org.archboy.clobaframe.web.theme.local.LocalThemeResourceInfo;
+import org.archboy.clobaframe.webresource.WebResourceInfo;
 import org.archboy.clobaframe.webresource.local.DefaultLocalWebResourceNameStrategy;
 import org.archboy.clobaframe.webresource.local.LocalWebResourceNameStrategy;
 
@@ -32,73 +32,34 @@ import org.archboy.clobaframe.webresource.local.LocalWebResourceNameStrategy;
  *
  * @author yang
  */
-public class LocalThemePackage implements ThemePackage {
+public class MultiPathLocalThemePackage implements ThemePackage {
 
 	private String catalog;
 	private String name;
 	
-	private static final String infoFileName = "info.json";
+	private List<LocalResourceProvider> localResourceProviders = new ArrayList<LocalResourceProvider>();
 	
-	private String description;
-	private String version;
-	private Date lastModified;
-	private String authorName;
-	private String website;
-
-	private LocalResourceProvider localResourceProvider;
-	
-	private TypeReference<Map<String, Object>> typeReference = new TypeReference<Map<String, Object>>() {};
-	private ObjectMapper objectMapper = new ObjectMapper();
-	
-	public LocalThemePackage(
+	public MultiPathLocalThemePackage(
 			String catalog, String name,
-			File basePath, 
-			String resourceNamePrefix, 
+			Collection<Map.Entry<File, String>> pathNames,
 			MimeTypeDetector mimeTypeDetector) {
-		
-		LocalWebResourceNameStrategy localWebResourceNameStrategy = new DefaultLocalWebResourceNameStrategy(
-			basePath, resourceNamePrefix);
 
-		FileBaseResourceInfoFactory fileBaseResourceInfoFactory = new LocalThemeResourceInfoFactory(
-			mimeTypeDetector, localWebResourceNameStrategy);
+		for(Map.Entry<File, String> pathName : pathNames) {
+			LocalWebResourceNameStrategy localWebResourceNameStrategy = new DefaultLocalWebResourceNameStrategy(
+				pathName.getKey(), pathName.getValue());
 
-		localResourceProvider = new DefaultLocalResourceProvider(basePath, 
-			fileBaseResourceInfoFactory, localWebResourceNameStrategy);
+			FileBaseResourceInfoFactory fileBaseResourceInfoFactory = new LocalThemeResourceInfoFactory(
+				mimeTypeDetector, localWebResourceNameStrategy);
+
+			LocalResourceProvider localResourceProvider = new DefaultLocalResourceProvider(pathName.getKey(), 
+				fileBaseResourceInfoFactory, localWebResourceNameStrategy);
+			
+			localResourceProviders.add(localResourceProvider);
+		}
 		
 		this.catalog = catalog;
 		this.name = name;
 		
-		// load extra info
-		try{
-			loadPackageInfo(basePath);
-		}catch(IOException e){
-			// ignore
-		}catch(ParseException e){
-			//
-		}
-	}
-	
-	private void loadPackageInfo(File basePath) throws IOException, ParseException {
-		File infoFile = new File(basePath, infoFileName);
-		if (!infoFile.exists()) {
-			return;
-		}
-		
-		DateFormat dateFormat = new ISO8601DateFormat();
-		//objectMapper.setDateFormat(dateFormat);
-		
-		Map<String, Object> map = objectMapper.readValue(infoFile, typeReference);
-		this.description = (String)map.get("description");
-		this.version = (String)map.get("version");
-		this.lastModified = dateFormat.parse((String)map.get("lastModified"));
-		this.authorName = (String)map.get("authorName");
-		this.website = (String)map.get("website");
-		
-		// override
-		String catalogByInfo = (String)map.get("catalog");
-		if (StringUtils.isNotEmpty(catalogByInfo)) {
-			this.catalog = catalogByInfo;
-		}
 	}
 	
 	@Override
@@ -113,27 +74,27 @@ public class LocalThemePackage implements ThemePackage {
 
 	@Override
 	public String getDescription() {
-		return description;
+		return null;
 	}
 
 	@Override
 	public String getVersion() {
-		return version;
+		return null;
 	}
 
 	@Override
 	public Date getLastModified() {
-		return lastModified;
+		return null;
 	}
 
 	@Override
 	public String getAuthorName() {
-		return authorName;
+		return null;
 	}
 
 	@Override
 	public String getWebsite() {
-		return website;
+		return null;
 	}
 
 	@Override
@@ -144,15 +105,26 @@ public class LocalThemePackage implements ThemePackage {
 	@Override
 	public Collection<ThemeResourceInfo> getResources() {
 		Collection<ThemeResourceInfo> themeResourceInfos = new ArrayList<ThemeResourceInfo>();
-		for(FileBaseResourceInfo fileBaseResourceInfo : localResourceProvider.getAll()){
-			themeResourceInfos.add((LocalThemeResourceInfo)fileBaseResourceInfo);
+		for(LocalResourceProvider localResourceProvider : localResourceProviders) {
+			Collection<FileBaseResourceInfo> fileBaseResourceInfos = localResourceProvider.getAll();
+			for(FileBaseResourceInfo fileBaseResourceInfo : fileBaseResourceInfos) {
+				themeResourceInfos.add((ThemeResourceInfo)fileBaseResourceInfo);
+			}
 		}
+		
 		return themeResourceInfos;
 	}
 
 	@Override
 	public ThemeResourceInfo getResource(String name) {
-		return (ThemeResourceInfo)localResourceProvider.getByName(name);
+		for(LocalResourceProvider localResourceProvider : localResourceProviders) {
+			ThemeResourceInfo themeResourceInfo = (ThemeResourceInfo)localResourceProvider.getByName(name);
+			if (themeResourceInfo != null) {
+				return themeResourceInfo;
+			}
+		}
+		
+		return null;
 	}
 	
 	@Override
@@ -177,7 +149,7 @@ public class LocalThemePackage implements ThemePackage {
 			return false;
 		}
 
-		LocalThemePackage other = (LocalThemePackage)o;
+		MultiPathLocalThemePackage other = (MultiPathLocalThemePackage)o;
 		return new EqualsBuilder()
 				.append(getCatalog(), other.getCatalog())
 				.append(getName(), other.getName())

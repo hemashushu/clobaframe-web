@@ -30,6 +30,7 @@ public class ThemeManagerImpl implements ThemeManager {
 	@Override
 	public Collection<ThemePackage> list(String catalog) {
 		List<ThemePackage> themePackages = new ArrayList<ThemePackage>();
+		
 		for (ThemeProvider themeProvider : themeProviders) {
 			for (ThemePackage themePackage : themeProvider.getPackages()){
 				if (themePackage.getCatalog().equals(catalog)){

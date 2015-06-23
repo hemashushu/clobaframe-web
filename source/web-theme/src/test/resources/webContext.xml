@@ -56,13 +56,12 @@
 				<entry key="res" value-ref="webResourceManagerImpl"/>
 				
 				<!-- from the package org.archboy.clobaframe.web.view.tool.impl -->
-				<!--
 				<entry key="esc" value-ref="extendedEscapeTool"/>
 				<entry key="json" value-ref="jsonWriterImpl"/>
 				<entry key="msg" value-ref="messageSourceToolImpl"/>
 				<entry key="header" value-ref="pageHeaderToolImpl"/>
-				-->
-			
+				<entry key="headerCtx" value-ref="pageHeaderContextImpl"/>
+				
 				<!-- rarely use -->
 				<!--
 				<entry key="date" value-ref="localeAwareComparisonDateTool"/>

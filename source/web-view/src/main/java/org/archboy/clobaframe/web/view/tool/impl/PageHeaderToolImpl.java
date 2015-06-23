@@ -22,11 +22,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 @Named
 public class PageHeaderToolImpl implements PageHeaderTool {
 
-	@Autowired(required = false)
-	private List<PageHeaderProvider> pageHeaderProviders = new ArrayList<PageHeaderProvider>();
-	
-	private static final String customHeaderRequestAttributeName = "clobaframe-web-view.customPageHeaders";
-	
 	/**
 	 * About the script and style sheet header template.
 	 * Specifying "type" attributes in these contexts is not necessary as
@@ -40,54 +35,6 @@ public class PageHeaderToolImpl implements PageHeaderTool {
 	
 	@Inject
 	private WebResourceManager webResourceManager;
-
-	@Override
-	public List<String> getHeaders() {
-		List<String> headers = new ArrayList<String>();
-		
-		if (pageHeaderProviders != null && !pageHeaderProviders.isEmpty()) {
-			for(PageHeaderProvider pageHeaderProvider : pageHeaderProviders){
-				headers.addAll(pageHeaderProvider.getHeaders());
-			}
-		}
-		
-		// get custom header from current HTTP request attributes (HTTP request scope).
-		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-		
-		@SuppressWarnings("unchecked")
-		List<String> extraHeaders = (List<String>)requestAttributes.getAttribute(
-				customHeaderRequestAttributeName, RequestAttributes.SCOPE_REQUEST);
-		
-		if (extraHeaders != null && !extraHeaders.isEmpty()){
-			headers.addAll(extraHeaders);
-		}
-		
-		return headers;
-	}
-
-	@Override
-	public void addHeader(String tagName, Map<String, Object> attributes, boolean closeTag) {
-		String header = write(tagName, attributes, closeTag);
-		
-		// get custom header from current HTTP request attributes.
-		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-		
-		@SuppressWarnings("unchecked")
-		List<String> extraHeaders = (List<String>)requestAttributes.getAttribute(
-				customHeaderRequestAttributeName, RequestAttributes.SCOPE_REQUEST);
-		
-		if (extraHeaders == null) {
-			extraHeaders = new ArrayList<String>();
-		}
-		
-		extraHeaders.add(header);
-		
-		// set custom header to current HTTP request attributes.
-		requestAttributes.setAttribute(customHeaderRequestAttributeName, 
-				extraHeaders, 
-				RequestAttributes.SCOPE_REQUEST);
-		
-	}
 
 	@Override
 	public String write(String tagName, Map<String, Object> attributes, boolean closeTag) {
@@ -133,7 +80,7 @@ public class PageHeaderToolImpl implements PageHeaderTool {
 	}
 
 	@Override
-	public List<String> getResources(Collection<String> names) {
+	public List<String> writeResources(Collection<String> names) {
 		List<String> results = new ArrayList<String>();
 
 		for(String name : names){

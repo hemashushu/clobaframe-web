@@ -13,13 +13,13 @@
 		$header.writeResource('js/jquery-1.11.1.js')
 		
 		<!-- Extra and custom headers -->
-		#foreach($line in $header.headers)
+		#foreach($line in $headerCtx.headers)
 			$line
 		#end
 		
 		<!-- Page special style-sheet and script -->
 		#if ($pageResources)
-			#foreach($line in $header.getResources($pageResources))
+			#foreach($line in $header.writeResources($pageResources))
 				$line
 			#end
 		#end

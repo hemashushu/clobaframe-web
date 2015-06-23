@@ -4,13 +4,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import javax.inject.Inject;
+import javax.inject.Named;
 import org.apache.commons.io.IOUtils;
+import static org.archboy.clobaframe.setting.SettingProvider.PRIORITY_HIGH;
+import org.archboy.clobaframe.setting.global.GlobalSettingProvider;
+import org.archboy.clobaframe.setting.global.GlobalSettingRepository;
+import org.archboy.clobaframe.setting.support.Utils;
 import org.archboy.clobaframe.web.theme.ThemeManager;
 import org.archboy.clobaframe.webresource.WebResourceManager;
 import org.springframework.core.io.Resource;
@@ -55,26 +62,60 @@ public class ThemeControllerTest {
 
 	@Test
 	public void testGetPage() throws Exception {
-		// test get page
-		mock.perform(get("/page/about").locale(Locale.ENGLISH))
+		// test get index
+		mock.perform(get("/index"))
 				.andExpect(status().isOk())
-				.andExpect(content().string("<h1>about r2</h1>"));
+				.andExpect(content().string(
+						"<!DOCTYPE html>\n" +
+						"<head>\n" +
+						"<script src=\"/resource/js/index.js?v4a6ae5f4\"></script>\n" +
+						"</head>"));
 		
-		// test get page with locale
-		mock.perform(get("/page/about").locale(Locale.SIMPLIFIED_CHINESE))
+		// test get index
+		mock.perform(get("/index").param("theme", "dark"))
 				.andExpect(status().isOk())
-				.andExpect(content().string("<h1>about zh_CN r8</h1>"));
+				.andExpect(content().string("<!DOCTYPE html>\n" +
+						"<head>\n" +
+						"<script src=\"/resource/js/index.js?v4a6ae5f4\"></script>\n" +
+						"<link href=\"/resource/theme/dark/resource/css/dark.css?vbf81ee39\" rel=\"stylesheet\">\n" +
+						"<link href=\"/resource/theme/dark/resource/css/index.css?v6dc92db3\" rel=\"stylesheet\">\n" +
+						"</head>"));
 		
-		// test get page that with template name spcified.
-		mock.perform(get("/page/contact").locale(Locale.ENGLISH))
+		// test get index
+		mock.perform(get("/index").param("theme", "flat"))
 				.andExpect(status().isOk())
-				.andExpect(content().string("<h2>contact[page-mobile]</h2>"));
-		
-		// test get page by url name
-		mock.perform(get("/help/privacy").locale(Locale.ENGLISH))
-				.andExpect(status().isOk())
-				.andExpect(content().string("<h1>privacy@help/privacy</h1>"));
+				.andExpect(content().string("<!DOCTYPE html>\n" +
+						"<head>\n" +
+						"<script src=\"/resource/js/index.js?v4a6ae5f4\"></script>\n" +
+						"<link href=\"/resource/theme/flat/resource/css/flat.css?vc724b117\" rel=\"stylesheet\">\n" +
+						"</head>"));
 		
 	}
 
+	@Named
+	public static class TestingGlobalSettingRepository implements GlobalSettingProvider, GlobalSettingRepository {
+
+		protected Map<String, Object> setting = new LinkedHashMap<String, Object>();
+		
+		@Override
+		public int getOrder() {
+			return PRIORITY_HIGH;
+		}
+
+		@Override
+		public Map<String, Object> getAll() {
+			return setting;
+		}
+		
+		@Override
+		public void update(Map<String, Object> item) {
+			setting = Utils.merge(setting, item);
+		}
+
+		@Override
+		public void update(String key, Object value) {
+			setting = Utils.merge(setting, key, value);
+		}
+	}
+	
 }

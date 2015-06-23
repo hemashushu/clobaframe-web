@@ -3,9 +3,11 @@ package org.archboy.clobaframe.web.theme.local.impl;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -43,21 +45,30 @@ public class LocalThemeProvider implements ThemeProvider {
 	// local resource path, usually relative to the 'src/main/webapp' folder.
 	// to using this repository, the web application war package must be expended when running.
 	private static final String DEFAULT_BASE_RESOURCE_PATH = ""; // "resources/default"
-	private static final String DEFAULT_BASE_RESOURCE_NAME_PREFIX = "";
+	private static final String DEFAULT_BASE_RESOURCE_NAME_PREFIX = "resources/";
 
-	@Value("${clobaframe.web.theme.baseResource.path:" + DEFAULT_BASE_RESOURCE_PATH + "}")
+	@Value("${clobaframe.web.theme.base.resource.path:" + DEFAULT_BASE_RESOURCE_PATH + "}")
 	private String baseResourcePath;
 
-	@Value("${clobaframe.web.theme.baseResource.resourceNamePrefix:" + DEFAULT_BASE_RESOURCE_NAME_PREFIX + "}")
+	@Value("${clobaframe.web.theme.base.resource.resourceNamePrefix:" + DEFAULT_BASE_RESOURCE_NAME_PREFIX + "}")
 	private String baseResourceNamePrefix;
 
+	private static final String DEFAULT_BASE_TEMPLATE_PATH = "";
+	private static final String DEFAULT_BASE_TEMPLATE_NAME_PREFIX = "template/";
+	
+	@Value("${clobaframe.web.theme.base.template.path:" + DEFAULT_BASE_TEMPLATE_PATH + "}")
+	private String baseTemplatePath;
+	
+	@Value("${clobaframe.web.theme.base.template.resourceNamePrefix:" + DEFAULT_BASE_TEMPLATE_NAME_PREFIX + "}")
+	private String baseTemplateNamePrefix;
+	
 	private static final String DEFAULT_THEME_RESOURCE_PATH = ""; // "resources/theme";
 	private static final String DEFAULT_THEME_RESOURCE_NAME_PREFIX = "";
 
-	@Value("${clobaframe.web.theme.themeResource.path:" + DEFAULT_THEME_RESOURCE_PATH + "}")
+	@Value("${clobaframe.web.theme.local.path:" + DEFAULT_THEME_RESOURCE_PATH + "}")
 	private String themeResourcePath;
 
-	@Value("${clobaframe.web.theme.themeResource.resourceNamePrefix:" + DEFAULT_THEME_RESOURCE_NAME_PREFIX + "}")
+	@Value("${clobaframe.web.theme.local.resourceNamePrefix:" + DEFAULT_THEME_RESOURCE_NAME_PREFIX + "}")
 	private String themeResourceNamePrefix;
 
 	private ThemePackage baseThemePackage;
@@ -70,10 +81,21 @@ public class LocalThemeProvider implements ThemeProvider {
 	public void init() {
 		// add base local resource
 		if (StringUtils.isNotEmpty(baseResourcePath)) {
+			File baseResourceBasePath = getFile(baseResourcePath);
+			File baseTemplateBasePath = getFile(baseTemplatePath);
+			
+			List<Map.Entry<File, String>> basePathNames = new ArrayList<Map.Entry<File, String>>();
+			if (baseResourceBasePath != null) {
+				basePathNames.add(new AbstractMap.SimpleEntry<File, String>(baseResourceBasePath, baseResourceNamePrefix));
+			}
+			
+			if (baseTemplateBasePath != null) {
+				basePathNames.add(new AbstractMap.SimpleEntry<File, String>(baseTemplateBasePath, baseTemplateNamePrefix));
+			}
+			
 			baseThemePackage = getThemePackage(ThemeManager.PACKAGE_CATALOG_BASE,
 					ThemeManager.PACKAGE_NAME_BASE,
-					baseResourcePath,
-					baseResourceNamePrefix);
+					basePathNames);
 		}
 
 		// resolve local theme resource path
@@ -84,6 +106,7 @@ public class LocalThemeProvider implements ThemeProvider {
 				// insert theme resource provider to web resource manager.
 				WebResourceProvider webResourceProvider = new LocalThemeWebResourceProvider(
 					localThemeResourcePath, themeResourceNamePrefix, mimeTypeDetector);
+				
 				webResourceProviderSet.addProvider(webResourceProvider);
 			}
 		}
@@ -100,6 +123,8 @@ public class LocalThemeProvider implements ThemeProvider {
 						+ "unpackage the WAR if you are running web application.", resourcePath);
 				return null;
 			}
+			
+			return path;
 		} catch (IOException e) {
 			logger.error("Load local theme resource repository error, {}", e.getMessage());
 		}
@@ -107,20 +132,22 @@ public class LocalThemeProvider implements ThemeProvider {
 		return null;
 	}
 
-	private ThemePackage getThemePackage(String catalog, String name, String resourcePath, String resourceNamePrefix) {
-		File path = getFile(resourcePath);
-		if (path == null) {
-			return null;
-		}
-		return getThemePackage(catalog, name, path, resourceNamePrefix);
-	}
+//	private ThemePackage getThemePackage(String catalog, String name, String resourcePath, String resourceNamePrefix) {
+//		File path = getFile(resourcePath);
+//		if (path == null) {
+//			return null;
+//		}
+//		return getThemePackage(catalog, name, path, resourceNamePrefix);
+//	}
 	
 	private ThemePackage getThemePackage(String catalog, String name, File path, String resourceNamePrefix) {
-		LocalWebResourceNameStrategy localWebResourceNameStrategy = new DefaultLocalWebResourceNameStrategy(path, resourceNamePrefix);
-		LocalThemeResourceInfoFactory localThemeResourceInfoFactory = new LocalThemeResourceInfoFactory(mimeTypeDetector, localWebResourceNameStrategy);
-		return new LocalThemePackage(catalog, name, path, localThemeResourceInfoFactory, localWebResourceNameStrategy);
+		return new LocalThemePackage(catalog, name, path, resourceNamePrefix, mimeTypeDetector);
 	}
 
+	private ThemePackage getThemePackage(String catalog, String name, Collection<Map.Entry<File, String>> pathNames) {
+		return new MultiPathLocalThemePackage(catalog, name, pathNames, mimeTypeDetector);
+	}
+	
 	@Override
 	public Collection<ThemePackage> getPackages() {
 		List<ThemePackage> themePackages = new ArrayList<ThemePackage>();
@@ -140,9 +167,11 @@ public class LocalThemeProvider implements ThemeProvider {
 		});
 		
 		for(File file : files) {
+			String packageResourceNamePrefix = String.format("%s%s/", themeResourceNamePrefix, file.getName());
+			
 			ThemePackage themePackage = getThemePackage(
 					ThemeManager.PACKAGE_CATALOG_LOCAL, file.getName(), 
-					file, themeResourceNamePrefix);
+					file, packageResourceNamePrefix);
 			
 			if (themePackage != null) {
 				themePackages.add(themePackage);
@@ -173,7 +202,8 @@ public class LocalThemeProvider implements ThemeProvider {
 			return null;
 		}
 		
-		return getThemePackage(catalog, name, path, themeResourceNamePrefix);
+		String packageResourceNamePrefix = String.format("%s%s/", themeResourceNamePrefix, name);
+		return getThemePackage(catalog, name, path, packageResourceNamePrefix);
 	}
 
 }

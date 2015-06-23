@@ -186,6 +186,15 @@
 			<artifactId>clobaframe-webresource</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<!-- Clobaframe for test -->
+		<dependency>
+			<groupId>org.archboy.clobaframe</groupId>
+			<artifactId>clobaframe-web-view</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+				
 	</dependencies>
 
 	<repositories>

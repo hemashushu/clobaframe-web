@@ -83,35 +83,9 @@ public class PageHeaderToolTest {
 		assertEquals("<script type=\"text/jsx\" src=\"/resource/js/index.js?v4a6ae5f4\"></script>", res3);
 		
 		// test get resources
-		List<String> ress1 = pageHeaderTool.getResources(Arrays.asList("css/index.css", "js/jquery-1.11.1.js"));
+		List<String> ress1 = pageHeaderTool.writeResources(Arrays.asList("css/index.css", "js/jquery-1.11.1.js"));
 		assertEquals(res1, ress1.get(0));
 		assertEquals(res2, ress1.get(1));
-		
-		// test getHeaders
-		// build mock
-		HttpServletRequest httpServletRequest = new MockHttpServletRequest();
-		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(httpServletRequest));
-		
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		
-		List<String> headers1 = pageHeaderTool.getHeaders();
-		assertEquals(1, headers1.size());
-		assertEquals(pageHeaderTool.writeResource("js/i18n/messages.js"), headers1.get(0));
-		
-		LocaleContextHolder.setLocale(Locale.SIMPLIFIED_CHINESE);
-		
-		List<String> headers2 = pageHeaderTool.getHeaders();
-		assertEquals(2, headers2.size());
-		assertEquals(pageHeaderTool.writeResource("js/i18n/messages.js"), headers2.get(0));
-		assertEquals(pageHeaderTool.writeResource("js/i18n/messages_zh_CN.js"), headers2.get(1));
-		
-		// test add header
-		// expect: "<meta charset=\"UTF-8\">"
-		pageHeaderTool.addHeader("meta", attr1, false);
-		List<String> headers3 = pageHeaderTool.getHeaders();
-		assertEquals(3, headers3.size());
-		assertEquals("<meta charset=\"UTF-8\">", headers3.get(2));
-		
 	}
 
 }
