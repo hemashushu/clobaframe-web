@@ -10,19 +10,13 @@
 		#end
 		
 		<!-- Common style-sheet and script -->
-		$header.writeResource('js/jquery-1.11.1.js')
-		
-		<!-- Extra and custom headers -->
-		#foreach($line in $headerCtx.headers)
-			$line
-		#end
+		$header.writeResources(['css/combine-common.css','js/combine-common.js'])
 		
 		<!-- Page special style-sheet and script -->
-		#if ($pageResources)
-			#foreach($line in $header.writeResources($pageResources))
-				$line
-			#end
-		#end
+		$header.writeResources($pageResources)
+
+		<!-- Extra and custom headers -->
+		$headerEx.write()
 		
 		<!-- meta keywords and meta description -->
 		#if ($metaKeywords)

@@ -69,6 +69,7 @@ public class ThemeControllerTest {
 						"<!DOCTYPE html>\n" +
 						"<head>\n" +
 						"<script src=\"/resource/js/index.js?v4a6ae5f4\"></script>\n" +
+						"\n" +
 						"</head>"));
 		
 		// test get index
@@ -77,7 +78,7 @@ public class ThemeControllerTest {
 				.andExpect(content().string("<!DOCTYPE html>\n" +
 						"<head>\n" +
 						"<script src=\"/resource/js/index.js?v4a6ae5f4\"></script>\n" +
-						"<link href=\"/resource/theme/dark/resource/css/dark.css?vbf81ee39\" rel=\"stylesheet\">\n" +
+						"<link href=\"/resource/theme/dark/resource/css/dark.css?vbf81ee39\" rel=\"stylesheet\">" +
 						"<link href=\"/resource/theme/dark/resource/css/index.css?v6dc92db3\" rel=\"stylesheet\">\n" +
 						"</head>"));
 		
@@ -95,7 +96,7 @@ public class ThemeControllerTest {
 	@Named
 	public static class TestingGlobalSettingRepository implements GlobalSettingProvider, GlobalSettingRepository {
 
-		protected Map<String, Object> setting = new LinkedHashMap<String, Object>();
+		private Map<String, Object> setting = new LinkedHashMap<String, Object>();
 		
 		@Override
 		public int getOrder() {

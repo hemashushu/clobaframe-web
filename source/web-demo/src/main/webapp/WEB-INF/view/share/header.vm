@@ -1,4 +1,6 @@
 <!-- header -->
 <header>
-	<h1>Clobaframe Web Demo</h1>
+	<div class="container">
+		<h1>Clobaframe Web Demo</h1>
+	</div>
 </header>

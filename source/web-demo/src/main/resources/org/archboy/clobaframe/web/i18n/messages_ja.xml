@@ -11,9 +11,5 @@
 	<entry key="index.terms">使用条件</entry>
 	<entry key="index.privacy">プライバシー</entry>
 	
-	<entry key="index.testI18nMessage">国際化テキストのテスト</entry>
-	<entry key="index.testScriptI18nMessage">テスト スクリプト （JavaScript） テキスト国際</entry>
-	<entry key="index.testScriptI18nMessage.currentLanguageTag"> は、現在の言語:</entry>
-	<entry key="index.testWebResource">Web リソースのテスト</entry>
-	<entry key="index.testViewObject">表示オブジェクトの （View Object）のテスト</entry>
+	<entry key="index.changeLanguage">言語を変更</entry>
 </properties>

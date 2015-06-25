@@ -351,7 +351,7 @@
 					<version>2.10</version>
 				</plugin>
 
-				<!-- Tomcat 7 Maven plugin -->				
+				<!-- Tomcat 7 Maven plugin -->		
 				<plugin>
 					<groupId>org.apache.tomcat.maven</groupId>
 					<artifactId>tomcat7-maven-plugin</artifactId>
@@ -362,10 +362,11 @@
 						<protocol>org.apache.coyote.http11.Http11NioProtocol</protocol>
 						<httpPort>8080</httpPort>
 						<httpsPort>8443</httpsPort>
-						<keystoreFile>${basedir}/clobaframe-web-demo/keystore.jks</keystoreFile>
+						<keystoreFile>${basedir}/keystore.jks</keystoreFile>
 						<keystorePass>password</keystorePass>
 					</configuration>
 				</plugin>
+
 			</plugins>
 		</pluginManagement>
 	</build>

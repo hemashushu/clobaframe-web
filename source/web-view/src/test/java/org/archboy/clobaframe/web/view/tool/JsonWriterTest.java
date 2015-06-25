@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import javax.inject.Inject;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static org.junit.Assert.*;
@@ -30,6 +31,8 @@ public class JsonWriterTest {
 
 	@Test
 	public void testWrite()  {
+		assertEquals(StringUtils.EMPTY, jsonWriter.write(null));
+		
 		User user1 = new User("123456", "foo");
 		String json1 = jsonWriter.write(user1);
 		assertEquals("{\"id\":\"123456\",\"name\":\"foo\"}", json1);

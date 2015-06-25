@@ -1,5 +1,5 @@
 <!DOCTYPE html>
 <head>
 $header.writeResource('js/index.js')
-#foreach($line in $headerCtx.headers)$line
-#end</head>
+$headerEx.write()
+</head>

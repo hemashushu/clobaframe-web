@@ -26,13 +26,13 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/applicationContext.xml"})
-public class PageHeaderContextTest {
+public class PageHeaderExtensionToolTest {
 
 	@Inject
 	private PageHeaderTool pageHeaderTool;
 
 	@Inject
-	private PageHeaderContext pageHeaderContext;
+	private PageHeaderExtensionTool pageHeaderExtensionTool;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -52,24 +52,39 @@ public class PageHeaderContextTest {
 		
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
 		
-		List<String> headers1 = pageHeaderContext.getHeaders();
+		List<String> headers1 = pageHeaderExtensionTool.getHeaders();
 		assertEquals(1, headers1.size());
 		assertEquals(pageHeaderTool.writeResource("js/i18n/messages.js"), headers1.get(0));
 		
+		assertEquals(pageHeaderTool.writeResource("js/i18n/messages.js"),
+				pageHeaderExtensionTool.write());
+		
+		// change locale
 		LocaleContextHolder.setLocale(Locale.SIMPLIFIED_CHINESE);
 		
-		List<String> headers2 = pageHeaderContext.getHeaders();
+		List<String> headers2 = pageHeaderExtensionTool.getHeaders();
 		assertEquals(2, headers2.size());
 		assertEquals(pageHeaderTool.writeResource("js/i18n/messages.js"), headers2.get(0));
 		assertEquals(pageHeaderTool.writeResource("js/i18n/messages_zh_CN.js"), headers2.get(1));
+		
+		assertEquals(
+				pageHeaderTool.writeResource("js/i18n/messages.js") + 
+				pageHeaderTool.writeResource("js/i18n/messages_zh_CN.js"),
+				pageHeaderExtensionTool.write());
+		
+		assertEquals(
+				pageHeaderTool.writeResource("js/i18n/messages.js") + 
+				"\n" +
+				pageHeaderTool.writeResource("js/i18n/messages_zh_CN.js"),
+				pageHeaderExtensionTool.write("\n"));
 		
 		// test add header
 		// expect: "<meta charset=\"UTF-8\">"
 		Map<String, Object> attr1 = new LinkedHashMap<String, Object>();
 		attr1.put("charset", "UTF-8");
 		
-		pageHeaderContext.addHeader("meta", attr1, false);
-		List<String> headers3 = pageHeaderContext.getHeaders();
+		pageHeaderExtensionTool.add("meta", attr1, false);
+		List<String> headers3 = pageHeaderExtensionTool.getHeaders();
 		assertEquals(3, headers3.size());
 		assertEquals("<meta charset=\"UTF-8\">", headers3.get(2));
 		

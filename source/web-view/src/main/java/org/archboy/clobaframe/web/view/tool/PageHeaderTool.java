@@ -36,7 +36,8 @@ public interface PageHeaderTool {
 	 * &lt;link href="xxx" rel="stylesheet"&gt; for stylesheet.
 	 * 
 	 * @param resourceName
-	 * @return 
+	 * @return EMPTY string when the specify resource does not exists or 
+	 * does not support the resource mime type.
 	 */
 	String writeResource(String resourceName);
 	
@@ -49,7 +50,7 @@ public interface PageHeaderTool {
 	 * @param locationAttributeName
 	 * @param otherAttributes
 	 * @param closeTag
-	 * @return 
+	 * @return EMPTY string when the specify resource does not exists.
 	 */
 	String writeResource(String resourceName, 
 			String tagName, 
@@ -60,8 +61,15 @@ public interface PageHeaderTool {
 	 * Get serval resource page header lines.
 	 * 
 	 * @param resourceNames
-	 * @return 
+	 * @return EMPTY string when all the specify resource does not exists.
 	 */
-	List<String> writeResources(Collection<String> resourceNames);
+	String writeResources(Collection<String> resourceNames);
 
+	/**
+	 * 
+	 * @param resourceNames
+	 * @param separator
+	 * @return EMPTY string when all the specify resource does not exists.
+	 */
+	String writeResources(Collection<String> resourceNames, String separator);
 }

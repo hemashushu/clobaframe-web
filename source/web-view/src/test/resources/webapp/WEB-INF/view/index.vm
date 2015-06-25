@@ -5,7 +5,7 @@
 #set ($metaDescription = 'clobaframe web view test.')
 
 ## add custom header
-$headerCtx.addHeader('meta', {"name":"rebots", "content":"noodp"}, false)
+$headerEx.add('meta', {"name":"rebots", "content":"noodp"}, false)
 
 <section class="i18n">
 	<p>i18n message: $msg.write('index.testI18nMessage')</p>
@@ -14,7 +14,7 @@ $headerCtx.addHeader('meta', {"name":"rebots", "content":"noodp"}, false)
 
 <section class="escape">
 	<p>HTML escape: $esc.html($html)</p>
-	<p>HTML paragraph escape: $esc.htmlP($htmlP)</p>
+	<div>HTML paragraph escape: $esc.htmlP($htmlP)</div>
 </section>
 
 <!-- write custom page resource -->

@@ -13,16 +13,10 @@
 		$header.writeResource('js/jquery-1.11.1.js')
 		
 		<!-- Extra and custom headers -->
-		#foreach($line in $headerCtx.headers)
-			$line
-		#end
+		$headerEx.write()
 		
 		<!-- Page special style-sheet and script -->
-		#if ($pageResources)
-			#foreach($line in $header.writeResources($pageResources))
-				$line
-			#end
-		#end
+		$header.writeResources($pageResources)
 		
 		<!-- meta keywords and meta description -->
 		#if ($metaKeywords)

@@ -60,7 +60,7 @@
 				<entry key="json" value-ref="jsonWriterImpl"/>
 				<entry key="msg" value-ref="messageSourceToolImpl"/>
 				<entry key="header" value-ref="pageHeaderToolImpl"/>
-				<entry key="headerCtx" value-ref="pageHeaderContextImpl"/>
+				<entry key="headerEx" value-ref="pageHeaderExtensionImpl"/>
 				
 				<!-- rarely use -->
 				<!--

@@ -74,10 +74,10 @@
 	</listener>
 	
 	<!-- The image library -->
-	<listener>
+<!--	<listener>
 		<display-name>ImageIO service provider loader/unloader</display-name>
 		<listener-class>com.twelvemonkeys.servlet.image.IIOProviderContextListener</listener-class>
-	</listener>
+	</listener>-->
 	
 	<!-- Processes application requests -->
 	<servlet>

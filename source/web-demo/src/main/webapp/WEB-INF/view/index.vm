@@ -4,15 +4,10 @@
 #set ($metaKeywords = 'clobaframe web')
 #set ($metaDescription = 'clobaframe web demo')
 
-## add custom header
-$headerCtx.addHeader('meta', {"name":"rebots", "content":"noodp"}, false)
-
-<div class="test-i18n">
-	<h2>$msg.write('index.testI18nMessage')</h2>
-	<p class="text">$msg.write('test.text2', 'WORLD!', $now)</p>
-	
-	<p>Change language</p>
-	<ul class="action">
+<div class="container">
+<div class="pull-right locale-switch">
+	<label>$msg.write('index.changeLanguage')</label>
+	<ul class="list-inline">
 		<li><a href="/changelocale?locale=en">$msg.write('common.language.en')</a></li>
 		<li><a href="/changelocale?locale=ja">$msg.write('common.language.ja')</a></li>
 		<li><a href="/changelocale?locale=zh_CN">$msg.write('common.language.zh_CN')</a></li>
@@ -53,6 +48,8 @@ $headerCtx.addHeader('meta', {"name":"rebots", "content":"noodp"}, false)
 		<li><a href="/doc/terms">$msg.write('index.terms')</a></li>
 		<li><a href="/doc/privacy">$msg.write('index.privacy')</a></li>
 	</ul>
+</div>
+
 </div>
 
 <!-- write custom page resource -->

@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static org.junit.Assert.*;
@@ -76,16 +77,31 @@ public class PageHeaderToolTest {
 		String res2 = pageHeaderTool.writeResource("js/jquery-1.11.1.js");
 		assertEquals("<script src=\"/resource/js/jquery-1.11.1.js?v3029834a\"></script>", res2);
 		
+		assertEquals(StringUtils.EMPTY, 
+				pageHeaderTool.writeResource("css/none-exists.css"));
+		
 		// test write resource with custom attr
 		Map<String, Object> attr4 = new LinkedHashMap<String, Object>();
 		attr4.put("type", "text/jsx");
 		String res3 = pageHeaderTool.writeResource("js/index.js", "script", "src", attr4, true);
 		assertEquals("<script type=\"text/jsx\" src=\"/resource/js/index.js?v4a6ae5f4\"></script>", res3);
 		
+		assertEquals(StringUtils.EMPTY, 
+				pageHeaderTool.writeResource("css/none-exists.css", "link", "src", attr4, false));
+		
 		// test get resources
-		List<String> ress1 = pageHeaderTool.writeResources(Arrays.asList("css/index.css", "js/jquery-1.11.1.js"));
-		assertEquals(res1, ress1.get(0));
-		assertEquals(res2, ress1.get(1));
+		String ress1 = pageHeaderTool.writeResources(Arrays.asList("css/index.css", "js/jquery-1.11.1.js"));
+		assertEquals(res1 + res2, ress1);
+		
+		String ress2 = pageHeaderTool.writeResources(Arrays.asList("css/index.css", "js/none-exists.js"));
+		assertEquals(res1, ress2);
+		
+		String ress3 = pageHeaderTool.writeResources(Arrays.asList("css/none-exists.css", "js/none-exists.js"));
+		assertEquals(StringUtils.EMPTY, ress3);
+		
+		String ress4 = pageHeaderTool.writeResources(Arrays.asList("css/index.css", "js/jquery-1.11.1.js"), "\n");
+		assertEquals(res1 + "\n" + res2, ress4);
+		
+		
 	}
-
 }

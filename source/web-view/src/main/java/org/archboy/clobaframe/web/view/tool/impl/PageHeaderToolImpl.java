@@ -1,16 +1,23 @@
 package org.archboy.clobaframe.web.view.tool.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.web.view.tool.PageHeaderProvider;
 import org.archboy.clobaframe.web.view.tool.PageHeaderTool;
 import org.archboy.clobaframe.webresource.WebResourceInfo;
 import org.archboy.clobaframe.webresource.WebResourceManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -36,6 +43,8 @@ public class PageHeaderToolImpl implements PageHeaderTool {
 	@Inject
 	private WebResourceManager webResourceManager;
 
+	private final Logger logger = LoggerFactory.getLogger(PageHeaderToolImpl.class);
+	
 	@Override
 	public String write(String tagName, Map<String, Object> attributes, boolean closeTag) {
 		StringBuilder builder = new StringBuilder();
@@ -65,7 +74,7 @@ public class PageHeaderToolImpl implements PageHeaderTool {
 
 		WebResourceInfo resource = webResourceManager.getServerResource(name);
 		if (resource == null) {
-			return null;
+			return StringUtils.EMPTY;
 		}
 		
 		String mimeType = resource.getMimeType();
@@ -75,12 +84,18 @@ public class PageHeaderToolImpl implements PageHeaderTool {
 			return String.format(STYLESHEET_TEMPLATE, webResourceManager.getLocation(resource));
 		}else{
 			// unsupport resource type
-			return null;
+			logger.error("Unsupport mime type, resource: " + name);
+			return StringUtils.EMPTY;
 		}
 	}
 
 	@Override
-	public List<String> writeResources(Collection<String> names) {
+	public String writeResources(Collection<String> names){
+		return writeResources(names, null);
+	}
+	
+	@Override
+	public String writeResources(Collection<String> names, String separator) {
 		List<String> results = new ArrayList<String>();
 
 		for(String name : names){
@@ -90,7 +105,11 @@ public class PageHeaderToolImpl implements PageHeaderTool {
 			}
 		}
 
-		return results;
+		if (results.isEmpty()) {
+			return StringUtils.EMPTY;
+		}
+		
+		return StringUtils.join(results, separator);
 	}
 
 	@Override
@@ -103,7 +122,7 @@ public class PageHeaderToolImpl implements PageHeaderTool {
 		WebResourceInfo resource = webResourceManager.getServerResource(resourceName);
 
 		if (resource == null) {
-			return null;
+			return StringUtils.EMPTY;
 		}
 		
 		String location = webResourceManager.getLocation(resource);

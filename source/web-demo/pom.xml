@@ -84,24 +84,6 @@
 		<!-- Clobaframe -->
 		<dependency>
 			<groupId>org.archboy.clobaframe</groupId>
-			<artifactId>clobaframe-query</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.archboy.clobaframe</groupId>
-			<artifactId>clobaframe-media</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.archboy.clobaframe</groupId>
-			<artifactId>clobaframe-blobstore</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.archboy.clobaframe</groupId>
 			<artifactId>clobaframe-web-view</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -139,16 +121,39 @@
 	<build>
 		<!-- the final package name -->
 		<finalName>clobaframe-web-demo</finalName>
-		
+
 		<plugins>
-			<plugin>
+			<!-- Jetty development -->
+<!--			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.3.0.RC1</version>
+				<configuration>
+					<stopKey>STOP</stopKey>
+					<stopPort>8005</stopPort>
+					<webAppConfig>
+						<contextPath>/</contextPath>
+					</webAppConfig>
+					<connectors>
+						<connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+							<port>8080</port>
+						</connector>
+						<connector implementation="org.eclipse.jetty.server.ssl.SslSelectChannelConnector">
+							<port>8443</port>
+							<keystore>keystore.jks</keystore>
+							<keyPassword>password</keyPassword>
+						</connector>
+					</connectors>
+				</configuration>
+			</plugin>-->
+			
+			<!-- Tomcat 7 -->
+<!--			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-					<!-- <path>/${project.build.finalName}</path> -->
 					<path>/</path>
-					<!-- <ignorePackaging>true</ignorePackaging> -->
 					<uriEncoding>UTF-8</uriEncoding>
 					<protocol>org.apache.coyote.http11.Http11NioProtocol</protocol>
 					<httpPort>8080</httpPort>
@@ -156,7 +161,32 @@
 					<keystoreFile>${basedir}/keystore.jks</keystoreFile>
 					<keystorePass>password</keystorePass>
 				</configuration>
-
+				-->
+				
+				<!-- Jetty development -->
+				<!--
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>${org.mortbay.jetty-version}</version>
+				<configuration>
+					<stopKey>STOP</stopKey>
+					<stopPort>8005</stopPort>
+					<webApp>
+						<contextPath>/</contextPath>
+					</webApp>
+					<connectors>
+						<connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+							<port>8080</port>
+						</connector>
+						<connector implementation="org.eclipse.jetty.server.ssl.SslSelectChannelConnector">
+							<port>8443</port>
+							<keystore>keystore.jks</keystore>
+							<keyPassword>password</keyPassword>
+							<password>password</password>
+						</connector>
+					</connectors>
+				</configuration>
+				-->
 				<!--
 				<executions>
 					<execution>
@@ -177,8 +207,7 @@
 						<phase>post-integration-test</phase>
 					</execution>
 				</executions>
-				-->
-			</plugin>
+			</plugin>-->
 
 			<!-- skip unit test run, tests to be executed during integration-test -->
 			<!-- see: http://docs.codehaus.org/pages/viewpage.action?pageId=62120 -->
