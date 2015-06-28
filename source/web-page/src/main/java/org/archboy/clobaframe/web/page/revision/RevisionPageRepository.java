@@ -12,13 +12,18 @@ import org.archboy.clobaframe.web.page.PageRepository;
 public interface RevisionPageRepository extends PageRepository {
 	
 	/**
-	 * TODO::// DELETE THIS METHOD, REPLACE WITH THE ALTERNATIVE save(int revision, ...).
+	 * 
 	 * @param pageKey
-	 * @param revision 
-	 * @return  
+	 * @param revision
+	 * @param title
+	 * @param content
+	 * @param urlName
+	 * @param templateName
+	 * @param authorName
+	 * @param authorId
+	 * @param comment
+	 * @return 
 	 */
-	//RevisionPage rollbackRevision(PageKey pageKey, int revision);
-	
 	PageInfo save(PageKey pageKey, int revision,
 		String title, String content, 
 		String urlName, String templateName,

@@ -6,7 +6,10 @@
 	],
 	
 	"js/combine-common.js":[
+		"js/react.js",
+		"js/JSXTransformer.js",
 		"js/jquery-1.11.1.js",
-		"js/bootstrap.js"
+		"js/bootstrap.js",
+		"js/common.js"
 	]
 }

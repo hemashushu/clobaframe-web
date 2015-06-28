@@ -14,40 +14,23 @@ import static org.archboy.clobaframe.web.page.PageProvider.PRIORITY_NORMAL;
 import org.archboy.clobaframe.web.page.revision.RevisionPageInfo;
 import org.archboy.clobaframe.web.page.revision.RevisionPageProvider;
 import org.archboy.clobaframe.web.page.revision.RevisionPageRepository;
-import org.archboy.clobaframe.web.page.revision.impl.AbstractRevisionPageCollection;
+import org.archboy.clobaframe.web.page.revision.impl.AbstractPreloadRevisionPageProvider;
 
 /**
  *
  * @author yang
  */
 @Named
-public class InMemoryRevisionPageRepository extends AbstractRevisionPageCollection implements RevisionPageProvider, RevisionPageRepository {
-	
-	@Override
-	public Collection<PageInfo> getAll() {
-		List<PageInfo> pages = new ArrayList<PageInfo>();
-
-		for(Map<Locale, Set<RevisionPageInfo>> localePages : pageMap.values()){
-			for(Set<RevisionPageInfo> revisionPages : localePages.values()) {
-				for (RevisionPageInfo revisionPage : revisionPages) {
-					pages.add(revisionPage);
-				}
-			}
-		}
-
-		return pages;
-	}
+public class InMemoryRevisionPageRepository extends AbstractPreloadRevisionPageProvider implements RevisionPageRepository {
 
 	@Override
 	public int getOrder() {
 		return PRIORITY_NORMAL;
 	}
-
+	
 	@Override
 	public PageInfo save(PageKey pageKey, int revision, String title, String content, String urlName, String templateName, String authorName, String authorId, String comment) {
-
 		RevisionPageInfo page = new RevisionPageInfo();
-
 		page.setAuthorId(authorId);
 		page.setAuthorName(authorName);
 		page.setComment(comment);
@@ -59,12 +42,27 @@ public class InMemoryRevisionPageRepository extends AbstractRevisionPageCollecti
 		page.setTitle(title);
 		page.setUrlName(urlName);
 
-		super.save(page);
+		super.add(page);
 		return page;
 	}
 
 	@Override
 	public PageInfo save(PageKey pageKey, String title, String content, String urlName, String templateName, String authorName, String authorId, String comment) {
 		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void delete(PageKey pageKey, int revision) {
+		super.remove(pageKey, revision);
+	}
+
+	@Override
+	public void delete(String name) {
+		super.remove(name);
+	}
+
+	@Override
+	public void delete(PageKey pageKey) {
+		super.remove(pageKey);
 	}
 }

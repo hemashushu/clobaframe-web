@@ -16,7 +16,7 @@ public interface PageManager {
 	 * List all available locale for the specify page.
 	 * 
 	 * @param name
-	 * @return NULL when the page name does not exist.
+	 * @return EMPTY when the page name does not exist.
 	 */
 	Collection<Locale> listLocale(String name);
 	
@@ -31,11 +31,27 @@ public interface PageManager {
 	/**
 	 * Get the page name by the URL name.
 	 * 
+	 * Note: All pages with the same page name SHOULD be the same URL name.
+	 * 
 	 * @param urlName
 	 * @return NULL when the specify URL name page does not exist.
 	 */
 	String getByUrlName(String urlName);
 
+	/**
+	 * 
+	 * @param locale
+	 * @return EMPTY when no page.
+	 */
+	Collection<PageInfo> listByLocale(Locale locale);
+	
+	/**
+	 * Get all page.
+	 * 
+	 * @return EMPTY when no page.
+	 */
+	Collection<PageInfo> list();
+	
 	/**
 	 * Create or update a page.
 	 * In some extend manager that supports the revision, this method

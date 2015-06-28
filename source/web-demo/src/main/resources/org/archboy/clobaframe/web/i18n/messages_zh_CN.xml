@@ -4,6 +4,10 @@
 	<comment></comment>
 	<entry key="common.language">中文(简体)</entry>
 
+	<entry key="common.theme.default">默认</entry>
+	<entry key="common.theme.dark">深色</entry>
+	<entry key="common.theme.flat">扁平风格</entry>
+
 	<entry key="test.text1">这是测试文字。</entry>
 	<entry key="test.text2">你好 {0}，现在时间 {1,date,long}。</entry>
 
@@ -12,5 +16,6 @@
 	<entry key="index.terms">服务条款</entry>
 	<entry key="index.privacy">隐私策略</entry>
 	
-	<entry key="index.changeLanguage">改变语言</entry>
+	<entry key="index.changeLanguage">更改语言</entry>
+	<entry key="index.changeTheme">更改主题</entry>
 </properties>

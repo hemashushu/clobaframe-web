@@ -149,7 +149,7 @@ public class LocalThemeProvider implements ThemeProvider {
 	}
 	
 	@Override
-	public Collection<ThemePackage> getPackages() {
+	public Collection<ThemePackage> listPackage() {
 		List<ThemePackage> themePackages = new ArrayList<ThemePackage>();
 		if (baseThemePackage != null) {
 			themePackages.add(baseThemePackage);

@@ -13,5 +13,5 @@ public interface PageHeaderProvider {
 	 * 
 	 * @return 
 	 */
-	List<String> getHeaders();
+	List<String> list();
 }

@@ -31,7 +31,7 @@ public interface ThemePackage {
 	
 	boolean isReadOnly();
 	
-	Collection<ThemeResourceInfo> getResources();
+	Collection<ThemeResourceInfo> listResource();
 	
 	ThemeResourceInfo getResource(String name);
 	

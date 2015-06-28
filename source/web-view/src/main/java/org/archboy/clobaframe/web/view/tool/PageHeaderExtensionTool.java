@@ -30,7 +30,7 @@ public interface PageHeaderExtensionTool {
 	 * 
 	 * @return EMPTY if no extra page header.
 	 */
-	List<String> getHeaders();
+	List<String> list();
 	
 	/**
 	 * 

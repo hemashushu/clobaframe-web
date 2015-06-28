@@ -53,12 +53,12 @@ public class PageHeaderExtensionImpl implements PageHeaderExtensionTool {
 	}
 	
 	@Override
-	public List<String> getHeaders() {
+	public List<String> list() {
 		List<String> headers = new ArrayList<String>();
 		
 		if (pageHeaderProviders != null && !pageHeaderProviders.isEmpty()) {
 			for(PageHeaderProvider pageHeaderProvider : pageHeaderProviders){
-				headers.addAll(pageHeaderProvider.getHeaders());
+				headers.addAll(pageHeaderProvider.list());
 			}
 		}
 		
@@ -83,7 +83,7 @@ public class PageHeaderExtensionImpl implements PageHeaderExtensionTool {
 
 	@Override
 	public String write(String seperator) {
-		List<String> headers = getHeaders();
+		List<String> headers = list();
 		if (headers.isEmpty()) {
 			return StringUtils.EMPTY;
 		}

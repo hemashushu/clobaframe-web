@@ -18,18 +18,41 @@ public interface PageProvider extends Ordered{
 	public static final int PRIORITY_LOWER = 100;
 	
 	/**
-	 * Get the priority of the current provider.
-	 * The higher priority provider will be check first when get a page by name.
-	 * I.E. when there are several pages that with the same name and locale, the page
-	 * that resist in the higher priority provider will be selected.
+	 * List all available locale for the specify page.
 	 * 
-	 * @return 
+	 * @param name
+	 * @return EMPTY when the page name does not exist.
 	 */
-	//int getOrder();
+	Collection<Locale> listLocale(String name);
+	
+	/**
+	 * Get the specify page by the key (page name and locale).
+	 * 
+	 * @param pageKey
+	 * @return NULL when the page key does not exist.
+	 */
+	PageInfo get(PageKey pageKey);
+	
+	/**
+	 * Get the page name by the URL name.
+	 * 
+	 * Note: All pages with the same page name SHOULD be the same URL name.
+	 * 
+	 * @param urlName
+	 * @return NULL when the specify URL name page does not exist.
+	 */
+	String getByUrlName(String urlName);
+
+	/**
+	 * 
+	 * @param locale
+	 * @return EMPTY when the specify locale has no page.
+	 */
+	Collection<PageInfo> listByLocale(Locale locale);
 	
 	/**
 	 * 
-	 * @return 
+	 * @return EMPTY when no page.
 	 */
-	Collection<PageInfo> getAll();
+	Collection<PageInfo> list();
 }

@@ -96,6 +96,10 @@ public class PageHeaderToolImpl implements PageHeaderTool {
 	
 	@Override
 	public String writeResources(Collection<String> names, String separator) {
+		if (names == null || names.isEmpty()) {
+			return StringUtils.EMPTY;
+		}
+		
 		List<String> results = new ArrayList<String>();
 
 		for(String name : names){

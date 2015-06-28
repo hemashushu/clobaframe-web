@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.io.IOUtils;
@@ -22,6 +23,8 @@ import org.archboy.clobaframe.web.page.PageKey;
 import org.archboy.clobaframe.web.page.PageProvider;
 import org.archboy.clobaframe.web.page.revision.RevisionPageInfo;
 import org.archboy.clobaframe.web.page.revision.RevisionPageProvider;
+import org.archboy.clobaframe.web.page.revision.impl.AbstractPreloadRevisionPageProvider;
+import org.archboy.clobaframe.web.page.revision.local.LocalRevisionPageInfo;
 import org.archboy.clobaframe.web.page.revision.local.LocalRevisionPageResourceInfo;
 import org.archboy.clobaframe.web.page.revision.local.LocalRevisionPageResourceNameStrategy;
 import org.slf4j.Logger;
@@ -29,13 +32,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.util.Assert;
 
 /**
  *
  * @author yang
  */
 @Named
-public class LocalRevisionPageProvider implements RevisionPageProvider {
+public class LocalRevisionPageProvider extends AbstractPreloadRevisionPageProvider {
 
 	@Inject
 	private ResourceLoader resourceLoader;
@@ -94,7 +98,7 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 	private Locale defaultLocale;
 
 	// content header
-	private static final String regexHeader1a = "^(.+)\\n(={3,})(\\n|$)";
+	private static final String regexHeader1a = "^(.+)\\n(={1,})(\\n|$)";
 	private static final String regexHeader1b = "^(#.+#?)(\\n|$)";
 	
 	private static final Pattern patternHeader1a = Pattern.compile(regexHeader1a);
@@ -102,8 +106,14 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 
 	private final Logger logger = LoggerFactory.getLogger(LocalRevisionPageProvider.class);
 	
-	@Override
-	public Collection<PageInfo> getAll() {
+	@PostConstruct
+	public void init(){
+		for(PageInfo pageInfo : listLocal()){
+			super.add((RevisionPageInfo)pageInfo);
+		}
+	}
+	
+	private Collection<PageInfo> listLocal() {
 		Resource resource = resourceLoader.getResource(pageResourcePath);
 		
 		try{
@@ -117,7 +127,7 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 				return new ArrayList<PageInfo>();
 			}
 			
-			return scan(baseDir);
+			return listLocal(baseDir);
 			
 		}catch(IOException e){
 			logger.error("Load local page resource repository error, {}", e.getMessage());
@@ -126,7 +136,7 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 		return new ArrayList<PageInfo>();
 	}
 	
-	private Collection<PageInfo> scan(File baseDir) {
+	private Collection<PageInfo> listLocal(File baseDir) {
 		
 		LocalRevisionPageResourceNameStrategy localPageResourceNameStrategy = new DefaultLocalRevisionPageResourceNameStrategy(baseDir);
 		LocalRevisionPageResourceInfoFactory localPageResourceInfoFactory = new LocalRevisionPageResourceInfoFactory(mimeTypeDetector, localPageResourceNameStrategy);
@@ -135,7 +145,7 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 		List<PageInfo> pages = new ArrayList<PageInfo>();
 		
 		
-		Collection<FileBaseResourceInfo> fileBaseResourceInfos = localResourceScanner.scan(baseDir, localPageResourceInfoFactory);
+		Collection<FileBaseResourceInfo> fileBaseResourceInfos = localResourceScanner.list(baseDir, localPageResourceInfoFactory);
 		for(FileBaseResourceInfo fileBaseResourceInfo : fileBaseResourceInfos) {
 			LocalRevisionPageResourceInfo localPageResourceInfo = (LocalRevisionPageResourceInfo)fileBaseResourceInfo;
 			
@@ -159,7 +169,7 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 				String revision = matcher.group(12);
 				
 				// build page name
-				String pageName = (path != null) ? pageName = path + "/" + name : name;
+				String pageName = (path != null) ? path + "/" + name : name;
 				
 				// get the locale value
 				Locale locale = null;
@@ -212,16 +222,17 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 		InputStream in = null;
 		try{
 			in = resourceInfo.getContent();
-			String content = IOUtils.toString(in, "UTF-8");
-			String title = extractTitle(content);
+			String source = IOUtils.toString(in, "UTF-8");
+			TitleAndContent titleAndContent = extractTitle(source);
 			
-			RevisionPageInfo page = new RevisionPageInfo();
-			page.setContent(content);
+			LocalRevisionPageInfo page = new LocalRevisionPageInfo();
+			page.setContent(titleAndContent.getContent());
 			page.setLastModified(resourceInfo.getLastModified());
 			page.setPageKey(new PageKey(name, locale));
+			page.setReadonly(true);
 			page.setRevision(revision);
 			page.setTemplateName(templateName);
-			page.setTitle(title);
+			page.setTitle(titleAndContent.getTitle());
 			page.setUrlName(urlName);
 			
 			return page;
@@ -236,7 +247,7 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 	 * @param text
 	 * @return 
 	 */
-	private String extractTitle(String text) {
+	private TitleAndContent extractTitle(String text) {
 		/**
 		 * #TITLE#\n
 		 * CONTENT
@@ -251,23 +262,23 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 		Matcher matcher1a = patternHeader1a.matcher(text);
 		if (matcher1a.find()){
 			String title = matcher1a.group(1);
-//			String content = null;
-//			int start = matcher1a.end();
-//			if (start < text.length()) {
-//				content = text.substring(start).trim();
-//			}
-			return title;
+			String content = null;
+			int start = matcher1a.end();
+			if (start < text.length()) {
+				content = trimContent(text.substring(start));
+			}
+			return new TitleAndContent(title, content);
 		}
 		
 		Matcher matcher1b = patternHeader1b.matcher(text);
 		if (matcher1b.find()){
-			String title = trimHeaderHashSymbol(matcher1b.group(1));
-//			String content = null;
-//			int start = matcher1b.end();
-//			if (start < text.length()) {
-//				content = text.substring(start).trim();
-//			}
-			return title;
+			String title = trimAtxHeaderHash(matcher1b.group(1));
+			String content = null;
+			int start = matcher1b.end();
+			if (start < text.length()) {
+				content = text.substring(start).trim();
+			}
+			return new TitleAndContent(title, content);
 		}
 
 		throw new IllegalArgumentException("Can not find the Markdown document title.");
@@ -278,7 +289,7 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 	 * @param title
 	 * @return 
 	 */
-	private String trimHeaderHashSymbol(String title) {
+	private String trimAtxHeaderHash(String title) {
 		int start = 0;
 		int end = title.length() - 1;
 		for (; start < end; start ++) {
@@ -292,9 +303,30 @@ public class LocalRevisionPageProvider implements RevisionPageProvider {
 		return title.substring(start, end +1).trim();
 	}	
 
+	private String trimContent(String content) {
+		return content.trim();
+	}
+	
 	@Override
 	public int getOrder() {
 		return PRIORITY_LOWER;
 	}
+	
+	private static class TitleAndContent {
+		private String title;
+		private String content;
 
+		public TitleAndContent(String title, String content) {
+			this.title = title;
+			this.content = content;
+		}
+
+		public String getTitle() {
+			return title;
+		}
+
+		public String getContent() {
+			return content;
+		}
+	}
 }

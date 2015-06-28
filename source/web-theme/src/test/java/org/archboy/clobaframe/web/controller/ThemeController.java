@@ -21,9 +21,9 @@ public class ThemeController {
 	@Inject
 	private GlobalSetting globalSetting;
 	
-	@RequestMapping("/index")
-	public String index(@RequestParam(value="theme", required = false, defaultValue = "") String theme){
-		globalSetting.set("theme", theme);
+	@RequestMapping("/changetheme")
+	public String changeTheme(@RequestParam(value="name", required = false, defaultValue = "") String name){
+		globalSetting.set("theme", name);
 		return "index";
 	}
 }

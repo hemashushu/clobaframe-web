@@ -1,1 +1,0 @@
-# about zh_CN r8

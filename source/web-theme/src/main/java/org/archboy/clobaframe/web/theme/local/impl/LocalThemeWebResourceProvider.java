@@ -53,9 +53,9 @@ public class LocalThemeWebResourceProvider implements WebResourceProvider {
 	}
 
 	@Override
-	public Collection<WebResourceInfo> getAll() {
+	public Collection<WebResourceInfo> list() {
 		List<WebResourceInfo> webResourceInfos = new ArrayList<WebResourceInfo>();
-		for(FileBaseResourceInfo fileBaseResourceInfo : localResourceProvider.getAll()){
+		for(FileBaseResourceInfo fileBaseResourceInfo : localResourceProvider.list()){
 			webResourceInfos.add((WebResourceInfo)fileBaseResourceInfo);
 		}
 		return webResourceInfos;

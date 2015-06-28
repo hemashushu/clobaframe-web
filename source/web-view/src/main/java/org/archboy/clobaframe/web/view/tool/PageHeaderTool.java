@@ -61,7 +61,7 @@ public interface PageHeaderTool {
 	 * Get serval resource page header lines.
 	 * 
 	 * @param resourceNames
-	 * @return EMPTY string when all the specify resource does not exists.
+	 * @return EMPTY string when all the specify resource does not exists, or the parameter is null..
 	 */
 	String writeResources(Collection<String> resourceNames);
 

@@ -196,7 +196,7 @@ public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageRes
 	}
 
 	@Override
-	public List<String> getHeaders() {
+	public List<String> list() {
 		List<String> headers = new ArrayList<String>();
 		
 		if (StringUtils.isEmpty(scriptPath)){

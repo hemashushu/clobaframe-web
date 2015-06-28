@@ -1,5 +1,6 @@
 package org.archboy.clobaframe.web.controller;
 
+import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
@@ -7,6 +8,8 @@ import org.archboy.clobaframe.query.DefaultViewModel;
 import org.archboy.clobaframe.query.ViewModel;
 import org.archboy.clobaframe.setting.global.GlobalSetting;
 import org.archboy.clobaframe.web.exception.NotFoundException;
+import org.archboy.clobaframe.web.page.PageInfo;
+import org.archboy.clobaframe.web.page.revision.RevisionPageManager;
 import org.archboy.clobaframe.web.theme.ThemeManager;
 import org.archboy.clobaframe.web.theme.ThemePackage;
 import org.archboy.clobaframe.web.view.tool.PageHeaderExtensionTool;
@@ -29,6 +32,9 @@ public class DemoController {
 	@Inject
 	private ThemeManager themeManager;
 	
+	@Inject
+	private RevisionPageManager pageManager;
+	
 //	@Inject
 //	private NoteService noteService;
 //	
@@ -41,14 +47,18 @@ public class DemoController {
 //	@Inject
 //	private Imaging imaging;
 //	
-	@Inject
-	private PageHeaderExtensionTool pageHeaderContext;
+//	@Inject
+//	private PageHeaderExtensionTool pageHeaderContext;
 	
 	@RequestMapping("/")
 	public String index(Model model){
 		
 		return "index";
 	}
+	
+	
+
+	
 //	
 //	@ResponseBody
 //	@RequestMapping(value = "/note", method = RequestMethod.POST)
@@ -152,19 +162,19 @@ public class DemoController {
 	
 	@ResponseBody
 	@RequestMapping("/changetheme")
-	public ViewModel changeTheme(@RequestParam(value = "theme", required = false, defaultValue = "") String theme) {
-		if (StringUtils.isNotEmpty(theme)) {
-			ThemePackage themePackage = themeManager.get(ThemeManager.PACKAGE_CATALOG_LOCAL, theme);
+	public ViewModel changeTheme(@RequestParam(value = "name", required = false, defaultValue = "") String name) {
+		if (StringUtils.isNotEmpty(name)) {
+			ThemePackage themePackage = themeManager.get(ThemeManager.PACKAGE_CATALOG_LOCAL, name);
 			if (themePackage == null) {
-				throw new NotFoundException("no this theme:" + theme);
+				throw new NotFoundException("no this theme:" + name);
 			}
 		}
 		
-		globalSetting.set("theme", theme);
+		globalSetting.set("theme", name);
 		
 		return new DefaultViewModel()
 				.add("result", "success")
-				.add("theme", theme);
+				.add("theme", name);
 	}
 	
 	@RequestMapping("/error")

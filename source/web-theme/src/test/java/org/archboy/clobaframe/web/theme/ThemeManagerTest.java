@@ -76,7 +76,7 @@ public class ThemeManagerTest {
 				"template/share/footer.vm", "template/share/header.vm");
 		
 		// get all resources.
-		Collection<ThemeResourceInfo> themeResourceInfos1 = basePackage.getResources();
+		Collection<ThemeResourceInfo> themeResourceInfos1 = basePackage.listResource();
 		
 		for (String name : imageCssJs1) {
 			boolean found = false;
@@ -166,7 +166,7 @@ public class ThemeManagerTest {
 				"theme/dark/resource/image/dark.png", "theme/dark/resource/js/dark.js", 
 				"theme/dark/template/page.vm");
 		
-		Collection<ThemeResourceInfo> themeResourceInfos1 = themePackage1.getResources();
+		Collection<ThemeResourceInfo> themeResourceInfos1 = themePackage1.listResource();
 		
 		for (String name : resources1) {
 			boolean found = false;

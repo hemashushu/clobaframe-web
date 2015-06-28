@@ -26,18 +26,18 @@ public interface RevisionPageManager extends PageManager {
 	/**
 	 * 
 	 * @param pageKey
-	 * @return 
+	 * @return EMPTY when no revisions.
 	 */
 	Collection<RevisionPageInfo> listRevision(PageKey pageKey);
 	
-	/**
-	 * Get the active revision.
-	 * Normally the active revision is the latest revision number.
-	 * 
-	 * @param pageKey
-	 * @return 0 when there is no other revision.
-	 */
-	int getCurrentRevision(PageKey pageKey);
+//	/**
+//	 * Get the active revision.
+//	 * Normally the active revision is the latest revision number.
+//	 * 
+//	 * @param pageKey
+//	 * @return 0 when there is no other revision. -1 when there is no the specify key.
+//	 */
+//	int getCurrentRevision(PageKey pageKey);
 	
 	/**
 	 * Rollback a revision.

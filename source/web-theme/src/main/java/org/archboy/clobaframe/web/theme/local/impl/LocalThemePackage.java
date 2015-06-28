@@ -142,9 +142,9 @@ public class LocalThemePackage implements ThemePackage {
 	}
 
 	@Override
-	public Collection<ThemeResourceInfo> getResources() {
+	public Collection<ThemeResourceInfo> listResource() {
 		Collection<ThemeResourceInfo> themeResourceInfos = new ArrayList<ThemeResourceInfo>();
-		for(FileBaseResourceInfo fileBaseResourceInfo : localResourceProvider.getAll()){
+		for(FileBaseResourceInfo fileBaseResourceInfo : localResourceProvider.list()){
 			themeResourceInfos.add((LocalThemeResourceInfo)fileBaseResourceInfo);
 		}
 		return themeResourceInfos;

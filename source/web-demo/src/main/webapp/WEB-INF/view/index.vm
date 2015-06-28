@@ -5,58 +5,34 @@
 #set ($metaDescription = 'clobaframe web demo')
 
 <div class="container">
-<div class="pull-right locale-switch">
-	<label>$msg.write('index.changeLanguage')</label>
-	<ul class="list-inline">
-		<li><a href="/changelocale?locale=en">$msg.write('common.language.en')</a></li>
-		<li><a href="/changelocale?locale=ja">$msg.write('common.language.ja')</a></li>
-		<li><a href="/changelocale?locale=zh_CN">$msg.write('common.language.zh_CN')</a></li>
-	</ul>
-</div>
+	<div class="text-right locale-switch">
+		<h5 class="">$msg.write('index.changeLanguage')</h5>
+		<ul class="list-inline">
+			<li><a href="/changelocale?locale=en">$msg.write('common.language.en')</a></li>
+			<li><a href="/changelocale?locale=ja">$msg.write('common.language.ja')</a></li>
+			<li><a href="/changelocale?locale=zh_CN">$msg.write('common.language.zh_CN')</a></li>
+		</ul>
+	</div>
 
-<div class="test-rest">
-	<h2>Test RESTful API</h2>
-	<form>
-		<div>
-			<label>Choose a photo
-				<input type="file" accept="image/*" name="file">
-			</label>
-		</div>
-		<div>
-			<label>title:
-				<input type="text" name="title">
-			</label>
-		</div>
-		<div>
-			<label>description:
-				<input type="text" name="description">
-			</label>
-		</div>
-		<div>
-			<input type="submit" value="Create a note">
-		</div>
-	</form>
-	<ul class="notes">
-		
-	</ul>
-</div>
+	<section>
+		<main id="page-box"></main>
+	</section>
 
-<div>
-	<h2>Test Doc</h2>
-	<ul>
-		<li><a href="/doc/about">$msg.write('index.about')</a></li>
-		<li><a href="/doc/terms">$msg.write('index.terms')</a></li>
-		<li><a href="/doc/privacy">$msg.write('index.privacy')</a></li>
-	</ul>
-</div>
-
+	<div class="text-right theme-switch">
+		<h5 class="">$msg.write('index.changeTheme')</h5>
+		<ul class="list-inline">
+			<li><a href="/changetheme?name=">$msg.write('common.theme.default')</a></li>
+			<li><a href="/changetheme?name=dark">$msg.write('common.theme.dark')</a></li>
+			<li><a href="/changetheme?name=flat">$msg.write('common.theme.flat')</a></li>
+		</ul>
+	</div>
 </div>
 
 <!-- write custom page resource -->
-$header.writeResource('jsx/helloworld.js', 'script', 'src', {'type':'text/jsx'}, true)
+$header.writeResource('jsx/page-box.js', 'script', 'src', {'type':'text/jsx'}, true)
 
 <script>
-	(function(window){
-		window.viewObject = $json.write($viewObject);
+	(function (window) {
+		
 	})(this);
 </script>

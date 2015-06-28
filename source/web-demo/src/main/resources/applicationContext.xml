@@ -28,6 +28,8 @@
 		<!-- exclude the the web package -->
 		<context:exclude-filter type="regex" expression="org\.archboy\.clobaframe\.web\.controller\..*"/>
 		<context:exclude-filter type="regex" expression="org\.archboy\.clobaframe\.web\.view\..*"/>
+		<context:exclude-filter type="regex" expression="org\.archboy\.clobaframe\.web\.page\..*"/>
+		<context:exclude-filter type="regex" expression="org\.archboy\.clobaframe\.web\.theme\..*"/>
 	</context:component-scan>
 
 	<!-- enable AspectJ annotation -->

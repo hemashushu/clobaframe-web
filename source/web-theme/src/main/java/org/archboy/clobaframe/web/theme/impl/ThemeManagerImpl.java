@@ -32,7 +32,7 @@ public class ThemeManagerImpl implements ThemeManager {
 		List<ThemePackage> themePackages = new ArrayList<ThemePackage>();
 		
 		for (ThemeProvider themeProvider : themeProviders) {
-			for (ThemePackage themePackage : themeProvider.getPackages()){
+			for (ThemePackage themePackage : themeProvider.listPackage()){
 				if (themePackage.getCatalog().equals(catalog)){
 					themePackages.add(themePackage);
 				}
@@ -71,7 +71,7 @@ public class ThemeManagerImpl implements ThemeManager {
 				themePackage.getName().equals(name)));
 		
 		ThemePackage pkg = themeRepository.create(catalog, name);
-		for (ThemeResourceInfo themeResourceInfo : themePackage.getResources()) {
+		for (ThemeResourceInfo themeResourceInfo : themePackage.listResource()) {
 			if (!themeResourceInfo.isTemplate() || includeTemplate)
 			themeRepository.save(pkg, themeResourceInfo);
 		}

@@ -8,7 +8,7 @@ import java.util.Collection;
  */
 public interface ThemeProvider {
 	
-	Collection<ThemePackage> getPackages();
+	Collection<ThemePackage> listPackage();
 	
 	ThemePackage get(String catalog, String name);
 	

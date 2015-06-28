@@ -8,17 +8,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.query.simplequery.SimpleQuery;
 import org.archboy.clobaframe.web.page.PageInfo;
 import org.archboy.clobaframe.web.page.PageKey;
 import org.archboy.clobaframe.web.page.revision.RevisionPageInfo;
+import org.archboy.clobaframe.web.page.revision.RevisionPageProvider;
 
 /**
  *
  * @author yang
  */
-public abstract class AbstractRevisionPageCollection {
+public abstract class AbstractPreloadRevisionPageProvider implements RevisionPageProvider {
 	
 	/**
 	 * The map key is: "page name, locale, revision".
@@ -31,24 +33,51 @@ public abstract class AbstractRevisionPageCollection {
 	 */
 	protected Map<String, String> urlMap = new HashMap<String, String>();
 	
+	@Override
+	public Collection<PageInfo> list() {
+		List<PageInfo> pageInfos = new ArrayList<PageInfo>();
+		for (Map<Locale, Set<RevisionPageInfo>> localePages : pageMap.values()){
+			for (Set<RevisionPageInfo> revisions : localePages.values()) {
+				pageInfos.add(
+					SimpleQuery.from(revisions).orderByDesc("revision").first());
+			}
+		}
+		return pageInfos;
+	}
+	
+	@Override
+	public Collection<PageInfo> listByLocale(Locale locale) {
+		List<PageInfo> pageInfos = new ArrayList<PageInfo>();
+		for (Map<Locale, Set<RevisionPageInfo>> localePages : pageMap.values()){
+			Set<RevisionPageInfo> revisions = localePages.get(locale);
+			if (revisions != null) {
+				pageInfos.add(
+					SimpleQuery.from(revisions).orderByDesc("revision").first());
+			}
+		}
+		return pageInfos;
+	}
+	
+	@Override
 	public Collection<Locale> listLocale(String name) {
 		Map<Locale, Set<RevisionPageInfo>> localePages = pageMap.get(name);
 		if (localePages == null) {
-			return null;
+			return new ArrayList<Locale>();
 		}
-		
 		return localePages.keySet();
 	}
 	
+	@Override
 	public Collection<RevisionPageInfo> listRevision(PageKey pageKey) {
 		Map<Locale, Set<RevisionPageInfo>> localePages = pageMap.get(pageKey.getName());
 		if (localePages == null) {
-			return null;
+			return new ArrayList<RevisionPageInfo>();
 		}
 		
 		return localePages.get(pageKey.getLocale());
 	}
 	
+	@Override
 	public PageInfo get(PageKey pageKey) {
 		Collection<RevisionPageInfo> revisionPages = listRevision(pageKey);
 		if (revisionPages == null) {
@@ -58,6 +87,7 @@ public abstract class AbstractRevisionPageCollection {
 		return SimpleQuery.from(revisionPages).orderByDesc("revision").first();
 	}
 	
+	@Override
 	public RevisionPageInfo get(PageKey pageKey, int revision) {
 		Collection<RevisionPageInfo> revisionPages = listRevision(pageKey);
 		if (revisionPages == null) {
@@ -67,21 +97,24 @@ public abstract class AbstractRevisionPageCollection {
 		return SimpleQuery.from(revisionPages).whereEquals("revision", revision).first();
 	}
 	
-	public int getCurrentRevision(PageKey pageKey) {
-		Collection<RevisionPageInfo> revisionPages = listRevision(pageKey);
-		if (revisionPages == null) {
-			throw new IllegalArgumentException("No this page key: " + pageKey);
-		}
-		
-		RevisionPageInfo page = SimpleQuery.from(revisionPages).orderByDesc("revision").first();
-		return page.getRevision();
-	}
+//	@Override
+//	public int getCurrentRevision(PageKey pageKey) {
+//		Collection<RevisionPageInfo> revisionPages = listRevision(pageKey);
+//		if (revisionPages == null) {
+//			//throw new IllegalArgumentException("No this page key: " + pageKey);
+//			return -1;
+//		}
+//		
+//		RevisionPageInfo page = SimpleQuery.from(revisionPages).orderByDesc("revision").first();
+//		return page.getRevision();
+//	}
 
+	@Override
 	public String getByUrlName(String urlName) {
 		return urlMap.get(urlName);
 	}
 	
-	public void delete(String name){
+	protected void remove(String name){
 		
 		// get url names
 		List<String> urlNames = new ArrayList<String>();
@@ -109,7 +142,7 @@ public abstract class AbstractRevisionPageCollection {
 		}
 	}
 	
-	public void delete(PageKey pageKey) {
+	protected void remove(PageKey pageKey) {
 		Map<Locale, Set<RevisionPageInfo>> localePages = pageMap.get(pageKey.getName());
 		if (localePages == null) {
 			return;
@@ -140,7 +173,7 @@ public abstract class AbstractRevisionPageCollection {
 		}
 	}
 	
-	public void delete(PageKey pageKey, int revision) {
+	protected void remove(PageKey pageKey, int revision) {
 		Collection<RevisionPageInfo> revisionPages = listRevision(pageKey);
 		if (revisionPages == null) {
 			return;
@@ -167,7 +200,7 @@ public abstract class AbstractRevisionPageCollection {
 	 * 
 	 * @param revisionPage 
 	 */
-	protected void save(RevisionPageInfo revisionPage) {
+	protected void add(RevisionPageInfo revisionPage) {
 		PageKey pageKey = revisionPage.getPageKey();
 		
 		// get locale doc

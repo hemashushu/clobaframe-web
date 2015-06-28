@@ -23,7 +23,7 @@ public class InMemoryGlobalSettingRepository implements GlobalSettingProvider, G
 	}
 
 	@Override
-	public Map<String, Object> getAll() {
+	public Map<String, Object> list() {
 		return setting;
 	}
 

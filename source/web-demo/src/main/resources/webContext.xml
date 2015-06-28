@@ -16,7 +16,9 @@
 		beans -->
 	<context:component-scan base-package="
 		org.archboy.clobaframe.web.controller,
-		org.archboy.clobaframe.web.view
+		org.archboy.clobaframe.web.view,
+		org.archboy.clobaframe.web.page,
+		org.archboy.clobaframe.web.theme,
 		"/>
 		
 	<!-- Enables the Spring MVC @Controller programming model -->

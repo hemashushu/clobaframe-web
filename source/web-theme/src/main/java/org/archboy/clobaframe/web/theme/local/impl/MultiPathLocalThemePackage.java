@@ -103,10 +103,10 @@ public class MultiPathLocalThemePackage implements ThemePackage {
 	}
 
 	@Override
-	public Collection<ThemeResourceInfo> getResources() {
+	public Collection<ThemeResourceInfo> listResource() {
 		Collection<ThemeResourceInfo> themeResourceInfos = new ArrayList<ThemeResourceInfo>();
 		for(LocalResourceProvider localResourceProvider : localResourceProviders) {
-			Collection<FileBaseResourceInfo> fileBaseResourceInfos = localResourceProvider.getAll();
+			Collection<FileBaseResourceInfo> fileBaseResourceInfos = localResourceProvider.list();
 			for(FileBaseResourceInfo fileBaseResourceInfo : fileBaseResourceInfos) {
 				themeResourceInfos.add((ThemeResourceInfo)fileBaseResourceInfo);
 			}

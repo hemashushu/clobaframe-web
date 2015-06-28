@@ -45,14 +45,14 @@ public class PageHeaderExtensionToolTest {
 	@Test
 	public void testWrite()  {
 	
-		// test getHeaders
+		// test list
 		// build mock
 		HttpServletRequest httpServletRequest = new MockHttpServletRequest();
 		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(httpServletRequest));
 		
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
 		
-		List<String> headers1 = pageHeaderExtensionTool.getHeaders();
+		List<String> headers1 = pageHeaderExtensionTool.list();
 		assertEquals(1, headers1.size());
 		assertEquals(pageHeaderTool.writeResource("js/i18n/messages.js"), headers1.get(0));
 		
@@ -62,7 +62,7 @@ public class PageHeaderExtensionToolTest {
 		// change locale
 		LocaleContextHolder.setLocale(Locale.SIMPLIFIED_CHINESE);
 		
-		List<String> headers2 = pageHeaderExtensionTool.getHeaders();
+		List<String> headers2 = pageHeaderExtensionTool.list();
 		assertEquals(2, headers2.size());
 		assertEquals(pageHeaderTool.writeResource("js/i18n/messages.js"), headers2.get(0));
 		assertEquals(pageHeaderTool.writeResource("js/i18n/messages_zh_CN.js"), headers2.get(1));
@@ -84,7 +84,7 @@ public class PageHeaderExtensionToolTest {
 		attr1.put("charset", "UTF-8");
 		
 		pageHeaderExtensionTool.add("meta", attr1, false);
-		List<String> headers3 = pageHeaderExtensionTool.getHeaders();
+		List<String> headers3 = pageHeaderExtensionTool.list();
 		assertEquals(3, headers3.size());
 		assertEquals("<meta charset=\"UTF-8\">", headers3.get(2));
 		
