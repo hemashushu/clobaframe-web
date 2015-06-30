@@ -1,25 +1,34 @@
 clobaframe-web
 ==============
 
-A web application template that using clobaframe, includes
-site themes, site documents and the view tools.
+A web application component that base on Clobaframe, includes
+site theme, site page and the view tools.
 
 Run the Demo
 ------------
 
-1. Complete all clobaframe unit tests.
+1. Check out the Clobaframe source then compile and complete the unit tests.
 
-2. Install clobaframe library into local Apache Maven repository.
+    $ git clone https://github.com/ivarptr/clobaframe.git
+    $ cd clobaframe/source
+    $ mvn clean test
 
-3. Check out source code into any folder
+2. Install Clobaframe library into local Apache Maven repository.
 
-4. Run with the embed Jetty web server:
+    $ mvn install
 
-    $ mvn clean jetty:run
+3. Check out Clobaframe-web source code into any folder that outside the Clobaframe source folder.
+
+    $ git clone https://github.com/ivarptr/clobaframe-web.git
+
+4. Run with the embed Tomcat/Jetty web server:
+
+    $ cd clobaframe-web/source
+    $ mvn clean tomcat7:run
 
 Or perfer IPv4:
 
-    $ mvn -Djava.net.preferIPv4Stack=true clean jetty:run
+    $ mvn -Djava.net.preferIPv4Stack=true clean tomcat7:run
 
 Then open http://localhost:8080/ in the web browser.
 
@@ -27,7 +36,7 @@ Then open http://localhost:8080/ in the web browser.
 Install library
 -------------------
 
-Install clobaframe-web into Apache Maven local repository:
+Install Clobaframe-web into Apache Maven local repository:
 
     $ mvn clean javadoc:jar source:jar install
 
