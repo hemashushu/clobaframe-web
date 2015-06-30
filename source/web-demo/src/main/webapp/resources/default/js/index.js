@@ -8,22 +8,6 @@
 	
 	var methods = {
 		init: function(){
-			
-			// handle locale change
-			$('.locale-switch ul li a').click(function(event){
-				event.preventDefault();
-				var url = $(this).attr('href');
-				
-				co.rest.get(url, function(data){
-					if (data.result === 'success') {
-						// refresh page
-						window.location.reload();
-					}else{
-						console.error(data);
-					}
-				});
-			});
-			
 			// handle theme change
 			$('.theme-switch ul li a').click(function(event){
 				event.preventDefault();

@@ -5,15 +5,6 @@
 #set ($metaDescription = 'clobaframe web demo')
 
 <div class="container">
-	<div class="text-right locale-switch">
-		<h4 class="">$msg.write('index.changeLanguage')</h4>
-		<ul class="list-inline">
-			<li><a href="/setlanguage?_locale=en">$msg.write('common.language.en')</a></li>
-			<li><a href="/setlanguage?_locale=ja">$msg.write('common.language.ja')</a></li>
-			<li><a href="/setlanguage?_locale=zh_CN">$msg.write('common.language.zh_CN')</a></li>
-		</ul>
-	</div>
-
 	<main id="page-box"></main>
 
 	<div class="text-right theme-switch">

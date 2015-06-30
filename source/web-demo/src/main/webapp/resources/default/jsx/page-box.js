@@ -4,9 +4,13 @@
 
 var PageBox = React.createClass({
 	getInitialState: function() {
-		return {pages: []};
+		var options = $.extend({}, this.props.pageOptions);
+		return {pages: [], options:options };
 	},
 	componentDidMount: function() {
+		this.loadPages();
+	},
+	loadPages:function(){
 		var me = this;
 		$.ajax({
 			url: me.props.url,
@@ -34,22 +38,62 @@ var PageBox = React.createClass({
 			console.error(this.props.url, textStatus, errorThrown.toString());
 		});
 	},
+	handleLanguageChange: function(url) {
+		var me = this;
+		$.getJSON(url).done(function(data, textStatus, jqXHR){
+			if (data.result === 'success') {
+				me.loadPages();
+
+				// update form
+				var options = me.state.options;
+				var newOptions = $.extend({}, options, {locale:data.locale});
+				me.setState({options: newOptions});
+			}else{
+				console.error(data);
+			}
+		}).fail(function(jqXHR, textStatus, errorThrown){
+			console.error(this.props.url, textStatus, errorThrown.toString());
+		});
+		
+	},
 	render: function(){
 		return (
 			<div className="page-box">
+				<LanguageSwitch onLauguageChange={this.handleLanguageChange}/>
 				<h1>Pages</h1>
 				<PageList pages={this.state.pages}/>
-				<PageForm locale={this.props.pageOptions.locale} onPageSubmit={this.handlePageSubmit}/>
+				<PageForm options={this.state.options} onPageSubmit={this.handlePageSubmit}/>
 			</div>
 		);
 	}
+});
+
+var LanguageSwitch = React.createClass({
+	handleClick:function(e){
+		e.preventDefault();
+		var url = $(e.currentTarget).attr('href');
+		this.props.onLauguageChange(url);
+	},
+	render: function() {
+		return (
+			<div className="text-right locale-switch">
+				<h4>Change Language</h4>
+				<ul className="list-inline">
+					<li><a onClick={this.handleClick} href="/setlanguage?_locale=en">English</a></li>
+					<li><a onClick={this.handleClick} href="/setlanguage?_locale=ja">Japanese</a></li>
+					<li><a onClick={this.handleClick} href="/setlanguage?_locale=zh_CN">Simplified Chinese</a></li>
+				</ul>
+			</div>	
+		);
+	}
+	
 });
 
 var PageList = React.createClass({
 	render: function() {
 		var pageNodes = this.props.pages.map(function (page) {
 			return (
-				<Page page={page}>
+				<Page page={page} key={page.pageKey.name + ',' + page.pageKey.locale}>
 				</Page>
 			);
 		});
@@ -67,7 +111,7 @@ var Page = React.createClass({
 		var page = this.props.page;
 		var pageUrl = co.objectUrl.page(page);
 		var summary = page.content.left(200, true);
-		
+
 		return (
 			<div className="page">
 				<h3><a href={pageUrl}>{page.title}</a></h3>
@@ -158,7 +202,7 @@ var PageForm = React.createClass({
 						<input className="form-control" type="text" 
 							id="txtLocale"
 							placeholder="The country and language code, e.g. en, ja, zh_CN"
-							value={this.props.locale}
+							defaultValue={this.props.options.locale}
 							ref="locale"/>
 					</div>
 					<button className="btn btn-info" type="submit">Post</button>
