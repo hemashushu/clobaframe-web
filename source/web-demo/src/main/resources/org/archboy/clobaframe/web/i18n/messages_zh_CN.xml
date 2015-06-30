@@ -4,9 +4,11 @@
 	<comment></comment>
 	<entry key="common.language">中文(简体)</entry>
 
+	<entry key="site.title">Clobaframe Web 演示</entry>
+
 	<entry key="common.theme.default">默认</entry>
 	<entry key="common.theme.dark">深色</entry>
-	<entry key="common.theme.flat">扁平风格</entry>
+	<entry key="common.theme.warm">暖色调</entry>
 
 	<entry key="test.text1">这是测试文字。</entry>
 	<entry key="test.text2">你好 {0}，现在时间 {1,date,long}。</entry>
@@ -18,4 +20,9 @@
 	
 	<entry key="index.changeLanguage">更改语言</entry>
 	<entry key="index.changeTheme">更改主题</entry>
+	
+	<entry key="index.pages">页面列表</entry>
+	<entry key="index.createNewPage">创建新页面</entry>
+	<entry key="page.revision">副本</entry>
+	<entry key="page.otherLanguage">阅读其他语言版本</entry>
 </properties>

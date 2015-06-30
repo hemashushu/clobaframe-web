@@ -1,3 +1,11 @@
 /*!
  * common.css
  */
+
+header h1 {
+	margin-bottom: 20px;
+}
+
+header h1 a {
+	color: #333;
+}

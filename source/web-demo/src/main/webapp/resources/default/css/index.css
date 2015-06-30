@@ -1,3 +1,21 @@
 /*!
  * index.css
  */
+
+#page-box {
+	min-height: 300px;
+}
+
+.page-form {
+	max-width: 640px;
+}
+
+.page-list .page {
+	position: relative;
+}
+
+.page-list .page .action {
+	position: absolute;
+	right: 0;
+	top: 0;
+}

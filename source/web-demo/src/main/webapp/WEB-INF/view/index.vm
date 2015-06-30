@@ -6,33 +6,35 @@
 
 <div class="container">
 	<div class="text-right locale-switch">
-		<h5 class="">$msg.write('index.changeLanguage')</h5>
+		<h4 class="">$msg.write('index.changeLanguage')</h4>
 		<ul class="list-inline">
-			<li><a href="/changelocale?locale=en">$msg.write('common.language.en')</a></li>
-			<li><a href="/changelocale?locale=ja">$msg.write('common.language.ja')</a></li>
-			<li><a href="/changelocale?locale=zh_CN">$msg.write('common.language.zh_CN')</a></li>
+			<li><a href="/setlanguage?_locale=en">$msg.write('common.language.en')</a></li>
+			<li><a href="/setlanguage?_locale=ja">$msg.write('common.language.ja')</a></li>
+			<li><a href="/setlanguage?_locale=zh_CN">$msg.write('common.language.zh_CN')</a></li>
 		</ul>
 	</div>
 
-	<section>
-		<main id="page-box"></main>
-	</section>
+	<main id="page-box"></main>
 
 	<div class="text-right theme-switch">
-		<h5 class="">$msg.write('index.changeTheme')</h5>
+		<h4 class="">$msg.write('index.changeTheme')</h4>
 		<ul class="list-inline">
 			<li><a href="/changetheme?name=">$msg.write('common.theme.default')</a></li>
 			<li><a href="/changetheme?name=dark">$msg.write('common.theme.dark')</a></li>
-			<li><a href="/changetheme?name=flat">$msg.write('common.theme.flat')</a></li>
+			<li><a href="/changetheme?name=warm">$msg.write('common.theme.warm')</a></li>
 		</ul>
 	</div>
 </div>
 
-<!-- write custom page resource -->
-$header.writeResource('jsx/page-box.js', 'script', 'src', {'type':'text/jsx'}, true)
-
 <script>
 	(function (window) {
-		
+		#if ($pageOptions)
+			window.pageOptions = $json.write($pageOptions);
+		#else
+			window.pageOptions = {};
+		#end
 	})(this);
 </script>
+
+<!-- write custom page resource -->
+$header.writeResource('jsx/page-box.js', 'script', 'src', {'type':'text/jsx'}, true)

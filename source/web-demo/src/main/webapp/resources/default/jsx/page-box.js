@@ -18,12 +18,28 @@ var PageBox = React.createClass({
 			console.error(this.props.url, textStatus, errorThrown.toString());
 		});
 	},
+	handlePageSubmit: function(page) {
+		var pages = this.state.pages;
+		var me = this;
+		$.ajax({
+			url: me.props.url,
+			dataType: 'json',
+			type: 'POST',
+			data: page
+		}).done(function(data, textStatus, jqXHR) {
+			var newPages = pages.concat([data]);
+			me.setState({pages: newPages});
+			
+		}).fail(function(jqXHR, textStatus, errorThrown){
+			console.error(this.props.url, textStatus, errorThrown.toString());
+		});
+	},
 	render: function(){
 		return (
 			<div className="page-box">
 				<h1>Pages</h1>
 				<PageList pages={this.state.pages}/>
-				<PageForm />
+				<PageForm locale={this.props.pageOptions.locale} onPageSubmit={this.handlePageSubmit}/>
 			</div>
 		);
 	}
@@ -48,12 +64,33 @@ var PageList = React.createClass({
 
 var Page = React.createClass({
 	render: function() {
+		var page = this.props.page;
+		var pageUrl = co.objectUrl.page(page);
+		var summary = page.content.left(200, true);
+		
 		return (
 			<div className="page">
-				<h3>{this.props.page.title}</h3>
-				<p className="text-muted">{this.props.page.revision}</p>
+				<h3><a href={pageUrl}>{page.title}</a></h3>
+				<div className="action">
+					<ul className="list-inline">
+						<li>
+							<button className="btn btn-default edit">
+								<i className="fa fa-edit"></i>
+							</button>
+						</li>
+						<li>
+							<button className="btn btn-default delete">
+								<i className="fa fa-remove"></i>
+							</button>
+						</li>
+					</ul>
+				</div>
+				<ul className="list-inline text-muted meta">
+					<li>locale: <em>{page.pageKey.locale}</em></li>
+					<li>revision: <em>{page.revision}</em></li>
+				</ul>
 				<div className="content">
-					{this.props.page.content}
+					{summary}
 				</div>
 			</div>
 		);
@@ -63,7 +100,28 @@ var Page = React.createClass({
 var PageForm = React.createClass({
 	handleSubmit: function(e){
 		e.preventDefault();
+		var name = React.findDOMNode(this.refs.name).value.trim();
+		var title = React.findDOMNode(this.refs.title).value.trim();
+		var urlName = React.findDOMNode(this.refs.urlName).value.trim();
+		var content = React.findDOMNode(this.refs.content).value.trim();
+		var locale = React.findDOMNode(this.refs.locale).value.trim();
 		
+		if (!name || !title || !content) {
+		  return;
+		}
+		
+		//send request to the server
+		this.props.onPageSubmit({
+			name: name, title: title, 
+			urlname: urlName, content: content, 
+			locale: locale});
+		
+		React.findDOMNode(this.refs.name).value = '';
+		React.findDOMNode(this.refs.title).value = '';
+		React.findDOMNode(this.refs.urlName).value = '';
+		React.findDOMNode(this.refs.content).value = '';
+		React.findDOMNode(this.refs.locale).value = '';
+		return;
 	},
 	render: function() {
 		return (
@@ -74,7 +132,7 @@ var PageForm = React.createClass({
 						<label htmlFor="txtName">Name</label>
 						<input className="form-control" type="text" 
 							id="txtName"
-							placeholder="Only a-z,0-9,- are allowed." 
+							placeholder="Only a-z,0-9 and '-' are allowed." 
 							ref="name"/>
 					</div>
 					<div className="form-group">
@@ -87,12 +145,21 @@ var PageForm = React.createClass({
 						<label htmlFor="txtUrlName">Url</label>
 						<input className="form-control" type="text" 
 							id="txtUrlName"
-							placeholder="Optional, only a-z,0-9,- are allowed." ref="urlName"/>
+							placeholder="Optional. e.g. 'mypage', 'help/quickstart', only a-z,0-9,'-' and '/' are allowed." ref="urlName"/>
 					</div>
 					<div className="form-group">
 						<label htmlFor="txtContent">Content</label>
 						<textarea className="form-control" id="txtContent"
+							rows="4"
 							ref="content"></textarea>
+					</div>
+					<div className="form-group">
+						<label htmlFor="txtLocale">Locale</label>
+						<input className="form-control" type="text" 
+							id="txtLocale"
+							placeholder="The country and language code, e.g. en, ja, zh_CN"
+							value={this.props.locale}
+							ref="locale"/>
 					</div>
 					<button className="btn btn-info" type="submit">Post</button>
 				</form>
@@ -102,6 +169,6 @@ var PageForm = React.createClass({
 });
 
 React.render(
-  <PageBox url="rest/page" />,
+  <PageBox url="rest/page" pageOptions={pageOptions}/>,
   document.getElementById('page-box')
 );

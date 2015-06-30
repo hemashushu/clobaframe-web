@@ -1,0 +1,28 @@
+/*
+ * flat.css
+ */
+
+body {
+	background-color: #fffcee;
+}
+
+header h1 a {
+	color: #c05b4d;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: #333;
+}
+
+a {
+	color: #c05b4d;
+}
+
+.form-control {
+	background-color: #FFF8E4;
+}
+
+.form-control:focus {
+	border-color: #CC7A6F;
+	box-shadow: none;
+}

@@ -13,6 +13,7 @@ import org.archboy.clobaframe.web.page.revision.RevisionPageManager;
 import org.archboy.clobaframe.web.theme.ThemeManager;
 import org.archboy.clobaframe.web.theme.ThemePackage;
 import org.archboy.clobaframe.web.view.tool.PageHeaderExtensionTool;
+import org.archboy.clobaframe.web.view.tool.ThemePageHeader;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,9 @@ public class DemoController {
 	@Inject
 	private RevisionPageManager pageManager;
 	
+	@Inject
+	private ThemePageHeader themePageHeader;
+	
 //	@Inject
 //	private NoteService noteService;
 //	
@@ -51,7 +55,12 @@ public class DemoController {
 //	private PageHeaderExtensionTool pageHeaderContext;
 	
 	@RequestMapping("/")
-	public String index(Model model){
+	public String index(Locale locale, Model model){
+		
+		ViewModel pageOptions = new DefaultViewModel()
+				.add("locale", locale);
+		
+		model.addAttribute("pageOptions", pageOptions);
 		
 		return "index";
 	}
@@ -152,8 +161,8 @@ public class DemoController {
 //	}
 	
 	@ResponseBody
-	@RequestMapping("/changelocale")
-	public ViewModel changeLocale(Locale locale) {
+	@RequestMapping("/setlanguage")
+	public ViewModel setlanguage(Locale locale) {
 		// route for org.springframework.web.servlet.i18n.LocaleChangeInterceptor
 		return new DefaultViewModel()
 				.add("result", "success")
@@ -162,7 +171,7 @@ public class DemoController {
 	
 	@ResponseBody
 	@RequestMapping("/changetheme")
-	public ViewModel changeTheme(@RequestParam(value = "name", required = false, defaultValue = "") String name) {
+	public List<String> changeTheme(@RequestParam(value = "name", required = false, defaultValue = "") String name) {
 		if (StringUtils.isNotEmpty(name)) {
 			ThemePackage themePackage = themeManager.get(ThemeManager.PACKAGE_CATALOG_LOCAL, name);
 			if (themePackage == null) {
@@ -172,9 +181,11 @@ public class DemoController {
 		
 		globalSetting.set("theme", name);
 		
-		return new DefaultViewModel()
-				.add("result", "success")
-				.add("theme", name);
+//		return new DefaultViewModel()
+//				.add("result", "success")
+//				.add("theme", name);
+		
+		return themePageHeader.list(name);
 	}
 	
 	@RequestMapping("/error")

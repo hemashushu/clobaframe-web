@@ -12,8 +12,8 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class PagePostForm {
 
-//	@NotNull
-//	private Locale locale;
+	@NotNull
+	private Locale locale;
 	
 	@NotBlank
 	private String name;
@@ -30,13 +30,13 @@ public class PagePostForm {
 	})
 	private String urlName;
 
-//	public Locale getLocale() {
-//		return locale;
-//	}
-//
-//	public void setLocale(Locale locale) {
-//		this.locale = locale;
-//	}
+	public Locale getLocale() {
+		return locale;
+	}
+
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
 
 	public String getName() {
 		return name;
