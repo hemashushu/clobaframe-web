@@ -10,6 +10,6 @@ public interface ThemeProvider {
 	
 	Collection<ThemePackage> listPackage();
 	
-	ThemePackage get(String catalog, String name);
+	ThemePackage get(String catalog, String id);
 	
 }

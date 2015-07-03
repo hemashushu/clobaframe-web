@@ -55,14 +55,14 @@ public class ThemeManagerTest {
 		assertEquals(1, packages1.size());
 		
 		ThemePackage basePackage = packages1.iterator().next();
-		assertEquals(ThemeManager.PACKAGE_NAME_BASE, basePackage.getName());
+		assertEquals(ThemeManager.PACKAGE_ID_BASE, basePackage.getId());
 		
 		// test get package info
 		assertNull(basePackage.getAuthorName());
 		assertEquals(ThemeManager.PACKAGE_CATALOG_BASE, basePackage.getCatalog());
 		assertNull(basePackage.getDescription());
 		assertNull(basePackage.getLastModified());
-		assertEquals(ThemeManager.PACKAGE_NAME_BASE, basePackage.getName());
+		assertEquals(ThemeManager.PACKAGE_ID_BASE, basePackage.getId());
 		assertNull(basePackage.getVersion());
 		assertNull(basePackage.getWebsite());
 		
@@ -122,9 +122,8 @@ public class ThemeManagerTest {
 		}
 		
 		// get package by name
-		ThemePackage themePackage1 = themeManager.get(
-				ThemeManager.PACKAGE_CATALOG_BASE, 
-				ThemeManager.PACKAGE_NAME_BASE);
+		ThemePackage themePackage1 = themeManager.get(ThemeManager.PACKAGE_CATALOG_BASE, 
+				ThemeManager.PACKAGE_ID_BASE);
 		
 		assertEquals(basePackage, themePackage1);
 		
@@ -143,7 +142,7 @@ public class ThemeManagerTest {
 		List<String> packageNames1 = Arrays.asList("dark", "flat");
 		
 		for(ThemePackage themePackage : packages1) {
-			assertTrue(packageNames1.contains(themePackage.getName()));
+			assertTrue(packageNames1.contains(themePackage.getId()));
 		}
 		
 		// test get info
@@ -156,7 +155,8 @@ public class ThemeManagerTest {
 		assertEquals(ThemeManager.PACKAGE_CATALOG_LOCAL, themePackage1.getCatalog());
 		assertEquals("a test theme", themePackage1.getDescription());
 		assertDateEquals(date1, themePackage1.getLastModified());
-		assertEquals("dark", themePackage1.getName());
+		assertEquals("The Dark Theme", themePackage1.getName());
+		assertEquals("dark", themePackage1.getId());
 		assertEquals("1.0.1", themePackage1.getVersion());
 		assertEquals("http://archboy.org", themePackage1.getWebsite());
 		

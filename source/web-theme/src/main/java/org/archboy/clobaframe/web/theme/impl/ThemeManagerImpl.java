@@ -43,9 +43,9 @@ public class ThemeManagerImpl implements ThemeManager {
 	}
 
 	@Override
-	public ThemePackage get(String catalog, String name) {
+	public ThemePackage get(String catalog, String id) {
 		for (ThemeProvider themeProvider : themeProviders) {
-			ThemePackage themePackage = themeProvider.get(catalog, name);
+			ThemePackage themePackage = themeProvider.get(catalog, id);
 			if (themePackage != null) {
 				return themePackage;
 			}
@@ -55,8 +55,8 @@ public class ThemeManagerImpl implements ThemeManager {
 	}
 
 	@Override
-	public ThemePackage create(String catalog, String name) {
-		return themeRepository.create(catalog, name);
+	public ThemePackage create(String catalog, String id) {
+		return themeRepository.create(catalog, id);
 	}
 
 	@Override
@@ -65,12 +65,12 @@ public class ThemeManagerImpl implements ThemeManager {
 	}
 
 	@Override
-	public ThemePackage clone(ThemePackage themePackage, boolean includeTemplate, String catalog, String name) {
+	public ThemePackage clone(ThemePackage themePackage, boolean includeTemplate, String catalog, String id) {
 		Assert.isTrue(!(
 				themePackage.getCatalog().equals(catalog) &&
-				themePackage.getName().equals(name)));
+				themePackage.getId().equals(id)));
 		
-		ThemePackage pkg = themeRepository.create(catalog, name);
+		ThemePackage pkg = themeRepository.create(catalog, id);
 		for (ThemeResourceInfo themeResourceInfo : themePackage.listResource()) {
 			if (!themeResourceInfo.isTemplate() || includeTemplate)
 			themeRepository.save(pkg, themeResourceInfo);
@@ -86,9 +86,9 @@ public class ThemeManagerImpl implements ThemeManager {
 	}
 
 	@Override
-	public void delete(ThemePackage themePackage, String name) {
+	public void delete(ThemePackage themePackage, String id) {
 		Assert.isTrue(!themePackage.isReadOnly());
-		themeRepository.delete(themePackage, name);
+		themeRepository.delete(themePackage, id);
 	}
 
 	@Override

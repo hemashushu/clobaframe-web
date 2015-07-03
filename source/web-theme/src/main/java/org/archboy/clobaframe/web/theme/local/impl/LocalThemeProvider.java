@@ -94,7 +94,7 @@ public class LocalThemeProvider implements ThemeProvider {
 			}
 			
 			baseThemePackage = getThemePackage(ThemeManager.PACKAGE_CATALOG_BASE,
-					ThemeManager.PACKAGE_NAME_BASE,
+					ThemeManager.PACKAGE_ID_BASE,
 					basePathNames);
 		}
 
@@ -140,12 +140,12 @@ public class LocalThemeProvider implements ThemeProvider {
 //		return getThemePackage(catalog, name, path, resourceNamePrefix);
 //	}
 	
-	private ThemePackage getThemePackage(String catalog, String name, File path, String resourceNamePrefix) {
-		return new LocalThemePackage(catalog, name, path, resourceNamePrefix, mimeTypeDetector);
+	private ThemePackage getThemePackage(String catalog, String id, File path, String resourceNamePrefix) {
+		return new LocalThemePackage(catalog, id, path, resourceNamePrefix, mimeTypeDetector);
 	}
 
-	private ThemePackage getThemePackage(String catalog, String name, Collection<Map.Entry<File, String>> pathNames) {
-		return new MultiPathLocalThemePackage(catalog, name, pathNames, mimeTypeDetector);
+	private ThemePackage getThemePackage(String catalog, String id, Collection<Map.Entry<File, String>> pathNames) {
+		return new MultiPathLocalThemePackage(catalog, id, pathNames, mimeTypeDetector);
 	}
 	
 	@Override
@@ -182,10 +182,10 @@ public class LocalThemeProvider implements ThemeProvider {
 	}
 
 	@Override
-	public ThemePackage get(String catalog, String name) {
+	public ThemePackage get(String catalog, String id) {
 		
 		if (ThemeManager.PACKAGE_CATALOG_BASE.equals(catalog) &&
-				ThemeManager.PACKAGE_NAME_BASE.equals(name)) {
+				ThemeManager.PACKAGE_ID_BASE.equals(id)) {
 			return baseThemePackage;
 		}
 		
@@ -197,13 +197,13 @@ public class LocalThemeProvider implements ThemeProvider {
 			return null;
 		}
 		
-		File path = new File(localThemeResourcePath, name);
+		File path = new File(localThemeResourcePath, id);
 		if (!path.exists() || path.isFile()) {
 			return null;
 		}
 		
-		String packageResourceNamePrefix = String.format("%s%s/", themeResourceNamePrefix, name);
-		return getThemePackage(catalog, name, path, packageResourceNamePrefix);
+		String packageResourceNamePrefix = String.format("%s%s/", themeResourceNamePrefix, id);
+		return getThemePackage(catalog, id, path, packageResourceNamePrefix);
 	}
 
 }

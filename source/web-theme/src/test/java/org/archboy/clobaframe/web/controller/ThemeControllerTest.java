@@ -78,7 +78,7 @@ public class ThemeControllerTest {
 				.andExpect(content().string("<!DOCTYPE html>\n" +
 						"<head>\n" +
 						"<script src=\"/resource/js/index.js?v4a6ae5f4\"></script>\n" +
-						"<link rel=\"stylesheet\" data-source=\"theme\" data-catalog=\"local\" data-name=\"dark\" href=\"/resource/theme/dark/resource/css/dark.css?vbf81ee39\"><link rel=\"stylesheet\" data-source=\"theme\" data-catalog=\"local\" data-name=\"dark\" href=\"/resource/theme/dark/resource/css/index.css?v6dc92db3\">\n" +
+						"<link rel=\"stylesheet\" data-source=\"theme\" data-catalog=\"local\" data-id=\"dark\" href=\"/resource/theme/dark/resource/css/dark.css?vbf81ee39\"><link rel=\"stylesheet\" data-source=\"theme\" data-catalog=\"local\" data-id=\"dark\" href=\"/resource/theme/dark/resource/css/index.css?v6dc92db3\">\n" +
 						"</head>"));
 		
 		// test get index
@@ -87,7 +87,7 @@ public class ThemeControllerTest {
 				.andExpect(content().string("<!DOCTYPE html>\n" +
 						"<head>\n" +
 						"<script src=\"/resource/js/index.js?v4a6ae5f4\"></script>\n" +
-						"<link rel=\"stylesheet\" data-source=\"theme\" data-catalog=\"local\" data-name=\"flat\" href=\"/resource/theme/flat/resource/css/flat.css?vc724b117\">\n" +
+						"<link rel=\"stylesheet\" data-source=\"theme\" data-catalog=\"local\" data-id=\"flat\" href=\"/resource/theme/flat/resource/css/flat.css?vc724b117\">\n" +
 						"</head>"));
 		
 	}

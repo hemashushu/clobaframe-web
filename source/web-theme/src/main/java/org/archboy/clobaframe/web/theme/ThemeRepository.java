@@ -10,7 +10,7 @@ import org.archboy.clobaframe.webresource.WebResourceInfo;
  */
 public interface ThemeRepository {
 	
-	ThemePackage create(String catalog, String name);
+	ThemePackage create(String catalog, String id);
 	
 	ThemePackage update(ThemePackage themePackage, 
 			String name,
@@ -21,6 +21,6 @@ public interface ThemeRepository {
 	
 	void save(ThemePackage themePackage, ThemeResourceInfo themeResourceInfo);
 	
-	void delete(ThemePackage themePackage, String name);
+	void delete(ThemePackage themePackage, String id);
 	
 }

@@ -35,12 +35,12 @@ import org.archboy.clobaframe.webresource.local.LocalWebResourceNameStrategy;
 public class MultiPathLocalThemePackage implements ThemePackage {
 
 	private String catalog;
-	private String name;
+	private String id;
 	
 	private List<LocalResourceProvider> localResourceProviders = new ArrayList<LocalResourceProvider>();
 	
 	public MultiPathLocalThemePackage(
-			String catalog, String name,
+			String catalog, String id,
 			Collection<Map.Entry<File, String>> pathNames,
 			MimeTypeDetector mimeTypeDetector) {
 
@@ -58,13 +58,17 @@ public class MultiPathLocalThemePackage implements ThemePackage {
 		}
 		
 		this.catalog = catalog;
-		this.name = name;
-		
+		this.id = id;
+	}
+
+	@Override
+	public String getId() {
+		return id;
 	}
 	
 	@Override
 	public String getName() {
-		return name;
+		return id;
 	}
 
 	@Override
@@ -131,7 +135,7 @@ public class MultiPathLocalThemePackage implements ThemePackage {
 	public int hashCode() {
 		return new HashCodeBuilder()
 				.append(getCatalog())
-				.append(getName())
+				.append(getId())
 				.toHashCode();
 	}
 
@@ -152,7 +156,7 @@ public class MultiPathLocalThemePackage implements ThemePackage {
 		MultiPathLocalThemePackage other = (MultiPathLocalThemePackage)o;
 		return new EqualsBuilder()
 				.append(getCatalog(), other.getCatalog())
-				.append(getName(), other.getName())
+				.append(getId(), other.getId())
 				.isEquals();
 	}
 
@@ -160,7 +164,7 @@ public class MultiPathLocalThemePackage implements ThemePackage {
 	public String toString() {
 		return new ToStringBuilder(this)
 				.append("catalog", getCatalog())
-				.append("name", getName())
+				.append("id", getId())
 				.toString();
 	}
 	

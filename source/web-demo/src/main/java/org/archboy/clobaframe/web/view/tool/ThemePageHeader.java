@@ -42,7 +42,7 @@ public class ThemePageHeader {
 		attrs.put("rel", "stylesheet");
 		attrs.put("data-source", "theme");
 		attrs.put("data-catalog", themePackage.getCatalog());
-		attrs.put("data-name", themePackage.getName());
+		attrs.put("data-id", themePackage.getName());
 		
 		for(ThemeResourceInfo themeResourceInfo : themePackage.listResource()){
 			String mimeType = themeResourceInfo.getMimeType();

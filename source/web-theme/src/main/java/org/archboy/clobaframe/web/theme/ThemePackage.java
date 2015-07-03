@@ -9,15 +9,27 @@ import org.archboy.clobaframe.webresource.WebResourceInfo;
  * @author yang
  */
 public interface ThemePackage {
-	
-//	public static enum ResourceType {
-//		template,
-//		resource
-//	}
-	
-	String getName();
-	
+
+	/**
+	 * The theme catalog.
+	 * Typically there are two catalogs: application global theme and user theme.
+	 * 
+	 * @return 
+	 */
 	String getCatalog();
+	
+	/**
+	 * The theme id must be unique.
+	 * @return 
+	 */
+	String getId();
+
+	/**
+	 * For display and human reading.
+	 * 
+	 * @return 
+	 */
+	String getName();
 	
 	String getDescription();
 	

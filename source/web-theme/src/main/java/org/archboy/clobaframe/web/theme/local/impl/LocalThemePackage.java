@@ -35,6 +35,7 @@ import org.archboy.clobaframe.webresource.local.LocalWebResourceNameStrategy;
 public class LocalThemePackage implements ThemePackage {
 
 	private String catalog;
+	private String id;
 	private String name;
 	
 	private static final String infoFileName = "info.json";
@@ -51,7 +52,7 @@ public class LocalThemePackage implements ThemePackage {
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
 	public LocalThemePackage(
-			String catalog, String name,
+			String catalog, String id,
 			File basePath, 
 			String resourceNamePrefix, 
 			MimeTypeDetector mimeTypeDetector) {
@@ -66,7 +67,7 @@ public class LocalThemePackage implements ThemePackage {
 			fileBaseResourceInfoFactory, localWebResourceNameStrategy);
 		
 		this.catalog = catalog;
-		this.name = name;
+		this.id = id;
 		
 		// load extra info
 		try{
@@ -93,6 +94,14 @@ public class LocalThemePackage implements ThemePackage {
 		this.lastModified = dateFormat.parse((String)map.get("lastModified"));
 		this.authorName = (String)map.get("authorName");
 		this.website = (String)map.get("website");
+
+		// set the name
+		String nameByInfo = (String)map.get("name");
+		if (StringUtils.isNotEmpty(nameByInfo)) {
+			this.name = nameByInfo;
+		}else{
+			this.name = id;
+		}
 		
 		// override
 		String catalogByInfo = (String)map.get("catalog");
@@ -102,13 +111,18 @@ public class LocalThemePackage implements ThemePackage {
 	}
 	
 	@Override
-	public String getName() {
-		return name;
+	public String getCatalog() {
+		return catalog;
 	}
 
 	@Override
-	public String getCatalog() {
-		return catalog;
+	public String getId() {
+		return id;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
 	}
 
 	@Override
@@ -159,7 +173,7 @@ public class LocalThemePackage implements ThemePackage {
 	public int hashCode() {
 		return new HashCodeBuilder()
 				.append(getCatalog())
-				.append(getName())
+				.append(getId())
 				.toHashCode();
 	}
 
@@ -180,7 +194,7 @@ public class LocalThemePackage implements ThemePackage {
 		LocalThemePackage other = (LocalThemePackage)o;
 		return new EqualsBuilder()
 				.append(getCatalog(), other.getCatalog())
-				.append(getName(), other.getName())
+				.append(getId(), other.getId())
 				.isEquals();
 	}
 
@@ -188,7 +202,7 @@ public class LocalThemePackage implements ThemePackage {
 	public String toString() {
 		return new ToStringBuilder(this)
 				.append("catalog", getCatalog())
-				.append("name", getName())
+				.append("id", getId())
 				.toString();
 	}
 	
