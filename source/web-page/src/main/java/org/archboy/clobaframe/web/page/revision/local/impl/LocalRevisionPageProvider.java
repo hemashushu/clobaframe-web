@@ -29,7 +29,9 @@ import org.archboy.clobaframe.web.page.revision.local.LocalRevisionPageResourceI
 import org.archboy.clobaframe.web.page.revision.local.LocalRevisionPageResourceNameStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.Assert;
@@ -39,9 +41,10 @@ import org.springframework.util.Assert;
  * @author yang
  */
 @Named
-public class LocalRevisionPageProvider extends AbstractPreloadRevisionPageProvider {
+public class LocalRevisionPageProvider extends AbstractPreloadRevisionPageProvider
+	implements ResourceLoaderAware, InitializingBean {
 
-	@Inject
+	//@Inject
 	private ResourceLoader resourceLoader;
 
 	@Inject
@@ -105,9 +108,27 @@ public class LocalRevisionPageProvider extends AbstractPreloadRevisionPageProvid
 	private static final Pattern patternHeader1b = Pattern.compile(regexHeader1b);
 
 	private final Logger logger = LoggerFactory.getLogger(LocalRevisionPageProvider.class);
+
+	@Override
+	public void setResourceLoader(ResourceLoader resourceLoader) {
+		this.resourceLoader = resourceLoader;
+	}
 	
-	@PostConstruct
-	public void init(){
+	public void setMimeTypeDetector(MimeTypeDetector mimeTypeDetector) {
+		this.mimeTypeDetector = mimeTypeDetector;
+	}
+
+	public void setPageResourcePath(String pageResourcePath) {
+		this.pageResourcePath = pageResourcePath;
+	}
+
+	public void setDefaultLocale(Locale defaultLocale) {
+		this.defaultLocale = defaultLocale;
+	}
+
+	//@PostConstruct
+	@Override
+	public void afterPropertiesSet() throws Exception {
 		for(PageInfo pageInfo : listLocal()){
 			super.add((RevisionPageInfo)pageInfo);
 		}

@@ -24,6 +24,14 @@ public class ThemePageHeader {
 	
 	@Inject
 	private ThemeManager themeManager;
+
+	public void setPageHeaderTool(PageHeaderTool pageHeaderTool) {
+		this.pageHeaderTool = pageHeaderTool;
+	}
+
+	public void setThemeManager(ThemeManager themeManager) {
+		this.themeManager = themeManager;
+	}
 	
 	public List<String> list(String themeName) {
 		List<String> headers = new ArrayList<String>();

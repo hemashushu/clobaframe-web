@@ -18,6 +18,10 @@ public class MessageSourceToolImpl implements MessageSourceTool {
 	@Inject
 	private MessageSource messageSource;
 
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
+	
 	@Override
 	public String write(String code, Object... args){
 		return messageSource.getMessage(code, args, LocaleContextHolder.getLocale());

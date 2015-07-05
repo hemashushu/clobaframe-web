@@ -60,9 +60,33 @@ public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageRes
 	 * RESOURCE_NOT_FOUND_NAME: no this resource.
 	 * Other: the web resource name.
 	 */
-	private String defaultResourceCacheName;
+	private String nameOfDefaultResource;
 	private Map<Locale, String> localResourceCacheNames = new HashMap<Locale, String>();
 
+	public void setWebResourceManager(WebResourceManager webResourceManager) {
+		this.webResourceManager = webResourceManager;
+	}
+
+	public void setPageHeaderTool(PageHeaderTool pageHeaderTool) {
+		this.pageHeaderTool = pageHeaderTool;
+	}
+
+	public void setScriptPath(String scriptPath) {
+		this.scriptPath = scriptPath;
+	}
+
+	public void setScriptNamePrefix(String scriptNamePrefix) {
+		this.scriptNamePrefix = scriptNamePrefix;
+	}
+
+	public void setScriptNameSuffix(String scriptNameSuffix) {
+		this.scriptNameSuffix = scriptNameSuffix;
+	}
+
+	public void setDefaultLocale(Locale defaultLocale) {
+		this.defaultLocale = defaultLocale;
+	}
+	
 //	@PostConstruct
 //	public void init(){
 //
@@ -108,15 +132,15 @@ public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageRes
 
 	@Override
 	public String getDefaultResourceName() {
-		if (defaultResourceCacheName == null) {
+		if (nameOfDefaultResource == null) {
 			// check first
 			String name = getCompatibleResourceName(null, null);
-			defaultResourceCacheName = (name == null) ? RESOURCE_NOT_FOUND_NAME : name;
+			nameOfDefaultResource = (name == null) ? RESOURCE_NOT_FOUND_NAME : name;
 		}
 		
-		return defaultResourceCacheName.equals(RESOURCE_NOT_FOUND_NAME) ? 
+		return nameOfDefaultResource.equals(RESOURCE_NOT_FOUND_NAME) ? 
 				null : 
-				defaultResourceCacheName;
+				nameOfDefaultResource;
 	}
 
 	/**

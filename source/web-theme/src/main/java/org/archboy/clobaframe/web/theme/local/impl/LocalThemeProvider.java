@@ -22,7 +22,9 @@ import org.archboy.clobaframe.webresource.local.DefaultLocalWebResourceNameStrat
 import org.archboy.clobaframe.webresource.local.LocalWebResourceNameStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
@@ -31,9 +33,9 @@ import org.springframework.core.io.ResourceLoader;
  * @author yang
  */
 @Named
-public class LocalThemeProvider implements ThemeProvider {
+public class LocalThemeProvider implements ThemeProvider, ResourceLoaderAware, InitializingBean {
 
-	@Inject
+	//@Inject
 	private ResourceLoader resourceLoader;
 
 	@Inject
@@ -77,8 +79,46 @@ public class LocalThemeProvider implements ThemeProvider {
 
 	private final Logger logger = LoggerFactory.getLogger(LocalThemeProvider.class);
 
-	@PostConstruct
-	public void init() {
+	@Override
+	public void setResourceLoader(ResourceLoader resourceLoader) {
+		this.resourceLoader = resourceLoader;
+	}
+
+	public void setMimeTypeDetector(MimeTypeDetector mimeTypeDetector) {
+		this.mimeTypeDetector = mimeTypeDetector;
+	}
+
+	public void setWebResourceProviderSet(WebResourceProviderSet webResourceProviderSet) {
+		this.webResourceProviderSet = webResourceProviderSet;
+	}
+
+	public void setBaseResourcePath(String baseResourcePath) {
+		this.baseResourcePath = baseResourcePath;
+	}
+
+	public void setBaseResourceNamePrefix(String baseResourceNamePrefix) {
+		this.baseResourceNamePrefix = baseResourceNamePrefix;
+	}
+
+	public void setBaseTemplatePath(String baseTemplatePath) {
+		this.baseTemplatePath = baseTemplatePath;
+	}
+
+	public void setBaseTemplateNamePrefix(String baseTemplateNamePrefix) {
+		this.baseTemplateNamePrefix = baseTemplateNamePrefix;
+	}
+
+	public void setThemeResourcePath(String themeResourcePath) {
+		this.themeResourcePath = themeResourcePath;
+	}
+
+	public void setThemeResourceNamePrefix(String themeResourceNamePrefix) {
+		this.themeResourceNamePrefix = themeResourceNamePrefix;
+	}
+
+	//@PostConstruct
+	@Override
+	public void afterPropertiesSet() throws Exception {
 		// add base local resource
 		if (StringUtils.isNotEmpty(baseResourcePath)) {
 			File baseResourceBasePath = getFile(baseResourcePath);

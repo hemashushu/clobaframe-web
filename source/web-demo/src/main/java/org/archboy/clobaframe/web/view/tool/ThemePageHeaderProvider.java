@@ -17,6 +17,14 @@ public class ThemePageHeaderProvider implements PageHeaderProvider {
 	
 	@Inject
 	private GlobalSetting globalSetting;
+
+	public void setThemePageHeader(ThemePageHeader themePageHeader) {
+		this.themePageHeader = themePageHeader;
+	}
+
+	public void setGlobalSetting(GlobalSetting globalSetting) {
+		this.globalSetting = globalSetting;
+	}
 	
 	@Override
 	public List<String> list() {

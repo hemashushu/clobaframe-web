@@ -31,6 +31,18 @@ public class ThemePageHeaderProvider implements PageHeaderProvider {
 	
 	@Inject
 	private GlobalSetting globalSetting;
+
+	public void setPageHeaderTool(PageHeaderTool pageHeaderTool) {
+		this.pageHeaderTool = pageHeaderTool;
+	}
+
+	public void setThemeManager(ThemeManager themeManager) {
+		this.themeManager = themeManager;
+	}
+
+	public void setGlobalSetting(GlobalSetting globalSetting) {
+		this.globalSetting = globalSetting;
+	}
 	
 	@Override
 	public List<String> list() {

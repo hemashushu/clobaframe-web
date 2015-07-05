@@ -10,11 +10,17 @@ import org.archboy.clobaframe.web.view.tool.PageHeaderExtensionTool;
 import org.archboy.clobaframe.web.view.tool.PageHeaderProvider;
 import org.archboy.clobaframe.web.view.tool.PageHeaderTool;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.NamedThreadLocal;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
 /**
- *
+ * In the none Spring MVC web application, it should invoke these each request:
+ * 
+ * HttpServletRequest httpServletRequest = new MockHttpServletRequest();
+ * RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(httpServletRequest));
+ * 
+ * 
  * @author yang
  */
 @Named
@@ -28,8 +34,58 @@ public class PageHeaderExtensionImpl implements PageHeaderExtensionTool {
 	
 	private static final String customHeaderRequestAttributeName = "clobaframe-web-view.customPageHeaders";
 
+	/*
+	private static final ThreadLocal<HeaderContext> headerContextHolder = new ThreadLocal<HeaderContext>();
+	
+	public static class HeaderContext {
+		private List<String> headers;
+
+		public HeaderContext() {
+			headers = new ArrayList<String>();
+		}
+		
+		public void add(String header) {
+			headers.add(header);
+		}
+
+		public List<String> getHeaders() {
+			return headers;
+		}
+	}
+
+	public static void clearContext() {
+		headerContextHolder.remove();
+	}
+	
+	public static HeaderContext getContext(){
+		HeaderContext context = headerContextHolder.get();
+		if (context == null) {
+			context = createContext();
+			headerContextHolder.set(context);
+		}
+		return context;
+	}
+	
+	public static void setContext(HeaderContext headerContext) {
+		headerContextHolder.set(headerContext);
+	}
+	
+	public static HeaderContext createContext() {
+		return new HeaderContext();
+	}
+	*/
+	
+	public void setPageHeaderProviders(List<PageHeaderProvider> pageHeaderProviders) {
+		this.pageHeaderProviders = pageHeaderProviders;
+	}
+
+	public void setPageHeaderTool(PageHeaderTool pageHeaderTool) {
+		this.pageHeaderTool = pageHeaderTool;
+	}
+
 	@Override
 	public void add(String tagName, Map<String, Object> attributes, boolean closeTag) {
+		
 		String header = pageHeaderTool.write(tagName, attributes, closeTag);
 		
 		// get custom header from current HTTP request attributes.
@@ -41,15 +97,17 @@ public class PageHeaderExtensionImpl implements PageHeaderExtensionTool {
 		
 		if (extraHeaders == null) {
 			extraHeaders = new ArrayList<String>();
+			
+			// set custom header to current HTTP request attributes.
+			requestAttributes.setAttribute(customHeaderRequestAttributeName, 
+				extraHeaders, 
+				RequestAttributes.SCOPE_REQUEST);
 		}
 		
 		extraHeaders.add(header);
 		
-		// set custom header to current HTTP request attributes.
-		requestAttributes.setAttribute(customHeaderRequestAttributeName, 
-				extraHeaders, 
-				RequestAttributes.SCOPE_REQUEST);
-		
+//		HeaderContext headerContext = getContext();
+//		headerContext.add(header);
 	}
 	
 	@Override
@@ -68,6 +126,9 @@ public class PageHeaderExtensionImpl implements PageHeaderExtensionTool {
 		@SuppressWarnings("unchecked")
 		List<String> extraHeaders = (List<String>)requestAttributes.getAttribute(
 				customHeaderRequestAttributeName, RequestAttributes.SCOPE_REQUEST);
+
+//		HeaderContext headerContext = getContext();
+//		List<String> extraHeaders = headerContext.getHeaders();
 		
 		if (extraHeaders != null && !extraHeaders.isEmpty()){
 			headers.addAll(extraHeaders);

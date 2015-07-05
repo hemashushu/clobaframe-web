@@ -44,6 +44,10 @@ public class PageHeaderToolImpl implements PageHeaderTool {
 	private WebResourceManager webResourceManager;
 
 	private final Logger logger = LoggerFactory.getLogger(PageHeaderToolImpl.class);
+
+	public void setWebResourceManager(WebResourceManager webResourceManager) {
+		this.webResourceManager = webResourceManager;
+	}
 	
 	@Override
 	public String write(String tagName, Map<String, Object> attributes, boolean closeTag) {

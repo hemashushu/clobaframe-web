@@ -26,6 +26,14 @@ public class ThemeManagerImpl implements ThemeManager {
 	
 	@Autowired(required = false)
 	private ThemeRepository themeRepository;
+
+	public void setThemeProviders(Collection<ThemeProvider> themeProviders) {
+		this.themeProviders = themeProviders;
+	}
+
+	public void setThemeRepository(ThemeRepository themeRepository) {
+		this.themeRepository = themeRepository;
+	}
 	
 	@Override
 	public Collection<ThemePackage> list(String catalog) {

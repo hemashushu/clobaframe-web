@@ -35,6 +35,18 @@ public class RevisionPageManagerImpl implements RevisionPageManager {
 	
 	@Value("${clobaframe.web.page.defaultLocale:" + DEFAULT_LOCALE + "}")
 	private Locale defaultLocale;
+
+	public void setRevisionPageProviders(List<RevisionPageProvider> revisionPageProviders) {
+		this.revisionPageProviders = revisionPageProviders;
+	}
+
+	public void setRevisionPageRepository(RevisionPageRepository revisionPageRepository) {
+		this.revisionPageRepository = revisionPageRepository;
+	}
+
+	public void setDefaultLocale(Locale defaultLocale) {
+		this.defaultLocale = defaultLocale;
+	}
 	
 	@Override
 	public Collection<Locale> listLocale(String name) {
