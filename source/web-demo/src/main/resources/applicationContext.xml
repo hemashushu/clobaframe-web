@@ -39,7 +39,7 @@
 	
 	<!-- application settings -->
 	<bean id="applicationSetting"
-		  class="org.archboy.clobaframe.setting.application.impl.ApplicationSettingImpl">
+		  class="org.archboy.clobaframe.setting.common.application.impl.ApplicationSettingImpl">
 		<property name="locations">
 			<list>
 				<value>classpath:application.properties</value>
@@ -49,7 +49,7 @@
 	</bean>
 
 	<bean id="propertyPlaceholderConfigurer"
-		  class="org.archboy.clobaframe.setting.application.config.PropertyPlaceholderConfigurer">
+		  class="org.archboy.clobaframe.setting.common.application.config.PropertyPlaceholderConfigurer">
 		<property name="applicationSetting" ref="applicationSetting"/>
 		<property name="ignoreUnresolvablePlaceholders" value="true"/>
 	</bean>

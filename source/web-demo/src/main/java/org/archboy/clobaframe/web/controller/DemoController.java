@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
-import org.archboy.clobaframe.query.DefaultViewModel;
-import org.archboy.clobaframe.query.ViewModel;
-import org.archboy.clobaframe.setting.global.GlobalSetting;
+import org.archboy.clobaframe.query.DefaultObjectMap;
+import org.archboy.clobaframe.query.ObjectMap;
+import org.archboy.clobaframe.setting.common.global.GlobalSetting;
 import org.archboy.clobaframe.web.exception.NotFoundException;
 import org.archboy.clobaframe.web.page.PageInfo;
 import org.archboy.clobaframe.web.page.revision.RevisionPageManager;
@@ -57,7 +57,7 @@ public class DemoController {
 	@RequestMapping("/")
 	public String index(Locale locale, Model model){
 		
-		ViewModel pageOptions = new DefaultViewModel()
+		ObjectMap pageOptions = new DefaultObjectMap()
 				.add("locale", locale);
 		
 		model.addAttribute("pageOptions", pageOptions);
@@ -162,9 +162,9 @@ public class DemoController {
 	
 	@ResponseBody
 	@RequestMapping("/setlanguage")
-	public ViewModel setlanguage(Locale locale) {
+	public ObjectMap setlanguage(Locale locale) {
 		// route for org.springframework.web.servlet.i18n.LocaleChangeInterceptor
-		return new DefaultViewModel()
+		return new DefaultObjectMap()
 				.add("result", "success")
 				.add("locale", locale.toLanguageTag());
 	}

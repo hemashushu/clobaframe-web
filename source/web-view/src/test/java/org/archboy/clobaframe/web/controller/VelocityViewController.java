@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
-import org.archboy.clobaframe.query.DefaultViewModel;
-import org.archboy.clobaframe.query.ViewModel;
+import org.archboy.clobaframe.query.DefaultObjectMap;
+import org.archboy.clobaframe.query.ObjectMap;
 import org.archboy.clobaframe.web.view.tool.PageHeaderExtensionTool;
 import org.archboy.clobaframe.web.view.tool.PageHeaderTool;
 import org.springframework.stereotype.Controller;
@@ -27,7 +27,7 @@ public class VelocityViewController {
 	public String index(Model model){
 		
 		// add custom page header
-		ViewModel attributes = new DefaultViewModel()
+		ObjectMap attributes = new DefaultObjectMap()
 			.add("href", "/atom.xml")
 			.add("type", "application/atom+xml")
 			.add("rel", "alternate")

@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
-import org.archboy.clobaframe.query.DefaultViewModel;
-import org.archboy.clobaframe.query.ViewModel;
+import org.archboy.clobaframe.query.DefaultObjectMap;
+import org.archboy.clobaframe.query.ObjectMap;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
@@ -40,7 +40,7 @@ public class PageNotFoundExceptionHandler implements HandlerExceptionResolver {
 			
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			
-			ViewModel viewModel = new DefaultViewModel()
+			ObjectMap viewModel = new DefaultObjectMap()
 					.add("code", "notFound");
 			
 			return new ModelAndView("error", viewModel);
