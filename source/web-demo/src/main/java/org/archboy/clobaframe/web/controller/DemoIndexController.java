@@ -13,7 +13,7 @@ import org.archboy.clobaframe.web.page.revision.RevisionPageManager;
 import org.archboy.clobaframe.web.theme.ThemeManager;
 import org.archboy.clobaframe.web.theme.ThemePackage;
 import org.archboy.clobaframe.web.view.tool.PageHeaderExtensionTool;
-import org.archboy.clobaframe.web.view.tool.ThemePageHeader;
+import org.archboy.clobaframe.web.view.tool.ThemePageHeaderTool;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author yang
  */
 @Controller
-public class DemoController {
+public class DemoIndexController {
 
 	@Inject
 	private GlobalSetting globalSetting;
@@ -33,11 +33,11 @@ public class DemoController {
 	@Inject
 	private ThemeManager themeManager;
 	
-	@Inject
-	private RevisionPageManager pageManager;
+//	@Inject
+//	private RevisionPageManager pageManager;
 	
 	@Inject
-	private ThemePageHeader themePageHeader;
+	private ThemePageHeaderTool themePageHeader;
 	
 //	@Inject
 //	private NoteService noteService;
@@ -53,6 +53,18 @@ public class DemoController {
 //	
 //	@Inject
 //	private PageHeaderExtensionTool pageHeaderContext;
+
+	public void setGlobalSetting(GlobalSetting globalSetting) {
+		this.globalSetting = globalSetting;
+	}
+
+	public void setThemeManager(ThemeManager themeManager) {
+		this.themeManager = themeManager;
+	}
+
+	public void setThemePageHeader(ThemePageHeaderTool themePageHeader) {
+		this.themePageHeader = themePageHeader;
+	}
 	
 	@RequestMapping("/")
 	public String index(Locale locale, Model model){

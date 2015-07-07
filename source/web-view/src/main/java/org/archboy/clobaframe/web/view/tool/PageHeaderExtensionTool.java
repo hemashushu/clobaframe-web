@@ -10,6 +10,18 @@ import java.util.Map;
 public interface PageHeaderExtensionTool {
 	
 	/**
+	 * 
+	 * @param pageHeaderProvider 
+	 */
+	void addProvider(PageHeaderProvider pageHeaderProvider);
+	
+	/**
+	 * 
+	 * @param providerName 
+	 */
+	void removeProvider(String providerName);
+	
+	/**
 	 * Add a custom header to the current HTTP request.
 	 * 
 	 * The custom headers will write into the current HTTP request attributes.

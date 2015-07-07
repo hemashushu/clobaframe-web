@@ -13,17 +13,22 @@ import org.archboy.clobaframe.setting.common.global.GlobalSetting;
 public class ThemePageHeaderProvider implements PageHeaderProvider {
 
 	@Inject
-	private ThemePageHeader themePageHeader;
+	private ThemePageHeaderTool themePageHeader;
 	
 	@Inject
 	private GlobalSetting globalSetting;
 
-	public void setThemePageHeader(ThemePageHeader themePageHeader) {
+	public void setThemePageHeader(ThemePageHeaderTool themePageHeader) {
 		this.themePageHeader = themePageHeader;
 	}
 
 	public void setGlobalSetting(GlobalSetting globalSetting) {
 		this.globalSetting = globalSetting;
+	}
+
+	@Override
+	public String getName() {
+		return getClass().getSimpleName();
 	}
 	
 	@Override

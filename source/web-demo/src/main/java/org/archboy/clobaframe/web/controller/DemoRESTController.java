@@ -26,6 +26,10 @@ public class DemoRESTController {
 	
 	@Inject
 	private RevisionPageManager revisionPageManager;
+
+	public void setRevisionPageManager(RevisionPageManager revisionPageManager) {
+		this.revisionPageManager = revisionPageManager;
+	}
 	
 	@ResponseBody
 	@RequestMapping("/rest/page")

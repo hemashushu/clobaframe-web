@@ -43,6 +43,18 @@ public class PageController {
 	
 	@Inject
 	private ObjectUrl objectUrl;
+
+	public void setDefaultTemplateName(String defaultTemplateName) {
+		this.defaultTemplateName = defaultTemplateName;
+	}
+
+	public void setRevisionPageManager(RevisionPageManager revisionPageManager) {
+		this.revisionPageManager = revisionPageManager;
+	}
+
+	public void setObjectUrl(ObjectUrl objectUrl) {
+		this.objectUrl = objectUrl;
+	}
 	
 	@ModelAttribute
 	public void addModelAttribute(Model model) {

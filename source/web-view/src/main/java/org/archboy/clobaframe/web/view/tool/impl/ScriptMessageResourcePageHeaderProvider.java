@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.lang3.StringUtils;
+import org.archboy.clobaframe.web.view.tool.PageHeaderExtensionTool;
 import org.archboy.clobaframe.web.view.tool.PageHeaderProvider;
 import org.archboy.clobaframe.web.view.tool.PageHeaderTool;
 import org.archboy.clobaframe.webresource.WebResourceInfo;
@@ -87,6 +88,10 @@ public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageRes
 		this.defaultLocale = defaultLocale;
 	}
 	
+	public void register(PageHeaderExtensionTool pageHeaderExtensionTool){
+		pageHeaderExtensionTool.addProvider(this);
+	}
+	
 //	@PostConstruct
 //	public void init(){
 //
@@ -130,6 +135,11 @@ public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageRes
 //		}
 //	}
 
+	@Override
+	public String getName() {
+		return getClass().getSimpleName();
+	}
+	
 	@Override
 	public String getDefaultResourceName() {
 		if (nameOfDefaultResource == null) {

@@ -31,7 +31,6 @@
 		<property name="locations">
 			<list>
 				<value>classpath:web.properties</value>
-				<value>classpath:clobaframe.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -46,8 +45,8 @@
 	<!-- init the velocity engine and set the configuration, for generate VelocityLayoutView -->
 	<bean id="velocityConfig"
 		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
-		<property name="resourceLoaderPath" value="/WEB-INF/view/"/>
-		<property name="configLocation" value="/WEB-INF/velocity.properties"/>
+		<property name="resourceLoaderPath" value="classpath:WEB-INF/view/"/>
+		<property name="configLocation" value="classpath:WEB-INF/velocity.properties"/>
 	</bean>
 	
 	<!-- specify the view resolver that using VelocityLayoutView -->
@@ -68,7 +67,7 @@
 				<entry key="json" value-ref="jsonWriterImpl"/>
 				<entry key="msg" value-ref="messageSourceToolImpl"/>
 				<entry key="header" value-ref="pageHeaderToolImpl"/>
-				<entry key="headerEx" value-ref="pageHeaderExtensionImpl"/>
+				<entry key="headerEx" value-ref="pageHeaderExtensionToolImpl"/>
 				
 				<!-- rarely use -->
 				<entry key="date" value-ref="localeAwareComparisonDateTool"/>

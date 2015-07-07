@@ -10,6 +10,14 @@ import java.util.List;
 public interface PageHeaderProvider {
 	
 	/**
+	 * Provider name.
+	 * It's optional.
+	 * 
+	 * @return 
+	 */
+	String getName();
+	
+	/**
 	 * 
 	 * @return 
 	 */

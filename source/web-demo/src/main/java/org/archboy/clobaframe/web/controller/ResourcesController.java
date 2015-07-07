@@ -31,6 +31,18 @@ public class ResourcesController {
 	
 	@Value("${clobaframe.webresource.repository.local.root.resourceNamePrefix:" + DEFAULT_ROOT_RESOURCE_NAME_PREFIX + "}")
 	private String rootResourceNamePrefix;
+
+	public void setWebResourceSender(WebResourceSender webResourceSender) {
+		this.webResourceSender = webResourceSender;
+	}
+
+	public void setBaseLocation(String baseLocation) {
+		this.baseLocation = baseLocation;
+	}
+
+	public void setRootResourceNamePrefix(String rootResourceNamePrefix) {
+		this.rootResourceNamePrefix = rootResourceNamePrefix;
+	}
 	
 	/**
 	 * Send web resource.

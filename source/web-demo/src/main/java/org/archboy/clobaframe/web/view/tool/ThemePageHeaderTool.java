@@ -17,7 +17,7 @@ import org.archboy.clobaframe.webresource.WebResourceManager;
  * @author yang
  */
 @Named
-public class ThemePageHeader {
+public class ThemePageHeaderTool {
 	
 	@Inject
 	private PageHeaderTool pageHeaderTool;

@@ -11,6 +11,7 @@ import org.archboy.clobaframe.web.view.tool.PageHeaderProvider;
 import org.archboy.clobaframe.web.view.tool.PageHeaderTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.NamedThreadLocal;
+import org.springframework.util.Assert;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
@@ -24,7 +25,7 @@ import org.springframework.web.context.request.RequestContextHolder;
  * @author yang
  */
 @Named
-public class PageHeaderExtensionImpl implements PageHeaderExtensionTool {
+public class PageHeaderExtensionToolImpl implements PageHeaderExtensionTool {
 
 	@Inject
 	private PageHeaderTool pageHeaderTool;
@@ -81,6 +82,28 @@ public class PageHeaderExtensionImpl implements PageHeaderExtensionTool {
 
 	public void setPageHeaderTool(PageHeaderTool pageHeaderTool) {
 		this.pageHeaderTool = pageHeaderTool;
+	}
+
+	@Override
+	public void addProvider(PageHeaderProvider pageHeaderProvider) {
+		if (pageHeaderProviders == null) {
+			pageHeaderProviders = new ArrayList<>();
+		}
+		
+		pageHeaderProviders.add(pageHeaderProvider);
+	}
+
+	@Override
+	public void removeProvider(String providerName) {
+		Assert.notNull(providerName);
+		
+		for (int idx = pageHeaderProviders.size() - 1; idx >= 0; idx--){
+			PageHeaderProvider provider = pageHeaderProviders.get(idx);
+			if (providerName.equals(provider.getName())){
+				pageHeaderProviders.remove(idx);
+				break;
+			}
+		}
 	}
 
 	@Override
