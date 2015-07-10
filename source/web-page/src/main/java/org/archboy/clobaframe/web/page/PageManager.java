@@ -94,4 +94,11 @@ public interface PageManager {
 	 * @return 
 	 */
 	Locale getDefaultLocale();
+	
+	/**
+	 * Default template name is 'page'.
+	 * 
+	 * @return 
+	 */
+	String getDefaultTemplateName();
 }

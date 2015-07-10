@@ -28,10 +28,10 @@ public class PageController {
 	private final int pagePathPrefixNameLength = "/page/".length();
 	private final int pagePrefixUrlNameLength = "/".length();
 	
-	private static final String DEFAULT_TEMPLATE_NAME = "page";
-	
-	@Value("${clobaframe.web.page.defaultTemplateName:" + DEFAULT_TEMPLATE_NAME + "}")
-	private String defaultTemplateName;
+//	private static final String DEFAULT_TEMPLATE_NAME = "page";
+//	
+//	@Value("${clobaframe.web.page.defaultTemplateName:" + DEFAULT_TEMPLATE_NAME + "}")
+//	private String defaultTemplateName;
 	
 	@Inject
 	private RevisionPageManager revisionPageManager;
@@ -64,7 +64,7 @@ public class PageController {
 		model.addAttribute("page", page);
 		
 		String templateName = StringUtils.isEmpty(page.getTemplateName()) ? 
-				defaultTemplateName : 
+				revisionPageManager.getDefaultTemplateName() : 
 				page.getTemplateName();
 		
 		return templateName;
@@ -103,7 +103,7 @@ public class PageController {
 		model.addAttribute("page", page);
 		
 		String templateName = StringUtils.isEmpty(page.getTemplateName()) ? 
-				defaultTemplateName : 
+				revisionPageManager.getDefaultTemplateName() : 
 				page.getTemplateName();
 		
 		return templateName;

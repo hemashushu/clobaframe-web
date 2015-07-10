@@ -24,10 +24,15 @@ import org.archboy.clobaframe.webresource.WebResourceManager;
 @Named
 public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageResource, PageHeaderProvider{
 
-	private static final String DEFAULT_I18N_SCRIPT_PATH = ""; //"js/i18n";
-	private static final String DEFAULT_I18N_SCRIPT_NAME_PREFIX = "messages";
-	private static final String DEFAULT_I18N_SCRIPT_NAME_SUFFIX = ".js";
-	private static final String DEFAULT_LOCALE = "en";
+	public static final String DEFAULT_SCRIPT_PATH = ""; //"js/i18n";
+	public static final String DEFAULT_SCRIPT_NAME_PREFIX = "messages";
+	public static final String DEFAULT_SCRIPT_NAME_SUFFIX = ".js";
+	public static final String DEFAULT_LOCALE = "en";
+	
+	public static final String SETTING_KEY_SCRIPT_PATH = "clobaframe.web.view.scriptMessageResource.path";
+	public static final String SETTING_KEY_SCRIPT_NAME_PREFIX = "clobaframe.web.view.scriptMessageResource.namePrefix";
+	public static final String SETTING_KEY_SCRIPT_NAME_SUFFIX = "clobaframe.web.view.scriptMessageResource.nameSuffix";
+	public static final String SETTING_KEY_DEFAULT_LOCALE = "clobaframe.web.view.scriptMessageResource.defaultLocale";
 	
 	@Inject
 	private WebResourceManager webResourceManager;
@@ -35,17 +40,17 @@ public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageRes
 	@Inject
 	private PageHeaderTool pageHeaderTool;
 	
-	@Value("${clobaframe.web.view.scriptMessageResource.path:" + DEFAULT_I18N_SCRIPT_PATH + "}")
+	@Value("${" + SETTING_KEY_SCRIPT_PATH + ":" + DEFAULT_SCRIPT_PATH + "}")
 	private String scriptPath;
 	
-	@Value("${clobaframe.web.view.scriptMessageResource.namePrefix:" + DEFAULT_I18N_SCRIPT_NAME_PREFIX + "}")
-	private String scriptNamePrefix;
+	@Value("${" + SETTING_KEY_SCRIPT_NAME_PREFIX + ":" + DEFAULT_SCRIPT_NAME_PREFIX + "}")
+	private String scriptNamePrefix = DEFAULT_SCRIPT_NAME_PREFIX;
 
-	@Value("${clobaframe.web.view.scriptMessageResource.nameSuffix:" + DEFAULT_I18N_SCRIPT_NAME_SUFFIX + "}")
-	private String scriptNameSuffix;
+	@Value("${" + SETTING_KEY_SCRIPT_NAME_SUFFIX + ":" + DEFAULT_SCRIPT_NAME_SUFFIX + "}")
+	private String scriptNameSuffix = DEFAULT_SCRIPT_NAME_SUFFIX;
 	
-	@Value("${clobaframe.web.view.scriptMessageResource.defaultLocale:" + DEFAULT_LOCALE + "}")
-	private Locale defaultLocale;
+	@Value("${" + SETTING_KEY_DEFAULT_LOCALE + ":" + DEFAULT_LOCALE + "}")
+	private Locale defaultLocale = Locale.ENGLISH;
 	
 	//private String defaultMessageResourceName = "message.js";
 	//private String localMessageResourceNameRegex = "^message_([a-z]{2})((_)([A-Z]{2}))?\\.js$";
@@ -86,10 +91,6 @@ public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageRes
 
 	public void setDefaultLocale(Locale defaultLocale) {
 		this.defaultLocale = defaultLocale;
-	}
-	
-	public void register(PageHeaderExtensionTool pageHeaderExtensionTool){
-		pageHeaderExtensionTool.addProvider(this);
 	}
 	
 //	@PostConstruct
@@ -137,7 +138,7 @@ public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageRes
 
 	@Override
 	public String getName() {
-		return getClass().getSimpleName();
+		return "scriptMessageResourcePageHeader";
 	}
 	
 	@Override

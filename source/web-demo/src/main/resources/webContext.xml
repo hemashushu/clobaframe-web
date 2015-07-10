@@ -45,8 +45,8 @@
 	<!-- init the velocity engine and set the configuration, for generate VelocityLayoutView -->
 	<bean id="velocityConfig"
 		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
-		<property name="resourceLoaderPath" value="classpath:WEB-INF/view/"/>
-		<property name="configLocation" value="classpath:WEB-INF/velocity.properties"/>
+		<property name="resourceLoaderPath" value="WEB-INF/view/"/>
+		<property name="configLocation" value="classpath:velocity.properties"/>
 	</bean>
 	
 	<!-- specify the view resolver that using VelocityLayoutView -->

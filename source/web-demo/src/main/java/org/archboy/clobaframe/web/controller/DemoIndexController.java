@@ -37,7 +37,7 @@ public class DemoIndexController {
 //	private RevisionPageManager pageManager;
 	
 	@Inject
-	private ThemePageHeaderTool themePageHeader;
+	private ThemePageHeaderTool themePageHeaderTool;
 	
 //	@Inject
 //	private NoteService noteService;
@@ -62,8 +62,8 @@ public class DemoIndexController {
 		this.themeManager = themeManager;
 	}
 
-	public void setThemePageHeader(ThemePageHeaderTool themePageHeader) {
-		this.themePageHeader = themePageHeader;
+	public void setThemePageHeaderTool(ThemePageHeaderTool themePageHeaderTool) {
+		this.themePageHeaderTool = themePageHeaderTool;
 	}
 	
 	@RequestMapping("/")
@@ -174,7 +174,7 @@ public class DemoIndexController {
 	
 	@ResponseBody
 	@RequestMapping("/setlanguage")
-	public ObjectMap setlanguage(Locale locale) {
+	public ObjectMap setLanguage(Locale locale) {
 		// route for org.springframework.web.servlet.i18n.LocaleChangeInterceptor
 		return new DefaultObjectMap()
 				.add("result", "success")
@@ -182,8 +182,8 @@ public class DemoIndexController {
 	}
 	
 	@ResponseBody
-	@RequestMapping("/changetheme")
-	public List<String> changeTheme(@RequestParam(value = "name", required = false, defaultValue = "") String name) {
+	@RequestMapping("/settheme")
+	public List<String> setTheme(@RequestParam(value = "name", required = false, defaultValue = "") String name) {
 		if (StringUtils.isNotEmpty(name)) {
 			ThemePackage themePackage = themeManager.get(ThemeManager.PACKAGE_CATALOG_LOCAL, name);
 			if (themePackage == null) {
@@ -197,7 +197,7 @@ public class DemoIndexController {
 //				.add("result", "success")
 //				.add("theme", name);
 		
-		return themePageHeader.list(name);
+		return themePageHeaderTool.list(name);
 	}
 	
 	@RequestMapping("/error")

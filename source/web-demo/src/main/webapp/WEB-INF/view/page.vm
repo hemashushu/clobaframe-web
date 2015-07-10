@@ -64,9 +64,9 @@
 	<div class="text-right theme-switch">
 		<h4 class="">$msg.write('index.changeTheme')</h4>
 		<ul class="list-inline">
-			<li><a href="/changetheme?name=">$msg.write('common.theme.default')</a></li>
-			<li><a href="/changetheme?name=dark">$msg.write('common.theme.dark')</a></li>
-			<li><a href="/changetheme?name=warm">$msg.write('common.theme.warm')</a></li>
+			<li><a href="/settheme?name=">$msg.write('common.theme.default')</a></li>
+			<li><a href="/settheme?name=dark">$msg.write('common.theme.dark')</a></li>
+			<li><a href="/settheme?name=warm">$msg.write('common.theme.warm')</a></li>
 		</ul>
 	</div>
 </div>

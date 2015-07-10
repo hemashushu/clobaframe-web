@@ -46,31 +46,36 @@ public class LocalThemeProvider implements ThemeProvider, ResourceLoaderAware, I
 	
 	// local resource path, usually relative to the 'src/main/webapp' folder.
 	// to using this repository, the web application war package must be expended when running.
-	private static final String DEFAULT_BASE_RESOURCE_PATH = ""; // "resources/default"
-	private static final String DEFAULT_BASE_RESOURCE_NAME_PREFIX = "resources/";
+	public static final String DEFAULT_BASE_RESOURCE_PATH = ""; // "resources/default"
+	public static final String DEFAULT_BASE_RESOURCE_NAME_PREFIX = "resources/";
+	public static final String DEFAULT_BASE_TEMPLATE_PATH = "";
+	public static final String DEFAULT_BASE_TEMPLATE_NAME_PREFIX = "template/";
+	public static final String DEFAULT_THEME_RESOURCE_PATH = ""; // "resources/theme";
+	public static final String DEFAULT_THEME_RESOURCE_NAME_PREFIX = "";
 
-	@Value("${clobaframe.web.theme.base.resource.path:" + DEFAULT_BASE_RESOURCE_PATH + "}")
+	public static final String SETTING_KEY_BASE_RESOURCE_PATH = "clobaframe.web.theme.base.resource.path";
+	public static final String SETTING_KEY_BASE_RESOURCE_NAME_PREFIX = "clobaframe.web.theme.base.resource.resourceNamePrefix";
+	public static final String SETTING_KEY_BASE_TEMPLATE_PATH = "clobaframe.web.theme.base.template.path";
+	public static final String SETTING_KEY_BASE_TEMPLATE_NAME_PREFIX = "clobaframe.web.theme.base.template.resourceNamePrefix";
+	public static final String SETTING_KEY_THEME_RESOURCE_PATH = "clobaframe.web.theme.local.path";
+	public static final String SETTING_KEY_THEME_RESOURCE_NAME_PREFIX = "clobaframe.web.theme.local.resourceNamePrefix";
+	
+	@Value("${" + SETTING_KEY_BASE_RESOURCE_PATH + ":" + DEFAULT_BASE_RESOURCE_PATH + "}")
 	private String baseResourcePath;
 
-	@Value("${clobaframe.web.theme.base.resource.resourceNamePrefix:" + DEFAULT_BASE_RESOURCE_NAME_PREFIX + "}")
+	@Value("${" + SETTING_KEY_BASE_RESOURCE_NAME_PREFIX + ":" + DEFAULT_BASE_RESOURCE_NAME_PREFIX + "}")
 	private String baseResourceNamePrefix;
-
-	private static final String DEFAULT_BASE_TEMPLATE_PATH = "";
-	private static final String DEFAULT_BASE_TEMPLATE_NAME_PREFIX = "template/";
 	
-	@Value("${clobaframe.web.theme.base.template.path:" + DEFAULT_BASE_TEMPLATE_PATH + "}")
+	@Value("${" + SETTING_KEY_BASE_TEMPLATE_PATH + ":" + DEFAULT_BASE_TEMPLATE_PATH + "}")
 	private String baseTemplatePath;
 	
-	@Value("${clobaframe.web.theme.base.template.resourceNamePrefix:" + DEFAULT_BASE_TEMPLATE_NAME_PREFIX + "}")
+	@Value("${" + SETTING_KEY_BASE_TEMPLATE_NAME_PREFIX + ":" + DEFAULT_BASE_TEMPLATE_NAME_PREFIX + "}")
 	private String baseTemplateNamePrefix;
-	
-	private static final String DEFAULT_THEME_RESOURCE_PATH = ""; // "resources/theme";
-	private static final String DEFAULT_THEME_RESOURCE_NAME_PREFIX = "";
 
-	@Value("${clobaframe.web.theme.local.path:" + DEFAULT_THEME_RESOURCE_PATH + "}")
+	@Value("${" + SETTING_KEY_THEME_RESOURCE_PATH + ":" + DEFAULT_THEME_RESOURCE_PATH + "}")
 	private String themeResourcePath;
 
-	@Value("${clobaframe.web.theme.local.resourceNamePrefix:" + DEFAULT_THEME_RESOURCE_NAME_PREFIX + "}")
+	@Value("${" + SETTING_KEY_THEME_RESOURCE_NAME_PREFIX + ":" + DEFAULT_THEME_RESOURCE_NAME_PREFIX + "}")
 	private String themeResourceNamePrefix;
 
 	private ThemePackage baseThemePackage;

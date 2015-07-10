@@ -15,7 +15,12 @@ import org.archboy.clobaframe.setting.support.Utils;
 public class InMemoryGlobalSettingRepository implements GlobalSettingProvider, GlobalSettingRepository {
 	
 	private Map<String, Object> setting = new LinkedHashMap<String, Object>();
-		
+
+	@Override
+	public String getName() {
+		return "inMemoryGlobalSettingRepository";
+	}
+	
 	@Override
 	public int getOrder() {
 		return PRIORITY_NORMAL;

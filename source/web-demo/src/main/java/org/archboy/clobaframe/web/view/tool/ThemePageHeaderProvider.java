@@ -13,13 +13,13 @@ import org.archboy.clobaframe.setting.common.global.GlobalSetting;
 public class ThemePageHeaderProvider implements PageHeaderProvider {
 
 	@Inject
-	private ThemePageHeaderTool themePageHeader;
+	private ThemePageHeaderTool themePageHeaderTool;
 	
 	@Inject
 	private GlobalSetting globalSetting;
 
-	public void setThemePageHeader(ThemePageHeaderTool themePageHeader) {
-		this.themePageHeader = themePageHeader;
+	public void setThemePageHeaderTool(ThemePageHeaderTool themePageHeaderTool) {
+		this.themePageHeaderTool = themePageHeaderTool;
 	}
 
 	public void setGlobalSetting(GlobalSetting globalSetting) {
@@ -28,13 +28,13 @@ public class ThemePageHeaderProvider implements PageHeaderProvider {
 
 	@Override
 	public String getName() {
-		return getClass().getSimpleName();
+		return "themePageHeader";
 	}
 	
 	@Override
 	public List<String> list() {
 		String themeName = (String)globalSetting.get("theme");
-		return themePageHeader.list(themeName);
+		return themePageHeaderTool.list(themeName);
 	}
 	
 }

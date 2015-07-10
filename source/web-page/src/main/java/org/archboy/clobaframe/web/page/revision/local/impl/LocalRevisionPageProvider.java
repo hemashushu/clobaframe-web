@@ -24,6 +24,7 @@ import org.archboy.clobaframe.web.page.PageProvider;
 import org.archboy.clobaframe.web.page.revision.RevisionPageInfo;
 import org.archboy.clobaframe.web.page.revision.RevisionPageProvider;
 import org.archboy.clobaframe.web.page.revision.impl.AbstractPreloadRevisionPageProvider;
+import static org.archboy.clobaframe.web.page.revision.impl.RevisionPageManagerImpl.DEFAULT_LOCALE;
 import org.archboy.clobaframe.web.page.revision.local.LocalRevisionPageInfo;
 import org.archboy.clobaframe.web.page.revision.local.LocalRevisionPageResourceInfo;
 import org.archboy.clobaframe.web.page.revision.local.LocalRevisionPageResourceNameStrategy;
@@ -55,9 +56,11 @@ public class LocalRevisionPageProvider extends AbstractPreloadRevisionPageProvid
 	
 	// local resource path, usually relative to the 'src/main/webapp' folder.
 	// to using this repository, the web application war package must be expended when running.
-	private static final String DEFAULT_PAGE_RESOURCE_PATH = "" ; //"resources/page";
+	public static final String DEFAULT_PAGE_RESOURCE_PATH = "" ; //"resources/page";
 	
-	@Value("${clobaframe.web.page.resource.path:" + DEFAULT_PAGE_RESOURCE_PATH + "}")
+	public static final String SETTING_KEY_PAGE_RESOURCE_PATH = "clobaframe.web.page.resource.path";
+	
+	@Value("${" + SETTING_KEY_PAGE_RESOURCE_PATH + ":" + DEFAULT_PAGE_RESOURCE_PATH + "}")
 	private String pageResourcePath;
 	
 	/**
@@ -95,10 +98,12 @@ public class LocalRevisionPageProvider extends AbstractPreloadRevisionPageProvid
 	
 	private Pattern resourceNamePattern = Pattern.compile(resourceNameRegex);
 	
-	private static final String DEFAULT_LOCALE = "en";
+	public static final String DEFAULT_LOCALE = "en";
 	
-	@Value("${clobaframe.web.page.defaultLocale:" + DEFAULT_LOCALE + "}")
-	private Locale defaultLocale;
+	public static final String SETTING_KEY_DEFAULT_LOCALE = "clobaframe.web.page.defaultLocale";
+	
+	@Value("${" + SETTING_KEY_DEFAULT_LOCALE + ":" + DEFAULT_LOCALE + "}")
+	private Locale defaultLocale = Locale.ENGLISH;
 
 	// content header
 	private static final String regexHeader1a = "^(.+)\\n(={1,})(\\n|$)";

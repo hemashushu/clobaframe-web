@@ -95,6 +95,11 @@ public class ThemeControllerTest {
 	public static class TestingGlobalSettingRepository implements GlobalSettingProvider, GlobalSettingRepository {
 
 		private Map<String, Object> setting = new LinkedHashMap<String, Object>();
+
+		@Override
+		public String getName() {
+			return "tesingGlobalSettingRepository";
+		}
 		
 		@Override
 		public int getOrder() {

@@ -31,10 +31,17 @@ public class RevisionPageManagerImpl implements RevisionPageManager {
 	@Autowired(required = false)
 	private RevisionPageRepository revisionPageRepository;
 	
-	private static final String DEFAULT_LOCALE = "en";
+	public static final String DEFAULT_LOCALE = "en";
+	public static final String DEFAULT_TEMPLATE_NAME = "page";
 	
-	@Value("${clobaframe.web.page.defaultLocale:" + DEFAULT_LOCALE + "}")
-	private Locale defaultLocale;
+	public static final String SETTING_KEY_DEFAULT_LOCALE = "clobaframe.web.page.defaultLocale";
+	public static final String SETTING_KEY_DEFAULT_TEMPLATE_NAME = "clobaframe.web.page.defaultTemplateName";
+	
+	@Value("${" + SETTING_KEY_DEFAULT_LOCALE + ":" + DEFAULT_LOCALE + "}")
+	private Locale defaultLocale = Locale.ENGLISH;
+	
+	@Value("${" + SETTING_KEY_DEFAULT_TEMPLATE_NAME + ":" + DEFAULT_TEMPLATE_NAME + "}")
+	private String defaultTemplateName = DEFAULT_TEMPLATE_NAME;
 
 	public void setRevisionPageProviders(List<RevisionPageProvider> revisionPageProviders) {
 		this.revisionPageProviders = revisionPageProviders;
@@ -46,6 +53,10 @@ public class RevisionPageManagerImpl implements RevisionPageManager {
 
 	public void setDefaultLocale(Locale defaultLocale) {
 		this.defaultLocale = defaultLocale;
+	}
+
+	public void setDefaultTemplateName(String defaultTemplateName) {
+		this.defaultTemplateName = defaultTemplateName;
 	}
 	
 	@Override
@@ -206,4 +217,9 @@ public class RevisionPageManagerImpl implements RevisionPageManager {
 	public Locale getDefaultLocale() {
 		return defaultLocale;
 	}
+
+	public String getDefaultTemplateName() {
+		return defaultTemplateName;
+	}
+	
 }

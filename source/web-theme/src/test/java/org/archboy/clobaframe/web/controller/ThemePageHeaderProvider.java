@@ -43,6 +43,11 @@ public class ThemePageHeaderProvider implements PageHeaderProvider {
 	public void setGlobalSetting(GlobalSetting globalSetting) {
 		this.globalSetting = globalSetting;
 	}
+
+	@Override
+	public String getName() {
+		return "themePageHeader";
+	}
 	
 	@Override
 	public List<String> list() {
