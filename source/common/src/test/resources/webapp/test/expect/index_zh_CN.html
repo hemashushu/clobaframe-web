@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+				<title>Test Page</title>
+				
+		<!-- Common style-sheet and script -->
+		<script src="/resource/js/jquery-1.11.1.js?v3029834a"></script>
+		
+		<!-- Extra and custom headers -->
+		<script src="/resource/js/i18n/messages.js?v565ad0a3"></script><script src="/resource/js/i18n/messages_zh_CN.js?vf60800bb"></script><link rel="alternate" href="/atom.xml" type="application/atom+xml" title="Clobaframe-web ATOM Feed"><meta name="rebots" content="noodp">
+		
+		<!-- Page special style-sheet and script -->
+		<link href="/resource/css/index.css?v0999d52a" rel="stylesheet"><script src="/resource/js/index.js?v4a6ae5f4"></script>
+		
+		<!-- meta keywords and meta description -->
+				<meta name="keywords" content="clobaframe web">
+				
+				<meta name="description" content="clobaframe web view test.">
+		
+		<!-- for home screen icon, iphone-retina with 120 x 120 px -->
+		<!-- see also: https://developer.apple.com/library/mac/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+		
+		<!-- favicon with 16 x 16 px, see http://www.w3.org/2005/10/howto-favicon -->
+		<link rel="icon" type="image/png" href="/favicon.png">
+		
+		<!-- android chrome -->
+		<!-- see http://updates.html5rocks.com/2014/11/Support-for-theme-color-in-Chrome-39-for-Android -->
+		<meta name="theme-color" content="#339900">
+		
+		<link rel="icon" type="image/png" sizes="192x192" href="/launcher-icon-192x192.png">
+		
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	
+	</head>
+	<body>
+		<!-- header -->		
+
+
+<section class="i18n">
+	<p>i18n message: 测试文本国际化</p>
+	<p>message with placeholder: 你好 WORLD!，现在时间 2015年7月10日。</p>
+</section>
+
+<section class="escape">
+	<p>HTML escape: text contains &lt;strong&gt;html tags&lt;/strong&gt;, 'single quotes' &amp; &quot;double quotes&quot;.</p>
+	<div>HTML paragraph escape: <p>line one.</p><p>line two.</p></div>
+</section>
+
+<!-- write custom page resource -->
+<script type="text/jsx" src="/resource/jsx/helloworld.js?v36bffcc8"></script>
+
+<script>
+	(function(window){
+		// write json
+		window.viewObject = {"name":"foo","id":"001"};
+	})(this);
+</script>
+		<!-- footer -->	</body>
+</html>

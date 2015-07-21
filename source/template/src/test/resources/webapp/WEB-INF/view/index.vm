@@ -1,0 +1,28 @@
+#set ($layout = 'layout/default.vm')
+#set ($pageTitle = 'Test Page')
+#set ($pageResources = ['css/index.css','js/index.js'])
+#set ($metaKeywords = 'clobaframe web')
+#set ($metaDescription = 'clobaframe web view test.')
+
+## add custom header
+$headerEx.add('meta', {"name":"rebots", "content":"noodp"}, false)
+
+<section class="i18n">
+	<p>i18n message: $msg.write('index.testI18nMessage')</p>
+	<p>message with placeholder: $msg.write('test.text2', 'WORLD!', $now)</p>
+</section>
+
+<section class="escape">
+	<p>HTML escape: $esc.html($html)</p>
+	<div>HTML paragraph escape: $esc.htmlP($htmlP)</div>
+</section>
+
+<!-- write custom page resource -->
+$header.writeResource('jsx/helloworld.js', 'script', 'src', {'type':'text/jsx'}, true)
+
+<script>
+	(function(window){
+		// write json
+		window.viewObject = $json.write($viewObject);
+	})(this);
+</script>

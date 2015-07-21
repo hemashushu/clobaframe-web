@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment></comment>
+	<entry key="common.language">中文(简体)</entry>
+
+	<entry key="test.text1">这是测试文字。</entry>
+	<entry key="test.text2">你好 {0}，现在时间 {1,date,long}。</entry>
+
+	<!-- 下面是页面文本 -->
+	<entry key="index.about">关于</entry>
+	<entry key="index.terms">服务条款</entry>
+	<entry key="index.privacy">隐私策略</entry>
+	
+	<entry key="index.testI18nMessage">测试文本国际化</entry>
+	<entry key="index.testScriptI18nMessage">测试脚本（JavaScript）文本国际化</entry>
+	<entry key="index.testScriptI18nMessage.currentLanguageTag">当前的语言为：</entry>
+	<entry key="index.testWebResource">测试网页资源</entry>
+	<entry key="index.testViewObject">测试视图对象（View Object）</entry>
+</properties>
