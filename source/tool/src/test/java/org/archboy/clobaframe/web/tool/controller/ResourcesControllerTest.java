@@ -1,4 +1,4 @@
-package org.archboy.clobaframe.web.controller;
+package org.archboy.clobaframe.web.tool.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import javax.inject.Inject;
 import org.apache.commons.io.IOUtils;
-import org.archboy.clobaframe.webresource.WebResourceManager;
+import org.archboy.clobaframe.resource.ResourceManager;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.ContextConfiguration;
@@ -18,9 +18,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import org.springframework.web.context.WebApplicationContext;
 
 /**
  *
@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ResourcesControllerTest {
 
 	@Inject
-	private WebResourceManager webResourceManager;
+	private ResourceManager resourceManager;
 	
 	@Inject
 	private ResourceLoader resourceLoader;
@@ -53,12 +53,12 @@ public class ResourcesControllerTest {
 
 	@Test
 	public void testSendResource() throws Exception {
-		String location1 = webResourceManager.getLocation("css/index.css");
-		String location2 = webResourceManager.getLocation("root/robots.txt");
-		String location3 = webResourceManager.getLocation("root/favicon-16x16.ico");
-		String location4 = webResourceManager.getLocation("root/favicon-16x16.png");
-		String location5 = webResourceManager.getLocation("root/apple-touch-icon-120x120.png");
-		String location6 = webResourceManager.getLocation("root/launcher-icon-192x192.png");
+		String location1 = resourceManager.getLocation("css/index.css");
+		String location2 = resourceManager.getLocation("root/robots.txt");
+		String location3 = resourceManager.getLocation("root/favicon-16x16.ico");
+		String location4 = resourceManager.getLocation("root/favicon-16x16.png");
+		String location5 = resourceManager.getLocation("root/apple-touch-icon-120x120.png");
+		String location6 = resourceManager.getLocation("root/launcher-icon-192x192.png");
 		
 		mock.perform(get(location1))
 				.andExpect(status().isOk())

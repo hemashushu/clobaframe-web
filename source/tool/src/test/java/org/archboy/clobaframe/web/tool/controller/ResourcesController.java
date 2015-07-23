@@ -1,13 +1,11 @@
-package org.archboy.clobaframe.web.controller;
+package org.archboy.clobaframe.web.tool.controller;
 
 import java.io.IOException;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.archboy.clobaframe.webresource.WebResourceSender;
-import org.springframework.beans.factory.annotation.Value;
+import org.archboy.clobaframe.resource.http.NamedResourceSender;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -21,16 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ResourcesController {
 
 	@Inject
-	private WebResourceSender webResourceSender;
-
-	private static final String DEFAULT_BASE_LOCATION = "/resource/";
-	private static final String DEFAULT_ROOT_RESOURCE_NAME_PREFIX = "root/";
+	private NamedResourceSender namedResourceSender;
 	
-	@Value("${clobaframe.webresource.baseLocation:" + DEFAULT_BASE_LOCATION + "}")
-	private String baseLocation;
-	
-	@Value("${clobaframe.webresource.repository.local.root.resourceNamePrefix:" + DEFAULT_ROOT_RESOURCE_NAME_PREFIX + "}")
-	private String rootResourceNamePrefix;
+	private String baseLocation = "/resource/";
+	private String rootResourceNamePrefix = "root/";
 	
 	/**
 	 * Send web resource.
@@ -48,37 +40,37 @@ public class ResourcesController {
 		String path = request.getRequestURI();
 		int baseLocationLength = baseLocation.length();
 		String resourceVersionName = path.substring(baseLocationLength);
-		webResourceSender.sendByVersionName(resourceVersionName, request, response);
+		namedResourceSender.sendByVersionName(resourceVersionName, request, response);
 	}
 
 	@RequestMapping("/robots.txt")
 	public void sendRebots(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		webResourceSender.send(rootResourceNamePrefix + "robots.txt", request, response);
+		namedResourceSender.send(rootResourceNamePrefix + "robots.txt", request, response);
 	}
 
 	@RequestMapping("/favicon.ico")
 	public void sendFavoriteIcon(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		webResourceSender.send(rootResourceNamePrefix + "favicon-16x16.ico", request, response);
+		namedResourceSender.send(rootResourceNamePrefix + "favicon-16x16.ico", request, response);
 	}
 	
 	@RequestMapping("/favicon.png")
 	public void sendFavoriteIconInPNG(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		webResourceSender.send(rootResourceNamePrefix + "favicon-16x16.png", request, response);
+		namedResourceSender.send(rootResourceNamePrefix + "favicon-16x16.png", request, response);
 	}
 	
 	@RequestMapping("/apple-touch-icon.png")
 	public void sendAppleTouchIcon(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		webResourceSender.send(rootResourceNamePrefix + "apple-touch-icon-120x120.png", request, response);
+		namedResourceSender.send(rootResourceNamePrefix + "apple-touch-icon-120x120.png", request, response);
 	}
 	
 	@RequestMapping("/launcher-icon-192x192.png")
 	public void sendLauncherIcon(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		webResourceSender.send(rootResourceNamePrefix + "launcher-icon-192x192.png", request, response);
+		namedResourceSender.send(rootResourceNamePrefix + "launcher-icon-192x192.png", request, response);
 	}
 	
 }

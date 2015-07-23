@@ -21,12 +21,18 @@ public class RouteDefinition {
 	private boolean responseBody;
 	
 	public static class ParameterInfo {
+		private String name;
 		private Class<?> clazz;
 		private Annotation annotation;
 
-		public ParameterInfo(Class<?> clazz, Annotation annotation) {
+		public ParameterInfo(String name, Class<?> clazz, Annotation annotation) {
+			this.name = name;
 			this.clazz = clazz;
 			this.annotation = annotation;
+		}
+
+		public String getName() {
+			return name;
 		}
 
 		public Class<?> getClazz() {

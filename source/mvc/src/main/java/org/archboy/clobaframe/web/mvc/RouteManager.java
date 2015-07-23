@@ -1,7 +1,6 @@
 package org.archboy.clobaframe.web.mvc;
 
-import javax.servlet.http.HttpServletRequest;
-import org.springframework.web.servlet.ViewResolver;
+import java.util.List;
 
 /**
  *
@@ -9,6 +8,6 @@ import org.springframework.web.servlet.ViewResolver;
  */
 public interface RouteManager {
 
-	RouteDefinition get(HttpServletRequest request);
+	List<RouteDefinition> list();
 	
 }
