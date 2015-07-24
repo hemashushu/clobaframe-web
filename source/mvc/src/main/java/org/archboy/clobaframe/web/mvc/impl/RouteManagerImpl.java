@@ -6,18 +6,15 @@ import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.ioc.BeanFactory;
 import org.archboy.clobaframe.web.mvc.RouteDefinition;
 import org.archboy.clobaframe.web.mvc.RouteManager;
 import org.springframework.core.OrderComparator;
-import org.springframework.core.Ordered;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -59,19 +56,29 @@ public class RouteManagerImpl implements RouteManager {
 		
 	}
 
-	private RouteDefinition buildDefinition(Object c, Method method) {
+	private RouteDefinition buildDefinition(Object controller, Method method) {
 		
 		RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
+		
+		// get mapping name
+		String routeMappingName = requestMapping.name();
+		if (StringUtils.isEmpty(routeMappingName)) {
+			routeMappingName = controller.getClass().getSimpleName() + "." + method.getName();
+		}
 		
 		// get url pattern
 		String[] urls = requestMapping.value();
 		Collection<Pattern> urlPatterns = new ArrayList<>();
+		
 		for(String url : urls){
 			urlPatterns.add(Pattern.compile(url));
 		}
 		
 		// get request methods
-		Collection<RequestMethod> requestMethods = Arrays.asList(requestMapping.method());
+		RequestMethod[] requestMethodArray = requestMapping.method();
+		Collection<RequestMethod> requestMethods = new ArrayList<>();
+		requestMethods.addAll(Arrays.asList(requestMethodArray));
+		
 		if (requestMethods.isEmpty()) {
 			requestMethods.add(RequestMethod.GET); // default request method.
 		}
@@ -93,9 +100,9 @@ public class RouteManagerImpl implements RouteManager {
 		// get return type
 		Class<?> returnType = method.getReturnType();
 		boolean responseBody = method.isAnnotationPresent(ResponseBody.class);
-		RouteDefinition routeDefinition = new RouteDefinition(
+		RouteDefinition routeDefinition = new RouteDefinition(routeMappingName,
 				urlPatterns, requestMethods,
-				c, method, parameterInfos,
+				controller, method, parameterInfos,
 				returnType, responseBody);
 		return routeDefinition;
 	}

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 public class RouteDefinition {
 
+	private String name;
 	private Collection<Pattern> urlPatterns;
 	private Collection<RequestMethod> requestMethods;
 	private Object controller;
@@ -44,7 +45,8 @@ public class RouteDefinition {
 		}
 	}
 
-	public RouteDefinition(Collection<Pattern> urlPatterns, Collection<RequestMethod> requestMethods, Object controller, Method method, Collection<ParameterInfo> parameterInfos, Class<?> returnType, boolean responseBody) {
+	public RouteDefinition(String name, Collection<Pattern> urlPatterns, Collection<RequestMethod> requestMethods, Object controller, Method method, Collection<ParameterInfo> parameterInfos, Class<?> returnType, boolean responseBody) {
+		this.name = name;
 		this.urlPatterns = urlPatterns;
 		this.requestMethods = requestMethods;
 		this.controller = controller;
@@ -52,6 +54,10 @@ public class RouteDefinition {
 		this.parameterInfos = parameterInfos;
 		this.returnType = returnType;
 		this.responseBody = responseBody;
+	}
+
+	public String getName() {
+		return name;
 	}
 	
 	public Object getController() {

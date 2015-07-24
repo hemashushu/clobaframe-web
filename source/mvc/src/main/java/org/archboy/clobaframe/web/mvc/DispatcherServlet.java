@@ -9,6 +9,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -23,6 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.OrderComparator;
 import org.springframework.http.HttpHeaders;
@@ -54,10 +57,11 @@ public class DispatcherServlet extends HttpServlet {
 	
 	@Inject
 	private ViewResolver viewResolver;
-	
-	private List<RouteDefinition> routeDefinitions;
 
+	private List<RouteDefinition> routeDefinitions;
 	private ObjectMapper objectMapper = new ObjectMapper();
+	
+	private final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
 	
 	public void setViewResolver(ViewResolver viewResolver) {
 		this.viewResolver = viewResolver;
@@ -71,7 +75,10 @@ public class DispatcherServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		System.out.println("---------- Servlet: init");
 		routeDefinitions = routeManager.list();
-		OrderComparator.sort(handlerExceptionResolvers);
+		
+		if (handlerExceptionResolvers != null && !handlerExceptionResolvers.isEmpty()){
+			OrderComparator.sort(handlerExceptionResolvers);
+		}
 	}
 
 	@Override
@@ -89,7 +96,8 @@ public class DispatcherServlet extends HttpServlet {
 			
 			// no exception resolver.
 			if (handlerExceptionResolvers == null || handlerExceptionResolvers.isEmpty()) {
-				log(e.getMessage(), e);
+				//log(e.getMessage(), e);
+				logger.error(e.getMessage(), e);
 				resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 				return;
 			}
@@ -111,7 +119,8 @@ public class DispatcherServlet extends HttpServlet {
 							}
 							view.render(modelAndView.getModel(), req, resp);
 						} catch (Exception ex) {
-							log(ex.getMessage(), ex);
+							//log(ex.getMessage(), ex);
+							logger.info(e.getMessage(), e);
 							resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
 							return;
 						}
@@ -129,11 +138,14 @@ public class DispatcherServlet extends HttpServlet {
 		
 		RouteMatcher routeMatcher = matcher(req);
 		if (routeMatcher == null) {
-			throw new FileNotFoundException("Page not found.");
+			throw new FileNotFoundException(
+					String.format("Resource [%s %s] not found.", req.getMethod(), req.getRequestURI()));
 		}
 		
 		RouteDefinition definition = routeMatcher.getRouteDefinition();
 		Matcher matcher = routeMatcher.getMatcher();
+		Object controller = definition.getController();
+		Method method = definition.getMethod();
 		
 		ExtendedModelMap model = new ExtendedModelMap();
 		
@@ -142,7 +154,7 @@ public class DispatcherServlet extends HttpServlet {
 		for(RouteDefinition.ParameterInfo parameterInfo : definition.getParameterInfos()) {
 			
 			String name = parameterInfo.getName();
-			Class<?> clazz = parameterInfo.getClass();
+			Class<?> clazz = parameterInfo.getClazz();
 			Annotation annotation = parameterInfo.getAnnotation();
 			
 			if (annotation == null) {
@@ -168,7 +180,10 @@ public class DispatcherServlet extends HttpServlet {
 				}else {
 					// no match type
 					throw new IllegalArgumentException(
-							String.format("No match type for the method parameter [%s].", name));
+							String.format("No match type for the parameter [%s] in method [%s#%s].",
+									name, 
+									controller.getClass().getName(), 
+									method.getName()));
 				}
 			}else{
 				// parameter with annotation
@@ -181,7 +196,10 @@ public class DispatcherServlet extends HttpServlet {
 					if (value == null) {
 						if (requestParam.required()){
 							throw new IllegalArgumentException(
-									String.format("Does not exist the request parameter [%s].", requestParam.value()));
+									String.format("Can not find the request parameter (in query string or post form field) [%s] in method [%s#%s].",
+											requestParam.value(), 
+											controller.getClass().getName(), 
+											method.getName()));
 						}else{
 							params.add(
 									requestParam.defaultValue().equals(ValueConstants.DEFAULT_NONE) ? 
@@ -197,7 +215,10 @@ public class DispatcherServlet extends HttpServlet {
 					String value = matcher.group(pathVariable.value());
 					if (StringUtils.isEmpty(value)) {
 						throw new IllegalArgumentException(
-								String.format("Does not exist path variable [%s].", pathVariable.value()));
+									String.format("Can not find the path variable [%s] in method [%s#%s].",
+											pathVariable.value(), 
+											controller.getClass().getName(), 
+											method.getName()));	
 					}else{
 						params.add(value);
 					}
@@ -211,18 +232,22 @@ public class DispatcherServlet extends HttpServlet {
 				}else{
 					// unsupport annotation type
 					throw new IllegalArgumentException(
-							String.format("Unsupport annotation type [%s].", annotationType.getName()));
+							String.format("Unsupport annotation type [%s] in method [%s#%s].",
+									annotationType.getName(),
+									controller.getClass().getName(), 
+									method.getName()));
 				}
 			}
 		} // end building params
+		
 		try {
-			Object returnObject = definition.getMethod().invoke(definition.getController(), params);
+			Object returnObject = method.invoke(controller, params.toArray());
 			
 			Class<?> clazz = definition.getReturnType();
 			if (definition.isResponseBody()) {
 				// return the object as response body
 				
-				if (clazz == null) {
+				if (clazz.equals(Void.TYPE)) {
 					// do nothing
 				}if (clazz.equals(String.class)) {
 					resp.getWriter().write((String)returnObject);
@@ -232,7 +257,7 @@ public class DispatcherServlet extends HttpServlet {
 				}
 			}else {
 				// return view
-				if (clazz == null) {
+				if (clazz.equals(Void.TYPE)) {
 					// do nothing
 				}else if (clazz.equals(String.class)){
 					View view = viewResolver.resolveViewName((String)returnObject, req.getLocale());
@@ -253,7 +278,10 @@ public class DispatcherServlet extends HttpServlet {
 					}
 				}else{
 					resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
-								String.format("Does not support the return type [%s].", clazz.getName()));
+								String.format("Does not support the return type [%s] in method [%s#%s].", 
+										clazz.getName(),
+										controller.getClass().getName(), 
+										method.getName()));
 				}
 			}
 			

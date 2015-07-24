@@ -17,6 +17,9 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<!-- for test -->
+		<org.eclipse.jetty-version>9.2.10.v20150310</org.eclipse.jetty-version>
 	</properties>
 
 	<dependencies>
@@ -174,6 +177,21 @@
 			<artifactId>servlet-api</artifactId>
 		</dependency>
 
+		<!-- Embed Jetty for test -->
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>${org.eclipse.jetty-version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-servlet</artifactId>
+			<version>${org.eclipse.jetty-version}</version>
+			<scope>test</scope>
+		</dependency>
+		
 		<!-- Clobaframe -->
 		<dependency>
 			<groupId>org.archboy.clobaframe</groupId>
