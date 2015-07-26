@@ -56,7 +56,6 @@ public class IndexControllerTest {
 
 	@After
 	public void tearDown() throws Exception {
-		//System.in.read();
 		// stop http server
 		server.stop();
 	}
@@ -108,6 +107,10 @@ public class IndexControllerTest {
 				.andRespond(withSuccess("{\"id\":456,\"name\":\"foo\"}", 
 						MediaType.APPLICATION_JSON));
 
+		// test request body
+		mockServer.expect(requestTo("/requestBody"))
+				.andRespond(withSuccess("{\"_name\":\"requestBody\",\"result\":\"success\"}", MediaType.APPLICATION_JSON));
+		
 		restTemplate.getForObject(new URI("/"), Map.class);
 		restTemplate.getForObject(new URI("/modelAndView"), Map.class);
 		restTemplate.getForObject(new URI("/writer"), String.class);
@@ -116,6 +119,19 @@ public class IndexControllerTest {
 		restTemplate.getForObject("/path/{id}", Map.class, "333");
 		restTemplate.getForObject("/string", String.class);
 		restTemplate.getForObject("/object", Map.class);
+		restTemplate.put("/requestBody", form);
+		
+		// verify all
+		mockServer.verify();
+	}
+	
+	@Test
+	public void testException() {
+		// test exception resolver
+		mockServer.expect(requestTo("/exception"))
+				.andRespond(withSuccess("{\"error\":{\"code\":\"notFound\"},\"_name\":\"error\"}", MediaType.APPLICATION_JSON));
+		
+		restTemplate.getForObject("/exception", Map.class);
 		
 		// verify all
 		mockServer.verify();

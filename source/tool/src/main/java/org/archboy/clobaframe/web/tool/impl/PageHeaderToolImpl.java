@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author yang
  */
-@Named
+@Named("pageHeaderTool")
 public class PageHeaderToolImpl implements PageHeaderTool {
 
 	/**

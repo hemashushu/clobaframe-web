@@ -6,12 +6,14 @@ import javax.inject.Named;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.web.tool.EscapeTool;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author yang
  */
-@Named
+@Named("escapeTool")
 public class EscapeToolImpl implements EscapeTool{
 	
 	@Override

@@ -13,7 +13,7 @@ import org.springframework.util.Assert;
  * 
  * @author yang
  */
-@Named
+@Named("pageHeaderWriter")
 public class PageHeaderWriterImpl implements PageHeaderWriter {
 
 	@Autowired(required = false)

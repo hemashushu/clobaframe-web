@@ -1,6 +1,7 @@
 package org.archboy.clobaframe.web.mvc.controller;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -82,6 +84,26 @@ public class IndexController {
 	@RequestMapping("^/object$")
 	public User object(){
 		return new User(456, "foo", "bar");
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="^/requestBody$", method = RequestMethod.PUT)
+	public String requestBody(@RequestBody Map<String, Object> map,
+			Model model) {
+		if (map.get("id").equals(222) &&
+				map.get("name").equals("bar")) {
+			model.addAttribute("result", "success");
+		}else{
+			model.addAttribute("result", "fail");
+		}
+		return "requestBody";
+	}
+	
+	@RequestMapping("^/exception$")
+	public void exception() throws IOException {
+		if (Boolean.TRUE) {
+			throw new FileNotFoundException("test");
+		}
 	}
 	
 	public static class User {

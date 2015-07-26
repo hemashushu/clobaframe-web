@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author yang
  */
-@Named
+@Named("jsonWriter")
 public class JsonWriterImpl implements JsonWriter{
 
 	private ObjectMapper mapper = new ObjectMapper();

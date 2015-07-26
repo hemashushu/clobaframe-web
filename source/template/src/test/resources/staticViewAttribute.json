@@ -1,0 +1,16 @@
+[
+	{"key":"res",
+		"bean":"resourceManagerImpl"},
+	{"key":"esc",
+		"bean":"escapeTool"},
+	{"key":"json",
+		"bean":"jsonWriter"},
+	{"key":"msg",
+		"bean":"messageSourceTool"},
+	{"key":"headerTool",
+		"bean":"pageHeaderTool"},
+	{"key":"headerWriter",
+		"bean":"pageHeaderWriter"},
+	{"key":"headerProvider",
+		"bean":"contextPageHeaderProvider"}
+]

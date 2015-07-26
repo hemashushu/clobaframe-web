@@ -195,13 +195,13 @@
 		<!-- Clobaframe -->
 		<dependency>
 			<groupId>org.archboy.clobaframe</groupId>
-			<artifactId>clobaframe-web-common</artifactId>
+			<artifactId>clobaframe-ioc</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>org.archboy.clobaframe</groupId>
-			<artifactId>clobaframe-ioc</artifactId>
+			<artifactId>clobaframe-web-tool</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

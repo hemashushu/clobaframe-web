@@ -73,7 +73,6 @@ public class DispatcherServlet extends HttpServlet {
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		System.out.println("---------- Servlet: init");
 		routeDefinitions = routeManager.list();
 		
 		if (handlerExceptionResolvers != null && !handlerExceptionResolvers.isEmpty()){
@@ -83,7 +82,7 @@ public class DispatcherServlet extends HttpServlet {
 
 	@Override
 	public void destroy() {
-		System.out.println("---------- Servlet: destroy");
+		//
 	}
 
 	@Override
@@ -92,19 +91,27 @@ public class DispatcherServlet extends HttpServlet {
 		
 		try{
 			handle(req, resp);
-		}catch(Exception e){
+		}catch(Exception ex){
+			
+			if (!(ex instanceof InvocationTargetException)) {
+				logger.error(ex.getMessage(), ex);
+				resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
+				return;
+			}
+			
+			Exception te = (Exception)((InvocationTargetException)ex).getTargetException();
 			
 			// no exception resolver.
 			if (handlerExceptionResolvers == null || handlerExceptionResolvers.isEmpty()) {
 				//log(e.getMessage(), e);
-				logger.error(e.getMessage(), e);
-				resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+				logger.error(te.getMessage(), te);
+				resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, te.getMessage());
 				return;
 			}
 			
 			// try to get the match resolver.
 			for (HandlerExceptionResolver resolver : handlerExceptionResolvers) {
-				ModelAndView modelAndView = resolver.resolveException(req, resp, null, e);
+				ModelAndView modelAndView = resolver.resolveException(req, resp, null, te);
 				if (modelAndView != null){
 					if (modelAndView.isEmpty()){
 						// the handler process the response itself.
@@ -118,10 +125,9 @@ public class DispatcherServlet extends HttpServlet {
 								return;
 							}
 							view.render(modelAndView.getModel(), req, resp);
-						} catch (Exception ex) {
-							//log(ex.getMessage(), ex);
-							logger.info(e.getMessage(), e);
-							resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
+						} catch (Exception tex) {
+							logger.info(tex.getMessage(), tex);
+							resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, tex.getMessage());
 							return;
 						}
 					}
@@ -134,7 +140,7 @@ public class DispatcherServlet extends HttpServlet {
 	}
 	
 	private void handle(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException, Exception {
+			throws Exception {
 		
 		RouteMatcher routeMatcher = matcher(req);
 		if (routeMatcher == null) {
@@ -189,6 +195,7 @@ public class DispatcherServlet extends HttpServlet {
 				// parameter with annotation
 				Class<?> annotationType = annotation.annotationType();
 				if (annotationType.equals(RequestParam.class)){
+					// handle @RequestParam
 					Assert.isTrue(clazz.equals(String.class));
 					
 					RequestParam requestParam = (RequestParam)annotation;
@@ -209,6 +216,7 @@ public class DispatcherServlet extends HttpServlet {
 						params.add(value);
 					}
 				}else if (annotationType.equals(PathVariable.class)) {
+					// handle @PathVariable
 					Assert.isTrue(clazz.equals(String.class));
 					
 					PathVariable pathVariable = (PathVariable)annotation;
@@ -223,6 +231,7 @@ public class DispatcherServlet extends HttpServlet {
 						params.add(value);
 					}
 				}else if (annotationType.equals(RequestBody.class)){
+					// handle @RequestBody
 					Assert.isTrue(clazz.equals(Map.class)); // only Map is supported currently.
 					
 					String encoding = (req.getCharacterEncoding() == null) ? "UTF-8" : req.getCharacterEncoding();
@@ -240,55 +249,50 @@ public class DispatcherServlet extends HttpServlet {
 			}
 		} // end building params
 		
-		try {
-			Object returnObject = method.invoke(controller, params.toArray());
-			
-			Class<?> clazz = definition.getReturnType();
-			if (definition.isResponseBody()) {
-				// return the object as response body
-				
-				if (clazz.equals(Void.TYPE)) {
-					// do nothing
-				}if (clazz.equals(String.class)) {
-					resp.getWriter().write((String)returnObject);
-				}else{
-					resp.setHeader(HttpHeaders.CONTENT_TYPE, "application/json; charset=utf-8");
-					objectMapper.writeValue(resp.getOutputStream(), returnObject);
-				}
-			}else {
-				// return view
-				if (clazz.equals(Void.TYPE)) {
-					// do nothing
-				}else if (clazz.equals(String.class)){
-					View view = viewResolver.resolveViewName((String)returnObject, req.getLocale());
-					if (view == null) {
-						resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
-								String.format("View [%s] not found.", returnObject));
-					}else{
-						view.render(model, req, resp);
-					}
-				}else if (clazz.equals(ModelAndView.class)){
-					ModelAndView modelAndView = (ModelAndView)returnObject;
-					View view = viewResolver.resolveViewName(modelAndView.getViewName(), req.getLocale());
-					if (view == null) {
-						resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
-								String.format("View [%s] not found.", returnObject));
-					}else{
-						view.render(modelAndView.getModel(), req, resp);
-					}
-				}else{
-					resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
-								String.format("Does not support the return type [%s] in method [%s#%s].", 
-										clazz.getName(),
-										controller.getClass().getName(), 
-										method.getName()));
-				}
+		// excute
+		Object returnObject = method.invoke(controller, params.toArray());
+
+		Class<?> clazz = definition.getReturnType();
+		if (definition.isResponseBody()) {
+			// return the object as response body
+
+			if (clazz.equals(Void.TYPE)) {
+				// do nothing
+			}if (clazz.equals(String.class)) {
+				resp.getWriter().write((String)returnObject);
+			}else{
+				resp.setHeader(HttpHeaders.CONTENT_TYPE, "application/json; charset=utf-8");
+				objectMapper.writeValue(resp.getOutputStream(), returnObject);
 			}
-			
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-			throw new IllegalArgumentException(ex);
+		}else {
+			// return view
+			if (clazz.equals(Void.TYPE)) {
+				// do nothing
+			}else if (clazz.equals(String.class)){
+				View view = viewResolver.resolveViewName((String)returnObject, req.getLocale());
+				if (view == null) {
+					resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+							String.format("View [%s] not found.", returnObject));
+				}else{
+					view.render(model, req, resp);
+				}
+			}else if (clazz.equals(ModelAndView.class)){
+				ModelAndView modelAndView = (ModelAndView)returnObject;
+				View view = viewResolver.resolveViewName(modelAndView.getViewName(), req.getLocale());
+				if (view == null) {
+					resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+							String.format("View [%s] not found.", returnObject));
+				}else{
+					view.render(modelAndView.getModel(), req, resp);
+				}
+			}else{
+				resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+							String.format("Does not support the return type [%s] in method [%s#%s].", 
+									clazz.getName(),
+									controller.getClass().getName(), 
+									method.getName()));
+			}
 		}
-		
 	}
 	
 	private RouteMatcher matcher(HttpServletRequest request) {

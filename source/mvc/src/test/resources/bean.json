@@ -6,5 +6,7 @@
 	{"id":"routeManager",
 		"class":"org.archboy.clobaframe.web.mvc.impl.RouteManagerImpl"},
 	{"id":"dispatcherServlet",
-		"class":"org.archboy.clobaframe.web.mvc.DispatcherServlet"}
+		"class":"org.archboy.clobaframe.web.mvc.DispatcherServlet"},
+	{"id":"fileNotFoundExceptionResolver",
+		"class":"org.archboy.clobaframe.web.mvc.controller.exception.resolver.FileNotFoundExceptionResolver"}
 ]

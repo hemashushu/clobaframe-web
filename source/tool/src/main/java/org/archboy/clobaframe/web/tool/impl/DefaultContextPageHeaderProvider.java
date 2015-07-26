@@ -22,7 +22,7 @@ import org.springframework.web.context.request.RequestContextHolder;
  * 
  * @author yang
  */
-@Named
+@Named("contextPageHeaderProvider")
 public class DefaultContextPageHeaderProvider implements ContextPageHeaderProvider {
 
 	public static final String DEFAULT_PAGE_HEADER_REQUEST_ATTRIBUTE_NAME = "clobaframe.web.tool.pageHeaders";

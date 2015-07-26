@@ -12,7 +12,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
  *
  * @author yang
  */
-@Named
+@Named("messageSourceTool")
 public class MessageSourceToolImpl implements MessageSourceTool {
 
 	@Inject

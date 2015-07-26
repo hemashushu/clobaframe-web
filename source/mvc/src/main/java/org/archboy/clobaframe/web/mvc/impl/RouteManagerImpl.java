@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.ioc.BeanFactory;
 import org.archboy.clobaframe.web.mvc.RouteDefinition;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  *
  * @author yang
  */
+@Named
 public class RouteManagerImpl implements RouteManager {
 
 	@Inject

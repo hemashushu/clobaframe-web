@@ -177,15 +177,10 @@
 		<!-- Clobaframe -->
 		<dependency>
 			<groupId>org.archboy.clobaframe</groupId>
-			<artifactId>clobaframe-setting</artifactId>
+			<artifactId>clobaframe-web-tool</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
-		<dependency>
-			<groupId>org.archboy.clobaframe</groupId>
-			<artifactId>clobaframe-resource</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		
 	</dependencies>
 
 </project>

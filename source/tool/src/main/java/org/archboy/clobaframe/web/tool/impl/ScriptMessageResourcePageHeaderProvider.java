@@ -27,10 +27,10 @@ public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageRes
 	public static final String DEFAULT_SCRIPT_NAME_SUFFIX = ".js";
 	public static final String DEFAULT_LOCALE = "en";
 	
-	public static final String SETTING_KEY_SCRIPT_PATH = "clobaframe.web.view.scriptMessage.path";
-	public static final String SETTING_KEY_SCRIPT_NAME_PREFIX = "clobaframe.web.view.scriptMessage.namePrefix";
-	public static final String SETTING_KEY_SCRIPT_NAME_SUFFIX = "clobaframe.web.view.scriptMessage.nameSuffix";
-	public static final String SETTING_KEY_DEFAULT_LOCALE = "clobaframe.web.view.scriptMessage.defaultLocale";
+	public static final String SETTING_KEY_SCRIPT_PATH = "clobaframe.web.tool.scriptMessage.path";
+	public static final String SETTING_KEY_SCRIPT_NAME_PREFIX = "clobaframe.web.tool.scriptMessage.namePrefix";
+	public static final String SETTING_KEY_SCRIPT_NAME_SUFFIX = "clobaframe.web.tool.scriptMessage.nameSuffix";
+	public static final String SETTING_KEY_DEFAULT_LOCALE = "clobaframe.web.tool.scriptMessage.defaultLocale";
 	
 	@Inject
 	private ResourceManager resourceManager;
