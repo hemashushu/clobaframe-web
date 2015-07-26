@@ -54,7 +54,7 @@
 		</dependency>
 
 		<!-- Spring Core -->
-		<dependency>
+<!--		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 		</dependency>
@@ -67,7 +67,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-		</dependency>
+		</dependency>-->
 
 		<!-- Spring Test support -->
 		<dependency>
@@ -84,7 +84,7 @@
 		<!-- Clobaframe -->
 		<dependency>
 			<groupId>org.archboy.clobaframe</groupId>
-			<artifactId>clobaframe-web-view</artifactId>
+			<artifactId>clobaframe-web-template</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		

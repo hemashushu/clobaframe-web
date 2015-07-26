@@ -13,11 +13,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.io.MimeTypeDetector;
+import org.archboy.clobaframe.resource.ResourceProvider;
+import org.archboy.clobaframe.resource.ResourceProviderSet;
 import org.archboy.clobaframe.web.theme.ThemeManager;
 import org.archboy.clobaframe.web.theme.ThemePackage;
 import org.archboy.clobaframe.web.theme.ThemeProvider;
-import org.archboy.clobaframe.webresource.WebResourceProvider;
-import org.archboy.clobaframe.webresource.WebResourceProviderSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,7 +38,7 @@ public class LocalThemeProvider implements ThemeProvider { //, ResourceLoaderAwa
 	private MimeTypeDetector mimeTypeDetector;
 
 	@Inject
-	private WebResourceProviderSet webResourceProviderSet;
+	private ResourceProviderSet resourceProviderSet;
 	
 	// local resource path, usually relative to the 'src/main/webapp' folder.
 	// to using this repository, the web application war package must be expended when running.
@@ -89,8 +89,8 @@ public class LocalThemeProvider implements ThemeProvider { //, ResourceLoaderAwa
 		this.mimeTypeDetector = mimeTypeDetector;
 	}
 
-	public void setWebResourceProviderSet(WebResourceProviderSet webResourceProviderSet) {
-		this.webResourceProviderSet = webResourceProviderSet;
+	public void setResourceProviderSet(ResourceProviderSet resourceProviderSet) {
+		this.resourceProviderSet = resourceProviderSet;
 	}
 
 	public void setBaseResourcePath(String baseResourcePath) {
@@ -145,10 +145,10 @@ public class LocalThemeProvider implements ThemeProvider { //, ResourceLoaderAwa
 			
 			if (localThemeResourcePath != null) {
 				// insert theme resource provider to web resource manager.
-				WebResourceProvider webResourceProvider = new LocalThemeWebResourceProvider(
+				ResourceProvider resourceProvider = new LocalThemeWebResourceProvider(
 					localThemeResourcePath, themeResourceNamePrefix, mimeTypeDetector);
 				
-				webResourceProviderSet.addProvider(webResourceProvider);
+				resourceProviderSet.addProvider(resourceProvider);
 			}
 		}
 	}

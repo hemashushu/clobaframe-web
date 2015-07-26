@@ -13,11 +13,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.ioc.BeanFactory;
+import org.archboy.clobaframe.web.mvc.RequestRoute;
 import org.archboy.clobaframe.web.mvc.RouteDefinition;
 import org.archboy.clobaframe.web.mvc.RouteManager;
 import org.springframework.core.OrderComparator;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -49,7 +49,7 @@ public class RouteManagerImpl implements RouteManager {
 			Method[] methods = clazz.getDeclaredMethods();
 			
 			for (Method method : methods) {
-				if (method.isAnnotationPresent(RequestMapping.class)) {
+				if (method.isAnnotationPresent(RequestRoute.class)) {
 					RouteDefinition routeDefinition = buildDefinition(controller, method);
 					routeDefinitions.add(routeDefinition);
 				}
@@ -60,7 +60,7 @@ public class RouteManagerImpl implements RouteManager {
 
 	private RouteDefinition buildDefinition(Object controller, Method method) {
 		
-		RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
+		RequestRoute requestMapping = method.getAnnotation(RequestRoute.class);
 		
 		// get mapping name
 		String routeMappingName = requestMapping.name();

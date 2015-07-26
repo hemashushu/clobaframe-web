@@ -1,18 +1,15 @@
 package org.archboy.clobaframe.web.controller;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.common.collection.DefaultObjectMap;
 import org.archboy.clobaframe.common.collection.ObjectMap;
-import org.archboy.clobaframe.setting.common.global.GlobalSetting;
-import org.archboy.clobaframe.web.exception.NotFoundException;
-import org.archboy.clobaframe.web.page.PageInfo;
-import org.archboy.clobaframe.web.page.revision.RevisionPageManager;
+import org.archboy.clobaframe.setting.global.GlobalSetting;
 import org.archboy.clobaframe.web.theme.ThemeManager;
 import org.archboy.clobaframe.web.theme.ThemePackage;
-import org.archboy.clobaframe.web.view.tool.PageHeaderExtensionTool;
 import org.archboy.clobaframe.web.view.tool.ThemePageHeaderTool;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -183,11 +180,11 @@ public class DemoIndexController {
 	
 	@ResponseBody
 	@RequestMapping("/settheme")
-	public List<String> setTheme(@RequestParam(value = "name", required = false, defaultValue = "") String name) {
+	public List<String> setTheme(@RequestParam(value = "name", required = false, defaultValue = "") String name) throws FileNotFoundException {
 		if (StringUtils.isNotEmpty(name)) {
 			ThemePackage themePackage = themeManager.get(ThemeManager.PACKAGE_CATALOG_LOCAL, name);
 			if (themePackage == null) {
-				throw new NotFoundException("no this theme:" + name);
+				throw new FileNotFoundException("no this theme:" + name);
 			}
 		}
 		

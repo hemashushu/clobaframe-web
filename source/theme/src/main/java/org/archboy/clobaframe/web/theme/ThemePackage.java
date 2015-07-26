@@ -2,7 +2,6 @@ package org.archboy.clobaframe.web.theme;
 
 import java.util.Collection;
 import java.util.Date;
-import org.archboy.clobaframe.webresource.WebResourceInfo;
 
 /**
  *

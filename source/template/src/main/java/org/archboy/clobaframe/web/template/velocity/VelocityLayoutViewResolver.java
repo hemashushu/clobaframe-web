@@ -51,7 +51,7 @@ public class VelocityLayoutViewResolver implements ViewResolver {
 	private String contentType = DEFAULT_CONTENT_TYPE;
 	
 	@Inject
-	private VelocityEngineFactory velocityEngineFactory;
+	private VelocityConfigurer velocityEngineFactory;
 
 	@Inject
 	private StaticAttributeLoader staticAttributeLoader;

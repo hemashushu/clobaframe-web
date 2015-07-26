@@ -1,11 +1,10 @@
 package org.archboy.clobaframe.web.theme.local;
 
 import java.io.File;
-import org.archboy.clobaframe.io.file.impl.DefaultFileBaseResourceInfo;
+import org.archboy.clobaframe.resource.local.LocalResourceInfo;
 import org.archboy.clobaframe.web.theme.ThemeResourceInfo;
-import org.archboy.clobaframe.webresource.local.LocalWebResourceInfo;
 
-public class LocalThemeResourceInfo extends LocalWebResourceInfo implements ThemeResourceInfo {
+public class LocalThemeResourceInfo extends LocalResourceInfo implements ThemeResourceInfo {
 
 	private boolean isTemplate;
 	

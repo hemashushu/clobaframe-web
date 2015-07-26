@@ -14,11 +14,10 @@ import org.junit.runner.RunWith;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.io.IOUtils;
-import org.archboy.clobaframe.setting.common.global.GlobalSettingProvider;
-import org.archboy.clobaframe.setting.common.global.GlobalSettingRepository;
+import org.archboy.clobaframe.setting.global.GlobalSettingProvider;
+import org.archboy.clobaframe.setting.global.GlobalSettingRepository;
 import org.archboy.clobaframe.setting.support.Utils;
 import org.archboy.clobaframe.web.theme.ThemeManager;
-import org.archboy.clobaframe.webresource.WebResourceManager;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.ContextConfiguration;
@@ -38,12 +37,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration("src/test/resources/webapp")
 @ContextConfiguration(locations = { "/webapp/WEB-INF/servlet.xml"})
 public class ThemeControllerTest {
-
-	@Inject
-	private ThemeManager themeManager;
-	
-	@Inject
-	private ResourceLoader resourceLoader;
 	
 	@Inject
 	private WebApplicationContext webApplicationContext;

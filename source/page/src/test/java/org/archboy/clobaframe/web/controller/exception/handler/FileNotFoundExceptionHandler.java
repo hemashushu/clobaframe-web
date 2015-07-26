@@ -4,10 +4,9 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
 import org.archboy.clobaframe.common.collection.DefaultObjectMap;
 import org.archboy.clobaframe.common.collection.ObjectMap;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
@@ -23,10 +22,7 @@ import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolv
  * @author yang
  */
 @Named
-public class PageNotFoundExceptionHandler implements HandlerExceptionResolver {
-
-	private static final String HEADER_EXPIRES = "Expires";
-	private static final String HEADER_CACHE_CONTROL = "Cache-Control";
+public class FileNotFoundExceptionHandler implements HandlerExceptionResolver {
 
 	@Override
 	public ModelAndView resolveException(HttpServletRequest request,
@@ -35,13 +31,15 @@ public class PageNotFoundExceptionHandler implements HandlerExceptionResolver {
 
 		if (ex instanceof FileNotFoundException) {
 			// disable the client cache
-			response.setHeader(HEADER_CACHE_CONTROL, "no-cache");
-			response.setDateHeader(HEADER_EXPIRES, 1L);
-			
+			response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");
+			response.setDateHeader(HttpHeaders.EXPIRES, 1L);
+			response.setContentType("application/json");
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			
 			ObjectMap viewModel = new DefaultObjectMap()
-					.add("code", "notFound");
+					.addChild("error")
+						.add("code", "notFound")
+					.top();
 			
 			return new ModelAndView("error", viewModel);
 		}

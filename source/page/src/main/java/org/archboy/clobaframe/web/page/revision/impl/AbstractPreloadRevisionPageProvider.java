@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.query.simplequery.SimpleQuery;
 import org.archboy.clobaframe.web.page.PageInfo;
@@ -39,7 +38,7 @@ public abstract class AbstractPreloadRevisionPageProvider implements RevisionPag
 		for (Map<Locale, Set<RevisionPageInfo>> localePages : pageMap.values()){
 			for (Set<RevisionPageInfo> revisions : localePages.values()) {
 				pageInfos.add(
-					SimpleQuery.from(revisions).orderByDesc("revision").first());
+						SimpleQuery.from(revisions).orderByDesc("revision").first());
 			}
 		}
 		return pageInfos;
@@ -52,7 +51,7 @@ public abstract class AbstractPreloadRevisionPageProvider implements RevisionPag
 			Set<RevisionPageInfo> revisions = localePages.get(locale);
 			if (revisions != null) {
 				pageInfos.add(
-					SimpleQuery.from(revisions).orderByDesc("revision").first());
+						SimpleQuery.from(revisions).orderByDesc("revision").first());
 			}
 		}
 		return pageInfos;

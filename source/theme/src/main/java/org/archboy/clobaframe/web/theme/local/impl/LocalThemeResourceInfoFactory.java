@@ -2,13 +2,12 @@ package org.archboy.clobaframe.web.theme.local.impl;
 
 import java.io.File;
 import org.archboy.clobaframe.io.MimeTypeDetector;
-import org.archboy.clobaframe.io.ResourceInfo;
 import org.archboy.clobaframe.io.file.FileBaseResourceInfo;
 import org.archboy.clobaframe.io.file.FileBaseResourceInfoFactory;
 import org.archboy.clobaframe.io.file.impl.DefaultFileBaseResourceInfoFactory;
+import org.archboy.clobaframe.resource.local.LocalResourceNameStrategy;
 import org.archboy.clobaframe.web.theme.ThemeManager;
 import org.archboy.clobaframe.web.theme.local.LocalThemeResourceInfo;
-import org.archboy.clobaframe.webresource.local.LocalWebResourceNameStrategy;
 
 /**
  *
@@ -16,9 +15,9 @@ import org.archboy.clobaframe.webresource.local.LocalWebResourceNameStrategy;
  */
 public class LocalThemeResourceInfoFactory extends DefaultFileBaseResourceInfoFactory implements FileBaseResourceInfoFactory {
 
-	private LocalWebResourceNameStrategy resourceNameStrategy;
+	private LocalResourceNameStrategy resourceNameStrategy;
 
-	public LocalThemeResourceInfoFactory(MimeTypeDetector mimeTypeDetector, LocalWebResourceNameStrategy resourceNameStrategy) {
+	public LocalThemeResourceInfoFactory(MimeTypeDetector mimeTypeDetector, LocalResourceNameStrategy resourceNameStrategy) {
 		super(mimeTypeDetector);
 		this.resourceNameStrategy = resourceNameStrategy;
 	}

@@ -6,12 +6,12 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
+import org.archboy.clobaframe.web.mvc.RequestRoute;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,13 +24,13 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class IndexController {
 	
-	@RequestMapping("^/$")
+	@RequestRoute("^/$")
 	public String index(Model model){
 		model.addAttribute("hello", "world");
 		return "index";
 	}
 	
-	@RequestMapping("^/modelAndView$")
+	@RequestRoute("^/modelAndView$")
 	public ModelAndView modelAndView(){
 		ModelAndView mv = new ModelAndView("modeAndView")
 				.addObject("id", 123)
@@ -38,13 +38,13 @@ public class IndexController {
 		return mv;
 	}
 	
-	@RequestMapping("^/writer$")
+	@RequestRoute("^/writer$")
 	public void writer(HttpServletResponse response, Writer writer) throws IOException{
 		response.setHeader(HttpHeaders.CONTENT_TYPE, "text/plain");
 		writer.write("hello");
 	}
 
-	@RequestMapping("^/query$")
+	@RequestRoute("^/query$")
 	public String query(Model model, 
 			@RequestParam("id") String id,
 			@RequestParam("name") String name) {
@@ -55,7 +55,7 @@ public class IndexController {
 		return "query";
 	}
 	
-	@RequestMapping(value = "^/form$", method = RequestMethod.POST)
+	@RequestRoute(value = "^/form$", method = RequestMethod.POST)
 	public String form(Model model, 
 			@RequestParam("id") String id,
 			@RequestParam("name") String name) {
@@ -66,7 +66,7 @@ public class IndexController {
 		return "form";
 	}
 	
-	@RequestMapping("^/path/(?<id>\\w+)$")
+	@RequestRoute("^/path/(?<id>\\w+)$")
 	public String path(Model model, 
 			@PathVariable("id") String id){
 		model.addAttribute("id", id);
@@ -74,20 +74,20 @@ public class IndexController {
 	}
 	
 	@ResponseBody
-	@RequestMapping("^/string$")
+	@RequestRoute("^/string$")
 	public String string(HttpServletResponse response){
 		response.setHeader(HttpHeaders.CONTENT_TYPE, "text/plain");
 		return "hello world";
 	}
 	
 	@ResponseBody
-	@RequestMapping("^/object$")
+	@RequestRoute("^/object$")
 	public User object(){
 		return new User(456, "foo", "bar");
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="^/requestBody$", method = RequestMethod.PUT)
+	@RequestRoute(value="^/requestBody$", method = RequestMethod.PUT)
 	public String requestBody(@RequestBody Map<String, Object> map,
 			Model model) {
 		if (map.get("id").equals(222) &&
@@ -99,7 +99,7 @@ public class IndexController {
 		return "requestBody";
 	}
 	
-	@RequestMapping("^/exception$")
+	@RequestRoute("^/exception$")
 	public void exception() throws IOException {
 		if (Boolean.TRUE) {
 			throw new FileNotFoundException("test");

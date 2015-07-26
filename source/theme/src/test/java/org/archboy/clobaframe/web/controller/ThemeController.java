@@ -1,7 +1,7 @@
 package org.archboy.clobaframe.web.controller;
 
 import javax.inject.Inject;
-import org.archboy.clobaframe.setting.common.global.GlobalSetting;
+import org.archboy.clobaframe.setting.global.GlobalSetting;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

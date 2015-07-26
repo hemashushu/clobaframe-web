@@ -7,10 +7,11 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.lang3.StringUtils;
+import org.archboy.clobaframe.resource.ResourceManager;
 import org.archboy.clobaframe.web.theme.ThemeManager;
 import org.archboy.clobaframe.web.theme.ThemePackage;
 import org.archboy.clobaframe.web.theme.ThemeResourceInfo;
-import org.archboy.clobaframe.webresource.WebResourceManager;
+import org.archboy.clobaframe.web.tool.PageHeaderTool;
 
 /**
  *
@@ -53,7 +54,7 @@ public class ThemePageHeaderTool {
 		
 		for(ThemeResourceInfo themeResourceInfo : themePackage.listResource()){
 			String mimeType = themeResourceInfo.getMimeType();
-			if (WebResourceManager.MIME_TYPE_STYLE_SHEET.equals(mimeType)) {
+			if (ResourceManager.MIME_TYPE_STYLE_SHEET.equals(mimeType)) {
 				String header = pageHeaderTool.writeResource(themeResourceInfo.getName(),
 						"link", "href", attrs, false);
 				headers.add(header);

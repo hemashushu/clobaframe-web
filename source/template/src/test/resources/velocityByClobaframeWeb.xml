@@ -12,6 +12,10 @@
 		">
 
 	<!-- Apache Velocity -->
+	<bean id="velocityEngineFactory"
+		class="org.archboy.clobaframe.web.template.velocity.VelocityConfigurer">
+	</bean>
+	
 	<bean id="staticAttributeLoader"
 		class="org.archboy.clobaframe.web.template.SpringStaticAttributeLoader">
 		<property name="staticAttributesDefineFileName" value="classpath:staticViewAttribute.json"/>

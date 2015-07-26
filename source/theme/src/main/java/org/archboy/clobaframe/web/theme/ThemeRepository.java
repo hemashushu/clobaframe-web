@@ -1,9 +1,5 @@
 package org.archboy.clobaframe.web.theme;
 
-
-import org.archboy.clobaframe.web.theme.ThemePackage;
-import org.archboy.clobaframe.webresource.WebResourceInfo;
-
 /**
  *
  * @author yang

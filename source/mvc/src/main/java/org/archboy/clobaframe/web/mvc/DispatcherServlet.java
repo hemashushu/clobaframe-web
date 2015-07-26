@@ -62,6 +62,10 @@ public class DispatcherServlet extends HttpServlet {
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
 	private final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
+
+	public void setRouteManager(RouteManager routeManager) {
+		this.routeManager = routeManager;
+	}
 	
 	public void setViewResolver(ViewResolver viewResolver) {
 		this.viewResolver = viewResolver;

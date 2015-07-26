@@ -1,20 +1,11 @@
 package org.archboy.clobaframe.web.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Locale;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import javax.inject.Inject;
-import org.apache.commons.io.IOUtils;
-import org.archboy.clobaframe.web.page.revision.RevisionPageManager;
-import org.archboy.clobaframe.webresource.WebResourceManager;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -33,12 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(locations = { "/webapp/WEB-INF/servlet.xml"})
 public class PageControllerTest {
 
-	@Inject
-	private RevisionPageManager revisionPageManager;
-	
-	@Inject
-	private ResourceLoader resourceLoader;
-	
 	@Inject
 	private WebApplicationContext webApplicationContext;
 

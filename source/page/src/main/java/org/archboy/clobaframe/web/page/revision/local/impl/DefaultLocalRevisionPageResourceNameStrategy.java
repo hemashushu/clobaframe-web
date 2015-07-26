@@ -3,7 +3,6 @@ package org.archboy.clobaframe.web.page.revision.local.impl;
 import java.io.File;
 import org.archboy.clobaframe.io.file.local.DefaultLocalFileNameStrategy;
 import org.archboy.clobaframe.web.page.revision.local.LocalRevisionPageResourceNameStrategy;
-import org.archboy.clobaframe.webresource.local.LocalWebResourceNameStrategy;
 
 /**
  * 

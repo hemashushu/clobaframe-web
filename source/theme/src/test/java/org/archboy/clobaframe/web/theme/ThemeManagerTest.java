@@ -3,23 +3,16 @@ package org.archboy.clobaframe.web.theme;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import javax.inject.Inject;
-import javax.inject.Named;
-import org.apache.commons.lang3.StringUtils;
-import org.archboy.clobaframe.webresource.WebResourceManager;
+import org.archboy.clobaframe.resource.ResourceManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static org.junit.Assert.*;
@@ -37,7 +30,7 @@ public class ThemeManagerTest {
 	private ThemeManager themeManager;
 
 	@Inject
-	private WebResourceManager webResourceManager;
+	private ResourceManager resourceManager;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -118,7 +111,7 @@ public class ThemeManagerTest {
 		// test get web resource
 		for (String name : imageCssJs1) {
 			String webResourceName = name.substring("resource/".length());
-			assertNotNull(webResourceManager.getResource(webResourceName));
+			assertNotNull(resourceManager.get(webResourceName));
 		}
 		
 		// get package by name
@@ -189,7 +182,7 @@ public class ThemeManagerTest {
 		
 		// test get web resource
 		for (String name : resources1) {
-			assertNotNull(webResourceManager.getResource(name));
+			assertNotNull(resourceManager.get(name));
 		}
 	}
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
 <head>
-$header.writeResource('js/index.js')
-$headerEx.write()
+$headerTool.writeResource('js/index.js')
+$headerWriter.write()
 </head>

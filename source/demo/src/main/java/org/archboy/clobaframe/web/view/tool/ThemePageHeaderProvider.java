@@ -3,7 +3,8 @@ package org.archboy.clobaframe.web.view.tool;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.archboy.clobaframe.setting.common.global.GlobalSetting;
+import org.archboy.clobaframe.setting.global.GlobalSetting;
+import org.archboy.clobaframe.web.tool.PageHeaderProvider;
 
 /**
  *

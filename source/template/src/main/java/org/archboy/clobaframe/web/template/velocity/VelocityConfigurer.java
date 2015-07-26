@@ -15,15 +15,18 @@ import org.archboy.clobaframe.web.template.ViewResourceManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
+import org.springframework.ui.velocity.VelocityEngineFactory;
 
 /**
- * See {@link VelocityConfigurer} and {@link VelocityEngineFactory}.
+ * See 
+ * {@link org.springframework.web.servlet.view.velocity.VelocityConfigurer} 
+ * and 
+ * {@link VelocityEngineFactory}.
  * 
  * @author yang
  */
-@Named
-public class VelocityEngineFactory {
+//@Named
+public class VelocityConfigurer {
 	
 	@Inject
 	private ResourceLoader resourceLoader;
@@ -35,21 +38,29 @@ public class VelocityEngineFactory {
 	private static final String DEFAULT_CONFIG_FILE_NAME = ""; // "classpath:velocity.properties"
 	
 	@Value("${" + SETTING_KEY_CONFIG_FILE_NAME + ":" + DEFAULT_CONFIG_FILE_NAME + "}")
-	private String configFileName;
+	private String configLocation;
 	
 	private VelocityEngine velocityEngine;
+
+	public void setResourceLoader(ResourceLoader resourceLoader) {
+		this.resourceLoader = resourceLoader;
+	}
+
+	public void setViewResourceManager(ViewResourceManager viewResourceManager) {
+		this.viewResourceManager = viewResourceManager;
+	}
 	
 	@PostConstruct
 	public void init() throws Exception {
 		Properties properties = new Properties();
 		
-		if (StringUtils.isNotEmpty(configFileName)) {
-			Resource resource = resourceLoader.getResource(configFileName);
+		if (StringUtils.isNotEmpty(configLocation)) {
+			Resource resource = resourceLoader.getResource(configLocation);
 			
 			if (!resource.exists()) {
 				throw new FileNotFoundException(String.format(
 						"Can not find the velocity config file [%s].",
-						configFileName));
+						configLocation));
 			}
 
 			InputStream in = null;

@@ -10,7 +10,6 @@ import org.archboy.clobaframe.web.theme.ThemePackage;
 import org.archboy.clobaframe.web.theme.ThemeProvider;
 import org.archboy.clobaframe.web.theme.ThemeRepository;
 import org.archboy.clobaframe.web.theme.ThemeResourceInfo;
-import org.archboy.clobaframe.webresource.WebResourceInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 

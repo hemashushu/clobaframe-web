@@ -2,7 +2,6 @@ package org.archboy.clobaframe.web.theme.local.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -20,13 +19,12 @@ import org.archboy.clobaframe.io.MimeTypeDetector;
 import org.archboy.clobaframe.io.file.FileBaseResourceInfo;
 import org.archboy.clobaframe.io.file.FileBaseResourceInfoFactory;
 import org.archboy.clobaframe.io.file.local.DefaultLocalResourceProvider;
-import org.archboy.clobaframe.io.file.local.LocalFileNameStrategy;
 import org.archboy.clobaframe.io.file.local.LocalResourceProvider;
+import org.archboy.clobaframe.resource.local.DefaultLocalResourceNameStrategy;
+import org.archboy.clobaframe.resource.local.LocalResourceNameStrategy;
 import org.archboy.clobaframe.web.theme.ThemePackage;
 import org.archboy.clobaframe.web.theme.ThemeResourceInfo;
 import org.archboy.clobaframe.web.theme.local.LocalThemeResourceInfo;
-import org.archboy.clobaframe.webresource.local.DefaultLocalWebResourceNameStrategy;
-import org.archboy.clobaframe.webresource.local.LocalWebResourceNameStrategy;
 
 /**
  *
@@ -57,10 +55,11 @@ public class LocalThemePackage implements ThemePackage {
 			String resourceNamePrefix, 
 			MimeTypeDetector mimeTypeDetector) {
 		
-		LocalWebResourceNameStrategy localWebResourceNameStrategy = new DefaultLocalWebResourceNameStrategy(
+		
+		LocalResourceNameStrategy localWebResourceNameStrategy = new DefaultLocalResourceNameStrategy(
 			basePath, resourceNamePrefix);
 
-		FileBaseResourceInfoFactory fileBaseResourceInfoFactory = new LocalThemeResourceInfoFactory(
+		LocalThemeResourceInfoFactory fileBaseResourceInfoFactory = new LocalThemeResourceInfoFactory(
 			mimeTypeDetector, localWebResourceNameStrategy);
 
 		localResourceProvider = new DefaultLocalResourceProvider(basePath, 

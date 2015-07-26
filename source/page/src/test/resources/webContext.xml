@@ -36,7 +36,7 @@
 	
 	<!-- Apache Velocity -->
 	<!-- init the velocity engine and set the configuration, for generate VelocityLayoutView -->
-	<bean id="velocityConfig"
+	<bean id="velocityConfigurer"
 		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
 		<property name="resourceLoaderPath" value="/WEB-INF/view/"/>
 		<property name="configLocation" value="classpath:velocity.properties"/>
@@ -45,47 +45,25 @@
 	<!-- specify the view resolver that using VelocityLayoutView -->
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">
+		<property name="layoutUrl" value="layout/default.vm"/>
 		<property name="cache" value="true"/>
 		<property name="prefix" value=""/>
 		<property name="suffix" value=".vm"/>
 		<property name="contentType" value="text/html; charset=UTF-8"/>
-		<property name="layoutUrl" value="layout/default.vm"/>
 		<property name="attributesMap">
 			<map>
 				<!-- from the clobaframe-webresource -->
-				<entry key="res" value-ref="webResourceManagerImpl"/>
+				<entry key="res" value-ref="resourceManagerImpl"/>
 				
 				<!-- from the package org.archboy.clobaframe.web.view.tool.impl -->
-				<!--
-				<entry key="esc" value-ref="extendedEscapeTool"/>
-				<entry key="json" value-ref="jsonWriterImpl"/>
-				<entry key="msg" value-ref="messageSourceToolImpl"/>
-				<entry key="header" value-ref="pageHeaderToolImpl"/>
-				<entry key="headerEx" value-ref="pageHeaderExtensionImpl"/>
-				-->
-			
-				<!-- rarely use -->
-				<!--
-				<entry key="date" value-ref="localeAwareComparisonDateTool"/>
-				<entry key="num" value-ref="localeAwareNumberTool"/>
-				-->
+				<entry key="esc" value-ref="escapeTool"/>
+				<entry key="json" value-ref="jsonWriter"/>
+				<entry key="msg" value-ref="messageSourceTool"/>
+				<entry key="headerTool" value-ref="pageHeaderTool"/>
+				<entry key="headerWriter" value-ref="pageHeaderWriter"/>
+				<entry key="headerProvider" value-ref="contextPageHeaderProvider"/>
 			</map>
 		</property>
 	</bean>
 	
-	<!-- Configures Handler Interceptors -->
-	<mvc:interceptors>
-		<!-- Changes the locale when a 'locale' request parameter is sent; e.g.
-			/?locale=de -->
-		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
-	</mvc:interceptors>
-
-	<!-- Saves locale change by cookie -->
-	<bean id="localeResolver"
-		class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
-		<property name="cookieName" value="LOCALE"/>
-		<!-- one month, 30 days -->
-		<property name="cookieMaxAge" value="2592000"/>
-		<property name="cookieDomain" value="localhost"/>
-	</bean>
 </beans>

@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -21,12 +20,11 @@ import org.archboy.clobaframe.io.file.FileBaseResourceInfoFactory;
 import org.archboy.clobaframe.io.file.local.DefaultLocalResourceProvider;
 import org.archboy.clobaframe.io.file.local.LocalFileNameStrategy;
 import org.archboy.clobaframe.io.file.local.LocalResourceProvider;
+import org.archboy.clobaframe.resource.local.DefaultLocalResourceNameStrategy;
+import org.archboy.clobaframe.resource.local.LocalResourceNameStrategy;
 import org.archboy.clobaframe.web.theme.ThemePackage;
 import org.archboy.clobaframe.web.theme.ThemeResourceInfo;
 import org.archboy.clobaframe.web.theme.local.LocalThemeResourceInfo;
-import org.archboy.clobaframe.webresource.WebResourceInfo;
-import org.archboy.clobaframe.webresource.local.DefaultLocalWebResourceNameStrategy;
-import org.archboy.clobaframe.webresource.local.LocalWebResourceNameStrategy;
 
 /**
  *
@@ -45,10 +43,10 @@ public class MultiPathLocalThemePackage implements ThemePackage {
 			MimeTypeDetector mimeTypeDetector) {
 
 		for(Map.Entry<File, String> pathName : pathNames) {
-			LocalWebResourceNameStrategy localWebResourceNameStrategy = new DefaultLocalWebResourceNameStrategy(
+			LocalResourceNameStrategy localWebResourceNameStrategy = new DefaultLocalResourceNameStrategy(
 				pathName.getKey(), pathName.getValue());
 
-			FileBaseResourceInfoFactory fileBaseResourceInfoFactory = new LocalThemeResourceInfoFactory(
+			LocalThemeResourceInfoFactory fileBaseResourceInfoFactory = new LocalThemeResourceInfoFactory(
 				mimeTypeDetector, localWebResourceNameStrategy);
 
 			LocalResourceProvider localResourceProvider = new DefaultLocalResourceProvider(pathName.getKey(), 

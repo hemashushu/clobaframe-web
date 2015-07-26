@@ -3,8 +3,8 @@ package org.archboy.clobaframe.web.service;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.inject.Named;
-import org.archboy.clobaframe.setting.common.global.GlobalSettingProvider;
-import org.archboy.clobaframe.setting.common.global.GlobalSettingRepository;
+import org.archboy.clobaframe.setting.global.GlobalSettingProvider;
+import org.archboy.clobaframe.setting.global.GlobalSettingRepository;
 import org.archboy.clobaframe.setting.support.Utils;
 
 /**

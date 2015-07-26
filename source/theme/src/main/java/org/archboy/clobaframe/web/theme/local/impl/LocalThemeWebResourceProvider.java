@@ -5,31 +5,26 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.archboy.clobaframe.io.MimeTypeDetector;
+import org.archboy.clobaframe.io.NamedResourceInfo;
 import org.archboy.clobaframe.io.file.FileBaseResourceInfo;
-import org.archboy.clobaframe.io.file.FileBaseResourceInfoFactory;
 import org.archboy.clobaframe.io.file.local.DefaultLocalResourceProvider;
-import org.archboy.clobaframe.io.file.local.LocalFileNameStrategy;
 import org.archboy.clobaframe.io.file.local.LocalResourceProvider;
-import org.archboy.clobaframe.web.theme.ThemeResourceInfo;
-import org.archboy.clobaframe.web.theme.local.LocalThemeResourceInfo;
-import org.archboy.clobaframe.webresource.WebResourceInfo;
-import org.archboy.clobaframe.webresource.WebResourceProvider;
-import org.archboy.clobaframe.webresource.local.DefaultLocalWebResourceNameStrategy;
-import org.archboy.clobaframe.webresource.local.LocalWebResourceInfoFactory;
-import org.archboy.clobaframe.webresource.local.LocalWebResourceNameStrategy;
+import org.archboy.clobaframe.resource.ResourceProvider;
+import org.archboy.clobaframe.resource.local.DefaultLocalResourceNameStrategy;
+import org.archboy.clobaframe.resource.local.LocalResourceNameStrategy;
 
 /**
  *
  * @author yang
  */
-public class LocalThemeWebResourceProvider implements WebResourceProvider {
+public class LocalThemeWebResourceProvider implements ResourceProvider {
 
 	private LocalResourceProvider localResourceProvider;
 	
 	public LocalThemeWebResourceProvider(File basePath, String namePrefix, MimeTypeDetector mimeTypeDetector) {
 		
-		LocalWebResourceNameStrategy localWebResourceNameStrategy = new DefaultLocalWebResourceNameStrategy(basePath, namePrefix);
-		LocalWebResourceInfoFactory localWebResourceInfoFactory = new LocalWebResourceInfoFactory(mimeTypeDetector, localWebResourceNameStrategy);
+		LocalResourceNameStrategy localWebResourceNameStrategy = new DefaultLocalResourceNameStrategy(basePath, namePrefix);
+		LocalThemeResourceInfoFactory localWebResourceInfoFactory = new LocalThemeResourceInfoFactory(mimeTypeDetector, localWebResourceNameStrategy);
 			
 		this.localResourceProvider = new DefaultLocalResourceProvider(
 				basePath, 
@@ -48,17 +43,17 @@ public class LocalThemeWebResourceProvider implements WebResourceProvider {
 	}
 
 	@Override
-	public WebResourceInfo getByName(String name) {
-		return (WebResourceInfo)localResourceProvider.getByName(name);
+	public NamedResourceInfo getByName(String name) {
+		return (NamedResourceInfo)localResourceProvider.getByName(name);
 	}
 
 	@Override
-	public Collection<WebResourceInfo> list() {
-		List<WebResourceInfo> webResourceInfos = new ArrayList<WebResourceInfo>();
+	public Collection<NamedResourceInfo> list() {
+		List<NamedResourceInfo> resourceInfos = new ArrayList<NamedResourceInfo>();
 		for(FileBaseResourceInfo fileBaseResourceInfo : localResourceProvider.list()){
-			webResourceInfos.add((WebResourceInfo)fileBaseResourceInfo);
+			resourceInfos.add((NamedResourceInfo)fileBaseResourceInfo);
 		}
-		return webResourceInfos;
+		return resourceInfos;
 	}
 	
 }

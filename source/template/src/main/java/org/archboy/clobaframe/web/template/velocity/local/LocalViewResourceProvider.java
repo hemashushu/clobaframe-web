@@ -26,7 +26,7 @@ import org.springframework.core.io.ResourceLoader;
  * @author yang
  */
 @Named
-public class LocalViewResourceProvider implements ViewResourceProvider, ResourceLoaderAware {
+public class LocalViewResourceProvider implements ViewResourceProvider { //, ResourceLoaderAware {
 
 	public static final String SETTING_KEY_LOCAL_PATH = "clobaframe.web.template.local.path";
 	public static final String SETTING_KEY_RESOURCE_NAME_PREFIX = "clobaframe.web.template.local.resourceNamePrefix";
@@ -58,7 +58,6 @@ public class LocalViewResourceProvider implements ViewResourceProvider, Resource
 		this.resourceNamePrefix = resourceNamePrefix;
 	}
 
-	@Override
 	public void setResourceLoader(ResourceLoader resourceLoader) {
 		this.resourceLoader = resourceLoader;
 	}
@@ -99,6 +98,10 @@ public class LocalViewResourceProvider implements ViewResourceProvider, Resource
 
 	@Override
 	public NamedResourceInfo get(String name) {
+//		if (localResourceProvider == null) {
+//			return null;
+//		}
+		
 		return (NamedResourceInfo)localResourceProvider.getByName(name);
 	}
 
