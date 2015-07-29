@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		">
+
+	<!-- Apache Velocity -->
+	<!-- init the velocity engine and set the configuration, for generate VelocityLayoutView -->
+	<bean id="velocityConfigurer"
+		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property name="resourceLoaderPath" value="WEB-INF/view/"/>
+		<property name="configLocation" value="classpath:velocity.properties"/>
+	</bean>
+	
+	<!-- specify the view resolver that using VelocityLayoutView -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">
+		<property name="layoutUrl" value="layout/default.vm"/>
+		<property name="cache" value="true"/>
+		<property name="prefix" value=""/>
+		<property name="suffix" value=".vm"/>
+		<property name="contentType" value="text/html; charset=UTF-8"/>
+		<property name="attributesMap">
+			<map>
+				<!-- from the clobaframe-webresource -->
+				<entry key="res" value-ref="resourceManagerImpl"/>
+				
+				<!-- from the package org.archboy.clobaframe.web.view.tool.impl -->
+				<entry key="esc" value-ref="escapeTool"/>
+				<entry key="date" value-ref="dateTimeFormatter"/>
+				<entry key="json" value-ref="jsonWriter"/>
+				<entry key="msg" value-ref="messageSourceTool"/>
+				<entry key="headerTool" value-ref="pageHeaderTool"/>
+				<entry key="headerWriter" value-ref="pageHeaderWriter"/>
+				<entry key="headerProvider" value-ref="contextPageHeaderProvider"/>
+			</map>
+		</property>
+	</bean>
+</beans>

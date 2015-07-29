@@ -11,68 +11,23 @@
 		http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
 		">
 
+	<import resource="classpath:velocityByClobaframeWeb.xml" />
 	
 	<!-- Scans the classpath of this application for @Components to deploy as
 		beans -->
-	<context:component-scan base-package="
-		org.archboy.clobaframe.web.controller,
-		org.archboy.clobaframe.web.view,
-		org.archboy.clobaframe.web.page,
-		org.archboy.clobaframe.web.theme,
-		"/>
+	<context:component-scan base-package="org.archboy.clobaframe.web"/>
 		
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<!-- JSR-303 support will be detected on classpath and enabled automatically -->
 	<mvc:annotation-driven/>
 	
-	<!-- application settings -->
-	<bean id="applicationSetting"
-		  class="org.archboy.clobaframe.setting.common.application.impl.ApplicationSettingImpl">
+	<!-- Spring placeholder configurer -->
+	<bean id="propertyPlaceholderConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
 				<value>classpath:web.properties</value>
 			</list>
-		</property>
-	</bean>
-
-	<bean id="propertyPlaceholderConfigurer"
-		  class="org.archboy.clobaframe.setting.common.application.config.PropertyPlaceholderConfigurer">
-		<property name="applicationSetting" ref="applicationSetting"/>
-		<property name="ignoreUnresolvablePlaceholders" value="true"/>
-	</bean>
-	
-	<!-- Apache Velocity -->
-	<!-- init the velocity engine and set the configuration, for generate VelocityLayoutView -->
-	<bean id="velocityConfigurer"
-		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
-		<property name="resourceLoaderPath" value="WEB-INF/view/"/>
-		<property name="configLocation" value="classpath:velocity.properties"/>
-	</bean>
-	
-	<!-- specify the view resolver that using VelocityLayoutView -->
-	<bean id="viewResolver"
-		class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">
-		<property name="cache" value="true"/>
-		<property name="prefix" value=""/>
-		<property name="suffix" value=".vm"/>
-		<property name="contentType" value="text/html; charset=UTF-8"/>
-		<property name="layoutUrl" value="layout/default.vm"/>
-		<property name="attributesMap">
-			<map>
-				<!-- from the clobaframe-webresource -->
-				<entry key="res" value-ref="webResourceManagerImpl"/>
-				
-				<!-- from the package org.archboy.clobaframe.web.view.tool.impl -->
-				<entry key="esc" value-ref="extendedEscapeTool"/>
-				<entry key="json" value-ref="jsonWriterImpl"/>
-				<entry key="msg" value-ref="messageSourceToolImpl"/>
-				<entry key="header" value-ref="pageHeaderToolImpl"/>
-				<entry key="headerEx" value-ref="pageHeaderExtensionToolImpl"/>
-				
-				<!-- rarely use -->
-				<entry key="date" value-ref="localeAwareComparisonDateTool"/>
-				<entry key="num" value-ref="localeAwareNumberTool"/>
-			</map>
 		</property>
 	</bean>
 	

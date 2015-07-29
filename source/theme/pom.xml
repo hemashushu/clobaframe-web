@@ -177,25 +177,17 @@
 		<!-- Clobaframe -->
 		<dependency>
 			<groupId>org.archboy.clobaframe</groupId>
-			<artifactId>clobaframe-web-tool</artifactId>
+			<artifactId>clobaframe-web-tools</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		
-		<!-- Clobaframe for test -->
+		<!-- for inject theme template -->
 		<dependency>
 			<groupId>org.archboy.clobaframe</groupId>
 			<artifactId>clobaframe-web-template</artifactId>
 			<version>${project.version}</version>
-			<scope>test</scope>
 		</dependency>
 				
 	</dependencies>
 
-	<repositories>
-	</repositories>
-
-	<build>
-		<plugins>
-		</plugins>
-	</build>
 </project>

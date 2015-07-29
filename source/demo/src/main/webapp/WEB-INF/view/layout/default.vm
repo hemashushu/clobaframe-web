@@ -10,13 +10,13 @@
 		#end
 		
 		<!-- Common style-sheet and script -->
-		$header.writeResources(['css/combine-common.css','js/combine-common.js'])
+		$headerTool.writeResources(['css/combine-common.css','js/combine-common.js'])
 		
 		<!-- Page special style-sheet and script -->
-		$header.writeResources($pageResources)
+		$headerTool.writeResources($pageResources)
 
 		<!-- Extra and custom headers -->
-		$headerEx.write()
+		$headerWriter.write()
 		
 		<!-- meta keywords and meta description -->
 		#if ($metaKeywords)

@@ -114,59 +114,59 @@
 			<artifactId>velocity</artifactId>
 		</dependency>
 
-		<dependency>
+<!--		<dependency>
 			<groupId>org.apache.velocity</groupId>
 			<artifactId>velocity-tools</artifactId>
-		</dependency>
+		</dependency>-->
 		
 		<!-- need by Apache Velocity, new artifact is commons-lang3 -->
-		<dependency>
+<!--		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
-		</dependency>
+		</dependency>-->
 
 		<!-- need by Apache Velocity, Velocity Tools, new artifact is commons-collections4 -->
-		<dependency>
+<!--		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
-		</dependency>
+		</dependency>-->
 
 		<!-- need by Apache Velocity Tools, new artifact is commons-digester3 -->
-		<dependency>
+<!--		<dependency>
 			<groupId>commons-digester</groupId>
 			<artifactId>commons-digester</artifactId>
-		</dependency>
+		</dependency>-->
 		
 		<!-- need by Apache Velocity Tools -->
-		<dependency>
+<!--		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
-		</dependency>
+		</dependency>-->
 
 		<!-- need by Apache Velocity Tools -->
-		<dependency>
+<!--		<dependency>
 			<groupId>commons-validator</groupId>
 			<artifactId>commons-validator</artifactId>
-		</dependency>
+		</dependency>-->
 		
 		<!-- need by Apache Velocity Tools -->
-		<dependency>
+<!--		<dependency>
 			<groupId>commons-chain</groupId>
 			<artifactId>commons-chain</artifactId>
-		</dependency>
+		</dependency>-->
 
 		<!-- need by Apache Velocity Tools -->
-		<dependency>
+<!--		<dependency>
 			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
-		</dependency>
+		</dependency>-->
 
 		<!-- XML Parser -->
 		<!-- need by Apache Velocity Tools -->
-		<dependency>
+<!--		<dependency>
 			<groupId>xml-apis</groupId>
 			<artifactId>xml-apis</artifactId>
-		</dependency>
+		</dependency>-->
 		
 		<!-- javax servlet -->
 		<dependency>
@@ -177,7 +177,7 @@
 		<!-- Clobaframe -->
 		<dependency>
 			<groupId>org.archboy.clobaframe</groupId>
-			<artifactId>clobaframe-web-tool</artifactId>
+			<artifactId>clobaframe-web-tools</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		

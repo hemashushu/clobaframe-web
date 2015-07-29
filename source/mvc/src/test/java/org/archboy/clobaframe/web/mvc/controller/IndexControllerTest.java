@@ -3,7 +3,6 @@ package org.archboy.clobaframe.web.mvc.controller;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
-import org.archboy.clobaframe.ioc.BeanFactory;
 import org.archboy.clobaframe.ioc.impl.DefaultBeanFactory;
 import org.archboy.clobaframe.web.mvc.DispatcherServlet;
 import org.eclipse.jetty.server.Server;
@@ -12,6 +11,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.ListableBeanFactory;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
 import org.springframework.http.MediaType;
@@ -23,7 +23,7 @@ import org.springframework.web.client.RestTemplate;
  */
 public class IndexControllerTest {
 	
-	private BeanFactory beanFactory;
+	private ListableBeanFactory beanFactory;
 	private RestTemplate restTemplate;
 	private MockRestServiceServer mockServer;
 	private Server server;
@@ -35,7 +35,7 @@ public class IndexControllerTest {
 				"classpath:clobaframe.properties", 
 				"classpath:web.properties");
 		
-		DispatcherServlet dispatcherServlet = beanFactory.get(DispatcherServlet.class);
+		DispatcherServlet dispatcherServlet = beanFactory.getBean(DispatcherServlet.class);
 		
 		// build mock object
 		restTemplate = new RestTemplate();
@@ -58,6 +58,8 @@ public class IndexControllerTest {
 	public void tearDown() throws Exception {
 		// stop http server
 		server.stop();
+		
+		((DefaultBeanFactory)beanFactory).close();
 	}
 
 	@Test

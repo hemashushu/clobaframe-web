@@ -26,10 +26,7 @@
 		<context:include-filter type="annotation" expression="org.aspectj.lang.annotation.Aspect"/>
 		-->
 		<!-- exclude the the web package -->
-<!--		<context:exclude-filter type="regex" expression="org\.archboy\.clobaframe\.web\.controller\..*"/>
-		<context:exclude-filter type="regex" expression="org\.archboy\.clobaframe\.web\.view\..*"/>
-		<context:exclude-filter type="regex" expression="org\.archboy\.clobaframe\.web\.page\..*"/>
-		<context:exclude-filter type="regex" expression="org\.archboy\.clobaframe\.web\.theme\..*"/>-->
+		<context:exclude-filter type="regex" expression="org\.archboy\.clobaframe\.web\..*"/>
 	</context:component-scan>
 
 	<!-- enable AspectJ annotation -->
@@ -42,16 +39,10 @@
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
+				<value>classpath:application.properties</value>
 				<value>classpath:clobaframe.properties</value>
-				<value>classpath:web.properties</value>
 			</list>
 		</property>
-	</bean>
-
-	<bean id="propertyPlaceholderConfigurer"
-		  class="org.archboy.clobaframe.setting.common.application.config.PropertyPlaceholderConfigurer">
-		<property name="applicationSetting" ref="applicationSetting"/>
-		<property name="ignoreUnresolvablePlaceholders" value="true"/>
 	</bean>
 
 	<!-- Application Message Bundle -->

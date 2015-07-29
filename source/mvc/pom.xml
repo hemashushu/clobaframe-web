@@ -201,9 +201,10 @@
 		
 		<dependency>
 			<groupId>org.archboy.clobaframe</groupId>
-			<artifactId>clobaframe-web-tool</artifactId>
+			<artifactId>clobaframe-web-tools</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
 	</dependencies>
 
 </project>

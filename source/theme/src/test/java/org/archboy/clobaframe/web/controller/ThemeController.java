@@ -21,4 +21,14 @@ public class ThemeController {
 		globalSetting.set("theme", name);
 		return "index";
 	}
+	
+	@RequestMapping("/index")
+	public String index() {
+		return "index";
+	}
+	
+	@RequestMapping("/page")
+	public String page(){
+		return "page";
+	}
 }

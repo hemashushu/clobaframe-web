@@ -84,6 +84,12 @@
 		<!-- Clobaframe -->
 		<dependency>
 			<groupId>org.archboy.clobaframe</groupId>
+			<artifactId>clobaframe-web-tool</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.archboy.clobaframe</groupId>
 			<artifactId>clobaframe-web-template</artifactId>
 			<version>${project.version}</version>
 		</dependency>

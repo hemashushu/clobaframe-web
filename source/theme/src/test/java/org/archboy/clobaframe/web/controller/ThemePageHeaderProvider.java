@@ -52,7 +52,7 @@ public class ThemePageHeaderProvider implements PageHeaderProvider {
 	public List<String> list() {
 		List<String> headers = new ArrayList<String>();
 		
-		String themeName = (String)globalSetting.get("theme");
+		String themeName = (String)globalSetting.getValue("theme");
 		if (StringUtils.isEmpty(themeName)) {
 			return headers;
 		}

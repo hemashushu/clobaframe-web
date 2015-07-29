@@ -28,4 +28,4 @@
 </script>
 
 <!-- write custom page resource -->
-$header.writeResource('jsx/page-box.js', 'script', 'src', {'type':'text/jsx'}, true)
+$headerTool.writeResource('jsx/page-box.js', 'script', 'src', {'type':'text/jsx'}, true)

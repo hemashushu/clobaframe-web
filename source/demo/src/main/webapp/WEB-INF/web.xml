@@ -6,11 +6,11 @@
 	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd
 	">
 
-	<display-name>clobaframe-web</display-name>
+	<display-name>clobaframe-web-demo</display-name>
 
 	<context-param>
 		<param-name>webAppRootKey</param-name>
-		<param-value>clobaframe-web.root</param-value>
+		<param-value>clobaframe-web-demo.root</param-value>
 	</context-param>
 
 	<!--
@@ -81,13 +81,13 @@
 	
 	<!-- Processes application requests -->
 	<servlet>
-		<servlet-name>clobaframe-web</servlet-name>
+		<servlet-name>clobaframe-web-demo</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>clobaframe-web</servlet-name>
+		<servlet-name>clobaframe-web-demo</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 	

@@ -50,7 +50,7 @@ import org.springframework.web.servlet.ViewResolver;
 public class DispatcherServlet extends HttpServlet {
 	
 	@Inject
-	private RouteManager routeManager;
+	private RouteDefinitionLoader routeDefinitionLoader;
 	
 	@Autowired(required = false)
 	private List<HandlerExceptionResolver> handlerExceptionResolvers;
@@ -63,10 +63,10 @@ public class DispatcherServlet extends HttpServlet {
 	
 	private final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
 
-	public void setRouteManager(RouteManager routeManager) {
-		this.routeManager = routeManager;
+	public void setRouteDefinitionLoader(RouteDefinitionLoader routeDefinitionLoader) {
+		this.routeDefinitionLoader = routeDefinitionLoader;
 	}
-	
+
 	public void setViewResolver(ViewResolver viewResolver) {
 		this.viewResolver = viewResolver;
 	}
@@ -77,7 +77,7 @@ public class DispatcherServlet extends HttpServlet {
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		routeDefinitions = routeManager.list();
+		routeDefinitions = routeDefinitionLoader.list();
 		
 		if (handlerExceptionResolvers != null && !handlerExceptionResolvers.isEmpty()){
 			OrderComparator.sort(handlerExceptionResolvers);
