@@ -7,6 +7,7 @@ import org.archboy.clobaframe.io.file.FileBaseResourceInfoFactory;
 import org.archboy.clobaframe.io.file.impl.DefaultFileBaseResourceInfoFactory;
 import org.archboy.clobaframe.resource.local.LocalResourceNameStrategy;
 import org.archboy.clobaframe.web.theme.ThemeManager;
+import org.archboy.clobaframe.web.theme.ThemeResourceInfo;
 import org.archboy.clobaframe.web.theme.local.LocalThemeResourceInfo;
 
 /**
@@ -26,8 +27,11 @@ public class LocalThemeResourceInfoFactory extends DefaultFileBaseResourceInfoFa
 	public FileBaseResourceInfo make(File file) {
 		String name = resourceNameStrategy.getName(file);
 		String mimeType = getMimeType(file);
-		boolean isTempate = ThemeManager.MIME_TYPE_VELOCITY_TEMPLATE.equals(mimeType);
+		//boolean isTempate = ThemeManager.MIME_TYPE_VELOCITY_TEMPLATE.equals(mimeType);
+		int contentType = ThemeManager.MIME_TYPE_VELOCITY_TEMPLATE.equals(mimeType) ? 
+				ThemeResourceInfo.TYPE_TEMPLATE : 
+				ThemeResourceInfo.TYPE_RESOURCE;
 		
-		return new LocalThemeResourceInfo(file, mimeType, name, isTempate);
+		return new LocalThemeResourceInfo(file, mimeType, name, contentType);
 	}
 }

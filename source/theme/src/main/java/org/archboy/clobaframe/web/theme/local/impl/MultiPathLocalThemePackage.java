@@ -1,11 +1,6 @@
 package org.archboy.clobaframe.web.theme.local.impl;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationConfig;
 import java.io.File;
-import java.io.IOException;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -16,18 +11,15 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.archboy.clobaframe.io.MimeTypeDetector;
 import org.archboy.clobaframe.io.file.FileBaseResourceInfo;
-import org.archboy.clobaframe.io.file.FileBaseResourceInfoFactory;
 import org.archboy.clobaframe.io.file.local.DefaultLocalResourceProvider;
-import org.archboy.clobaframe.io.file.local.LocalFileNameStrategy;
 import org.archboy.clobaframe.io.file.local.LocalResourceProvider;
 import org.archboy.clobaframe.resource.local.DefaultLocalResourceNameStrategy;
 import org.archboy.clobaframe.resource.local.LocalResourceNameStrategy;
 import org.archboy.clobaframe.web.theme.ThemePackage;
 import org.archboy.clobaframe.web.theme.ThemeResourceInfo;
-import org.archboy.clobaframe.web.theme.local.LocalThemeResourceInfo;
 
 /**
- *
+ * For the base theme resource and template.
  * @author yang
  */
 public class MultiPathLocalThemePackage implements ThemePackage {
@@ -39,7 +31,7 @@ public class MultiPathLocalThemePackage implements ThemePackage {
 	
 	public MultiPathLocalThemePackage(
 			String catalog, String id,
-			Collection<Map.Entry<File, String>> pathNames,
+			Collection<Map.Entry<File, String>> pathNames, // base path and name prefix
 			MimeTypeDetector mimeTypeDetector) {
 
 		for(Map.Entry<File, String> pathName : pathNames) {

@@ -84,7 +84,7 @@ public class PageHeaderToolTest {
 		Map<String, Object> attr4 = new LinkedHashMap<String, Object>();
 		attr4.put("type", "text/jsx");
 		String res3 = pageHeaderTool.writeResource("js/index.js", "script", "src", attr4, true);
-		assertEquals("<script type=\"text/jsx\" src=\"/resource/js/index.js?v4a6ae5f4\"></script>", res3);
+		assertEquals("<script src=\"/resource/js/index.js?v4a6ae5f4\" type=\"text/jsx\"></script>", res3);
 		
 		assertEquals(StringUtils.EMPTY, 
 				pageHeaderTool.writeResource("css/none-exists.css", "link", "src", attr4, false));

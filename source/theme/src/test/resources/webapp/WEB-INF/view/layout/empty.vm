@@ -1,6 +1,2 @@
 <!DOCTYPE html>
-<head>
-$headerTool.writeResource('js/index.js')
-$headerWriter.write()
-</head>
-<body>$screen_content</body>
+$screen_content

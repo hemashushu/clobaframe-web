@@ -8,7 +8,7 @@ import org.apache.velocity.exception.VelocityException;
 import org.apache.velocity.runtime.resource.Resource;
 import org.apache.velocity.runtime.resource.loader.ResourceLoader;
 import org.archboy.clobaframe.io.NamedResourceInfo;
-import org.archboy.clobaframe.web.template.ViewResourceManager;
+import org.archboy.clobaframe.web.template.TemplateManager;
 import org.springframework.ui.velocity.SpringResourceLoader;
 
 /**
@@ -16,17 +16,17 @@ import org.springframework.ui.velocity.SpringResourceLoader;
  * 
  * @author yang
  */
-public class DelegateVelocityViewResourceLoader extends ResourceLoader {
+public class DelegateVelocityTemplateResourceLoader extends ResourceLoader {
 	
 	public static final String NAME = "delegate";
 	public static final String RESOURCE_LOADER_CLASS = "delegate.resource.loader.class";
 	public static final String VIEW_RESOURCE_MANAGER = "delegate.resource.loader.viewResourceManager";
 
-	private ViewResourceManager viewResourceManager;
+	private TemplateManager viewResourceManager;
 	
 	@Override
 	public void init(ExtendedProperties configuration) {
-		this.viewResourceManager = (ViewResourceManager)this.rsvc.getProperty(VIEW_RESOURCE_MANAGER);
+		this.viewResourceManager = (TemplateManager)this.rsvc.getProperty(VIEW_RESOURCE_MANAGER);
 	}
 
 	@Override

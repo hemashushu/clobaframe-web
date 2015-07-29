@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.log.Log4JLogChute;
-import org.archboy.clobaframe.web.template.ViewResourceManager;
+import org.archboy.clobaframe.web.template.TemplateManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -32,7 +32,7 @@ public class VelocityConfigurer {
 	private ResourceLoader resourceLoader;
 	
 	@Inject
-	private ViewResourceManager viewResourceManager;
+	private TemplateManager viewResourceManager;
 	
 	private static final String SETTING_KEY_CONFIG_FILE_NAME = "clobaframe.web.template.velocity.configFileName";
 	private static final String DEFAULT_CONFIG_FILE_NAME = ""; // "classpath:velocity.properties"
@@ -46,7 +46,7 @@ public class VelocityConfigurer {
 		this.resourceLoader = resourceLoader;
 	}
 
-	public void setViewResourceManager(ViewResourceManager viewResourceManager) {
+	public void setViewResourceManager(TemplateManager viewResourceManager) {
 		this.viewResourceManager = viewResourceManager;
 	}
 	
@@ -82,11 +82,11 @@ public class VelocityConfigurer {
 	
 	protected void initResourceLoader(VelocityEngine velocityEngine) {
 		velocityEngine.setProperty(
-				RuntimeConstants.RESOURCE_LOADER, DelegateVelocityViewResourceLoader.NAME);
+				RuntimeConstants.RESOURCE_LOADER, DelegateVelocityTemplateResourceLoader.NAME);
 		velocityEngine.setProperty(
-				DelegateVelocityViewResourceLoader.RESOURCE_LOADER_CLASS, DelegateVelocityViewResourceLoader.class.getName());
+				DelegateVelocityTemplateResourceLoader.RESOURCE_LOADER_CLASS, DelegateVelocityTemplateResourceLoader.class.getName());
 		velocityEngine.setProperty(
-				DelegateVelocityViewResourceLoader.VIEW_RESOURCE_MANAGER, viewResourceManager);
+				DelegateVelocityTemplateResourceLoader.VIEW_RESOURCE_MANAGER, viewResourceManager);
 	}
 	
 	public VelocityEngine getVelocityEngine(){

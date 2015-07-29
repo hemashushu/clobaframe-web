@@ -13,7 +13,7 @@ import org.archboy.clobaframe.io.file.local.LocalResourceProvider;
 import org.archboy.clobaframe.resource.local.DefaultLocalResourceNameStrategy;
 import org.archboy.clobaframe.resource.local.LocalResourceInfoFactory;
 import org.archboy.clobaframe.resource.local.LocalResourceNameStrategy;
-import org.archboy.clobaframe.web.template.ViewResourceProvider;
+import org.archboy.clobaframe.web.template.TemplateProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +26,7 @@ import org.springframework.core.io.ResourceLoader;
  * @author yang
  */
 @Named
-public class LocalViewResourceProvider implements ViewResourceProvider { //, ResourceLoaderAware {
+public class LocalTemplateResourceProvider implements TemplateProvider { //, ResourceLoaderAware {
 
 	public static final String SETTING_KEY_LOCAL_PATH = "clobaframe.web.template.local.path";
 	public static final String SETTING_KEY_RESOURCE_NAME_PREFIX = "clobaframe.web.template.local.resourceNamePrefix";
@@ -48,7 +48,7 @@ public class LocalViewResourceProvider implements ViewResourceProvider { //, Res
 	
 	private LocalResourceProvider localResourceProvider;
 	
-	private final Logger logger = LoggerFactory.getLogger(LocalViewResourceProvider.class);
+	private final Logger logger = LoggerFactory.getLogger(LocalTemplateResourceProvider.class);
 	
 	public void setLocalPath(String localPath) {
 		this.localPath = localPath;

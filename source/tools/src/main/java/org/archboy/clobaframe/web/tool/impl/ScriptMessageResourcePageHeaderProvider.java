@@ -162,21 +162,21 @@ public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageRes
 	 */
 	private String getCompatibleResourceName(String languageCode, String countryCode) {
 		String resourceName = buildResourceName(languageCode, countryCode);
-		if (resourceManager.get(resourceName) != null){
+		if (resourceManager.getServedResource(resourceName) != null){
 			return resourceName;
 			
 		}else if (StringUtils.isNotEmpty(languageCode)){
 			// try remove the country code.
 			if (StringUtils.isNotEmpty(countryCode)){
 				resourceName = buildResourceName(languageCode, null);
-				if (resourceManager.get(resourceName) != null) {
+				if (resourceManager.getServedResource(resourceName) != null) {
 					return resourceName;
 				}
 			}
 			
 			// try remove the language code.
 			resourceName = buildResourceName(null, null);
-			if (resourceManager.get(resourceName) != null) {
+			if (resourceManager.getServedResource(resourceName) != null) {
 				return resourceName;
 			}
 		}

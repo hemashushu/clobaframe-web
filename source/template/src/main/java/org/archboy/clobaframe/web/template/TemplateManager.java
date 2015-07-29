@@ -6,7 +6,7 @@ import org.archboy.clobaframe.io.NamedResourceInfo;
  *
  * @author yang
  */
-public interface ViewResourceManager {
+public interface TemplateManager {
 	
 	/**
 	 * 

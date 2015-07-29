@@ -19,7 +19,7 @@ import org.springframework.util.Assert;
  * @author yang
  */
 @Named
-public class ThemePageHeaderTool {
+public class ThemeResourcePageHeaderTool {
 	
 	@Inject
 	private PageHeaderTool pageHeaderTool;
@@ -44,17 +44,22 @@ public class ThemePageHeaderTool {
 			return headers;
 		}
 		
-		Map<String, Object> attrs = new LinkedHashMap<String, Object>();
-		attrs.put("rel", "stylesheet");
-		attrs.put("data-source", "theme");
-		attrs.put("data-catalog", themePackage.getCatalog());
-		attrs.put("data-id", themePackage.getName());
+		Map<String, Object> attributes = new LinkedHashMap<String, Object>();
+		attributes.put("data-source", "theme");
+		attributes.put("data-catalog", themePackage.getCatalog());
+		attributes.put("data-id", themePackage.getName());
 		
 		for(ThemeResourceInfo themeResourceInfo : themePackage.listResource()){
+			// filter resource mime type
 			String mimeType = themeResourceInfo.getMimeType();
-			String header = pageHeaderTool.writeResource(themeResourceInfo.getName(),
-					"link", "href", attrs, 
-					ResourceManager.MIME_TYPE_STYLE_SHEET.equals(mimeType));
+			if (!ResourceManager.MIME_TYPE_STYLE_SHEET.equals(mimeType) &&
+					!ResourceManager.MIME_TYPE_JAVA_SCRIPT.contains(mimeType)){
+				continue;
+			}
+			
+			// write header
+			String resourceName = "theme/" + themeName + "/" + themeResourceInfo.getName();
+			String header = pageHeaderTool.writeResource(resourceName, attributes);
 			headers.add(header);
 		}
 		

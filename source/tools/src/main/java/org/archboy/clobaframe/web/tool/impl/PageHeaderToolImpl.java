@@ -29,8 +29,8 @@ public class PageHeaderToolImpl implements PageHeaderTool {
 	 * type="text/javascript" and type="text/css" is not necessary in HTML5.
 	 */
 
-	private static final String SCRIPT_TEMPLATE = "<script src=\"%s\"></script>";
-	private static final String STYLESHEET_TEMPLATE = "<link href=\"%s\" rel=\"stylesheet\">";
+	//private static final String SCRIPT_TEMPLATE = "<script src=\"%s\"></script>";
+	//private static final String STYLESHEET_TEMPLATE = "<link href=\"%s\" rel=\"stylesheet\">";
 	
 	@Inject
 	private ResourceManager resourceManager;
@@ -46,13 +46,15 @@ public class PageHeaderToolImpl implements PageHeaderTool {
 		StringBuilder builder = new StringBuilder();
 		builder.append("<");
 		builder.append(tagName);
-		
-		for(Map.Entry<String, Object> entry : attributes.entrySet()){
-			builder.append(" ");
-			builder.append(entry.getKey());
-			builder.append("=\"");
-			builder.append(entry.getValue());
-			builder.append("\"");
+
+		if (attributes != null && !attributes.isEmpty()) {
+			for(Map.Entry<String, Object> entry : attributes.entrySet()){
+				builder.append(" ");
+				builder.append(entry.getKey());
+				builder.append("=\"");
+				builder.append(entry.getValue());
+				builder.append("\"");
+			}
 		}
 		
 		builder.append(">");
@@ -66,23 +68,77 @@ public class PageHeaderToolImpl implements PageHeaderTool {
 	}
 	
 	@Override
-	public String writeResource(String name) {
+	public String writeResource(String resourceName) {
+		return writeResource(resourceName, null);
+	}
 
-		NamedResourceInfo resource = resourceManager.getServedResource(name);
+	@Override
+	public String writeResource(String resourceName, Map<String, Object> otherAttributes) {
+		NamedResourceInfo resource = resourceManager.getServedResource(resourceName);
 		if (resource == null) {
 			return StringUtils.EMPTY;
 		}
 		
+		Map<String, Object> attributes = new LinkedHashMap<String, Object>();
+		
+		String location = resourceManager.getLocation(resource);
 		String mimeType = resource.getMimeType();
+		
 		if (ResourceManager.MIME_TYPE_JAVA_SCRIPT.contains(mimeType)){
-			return String.format(SCRIPT_TEMPLATE, resourceManager.getLocation(resource));
+			//return String.format(SCRIPT_TEMPLATE, resourceManager.getLocation(resource));
+			
+			attributes.put("src", location);
+			
+			if (otherAttributes != null && !otherAttributes.isEmpty()){
+				attributes.putAll(attributes);
+			}
+			
+			return write("script",attributes, true);
+			
 		}else if (ResourceManager.MIME_TYPE_STYLE_SHEET.equals(mimeType)){
-			return String.format(STYLESHEET_TEMPLATE, resourceManager.getLocation(resource));
+			//return String.format(STYLESHEET_TEMPLATE, resourceManager.getLocation(resource));
+			
+			attributes.put("href", location);
+			attributes.put("rel", "stylesheet");
+			
+			if (otherAttributes != null && !otherAttributes.isEmpty()){
+				attributes.putAll(attributes);
+			}
+
+			return write("link",attributes, false);
 		}else{
 			// unsupport resource type
-			logger.error("Unsupport mime type, resource: " + name);
+			//logger.error("Unsupport mime type, resource: " + resourceName);
+			//return StringUtils.EMPTY;
+			
+			throw new IllegalArgumentException(String.format(
+					"The mime type of resource [%s] is not supported.", resourceName));
+		}
+	}
+
+	@Override
+	public String writeResource(String resourceName, 
+			String tagName, 
+			String locationAttributeName, 
+			Map<String, Object> otherAttributes,
+			boolean closeTag) {
+		
+		NamedResourceInfo resource = resourceManager.getServedResource(resourceName);
+
+		if (resource == null) {
 			return StringUtils.EMPTY;
 		}
+
+		Map<String, Object> attributes = new LinkedHashMap<String, Object>();
+		
+		String location = resourceManager.getLocation(resource);
+		attributes.put(locationAttributeName, location);
+		
+		if (otherAttributes != null && !otherAttributes.isEmpty()){
+			attributes.putAll(otherAttributes);
+		}
+		
+		return write(tagName, attributes, closeTag);
 	}
 
 	@Override
@@ -111,28 +167,4 @@ public class PageHeaderToolImpl implements PageHeaderTool {
 		
 		return StringUtils.join(results, separator);
 	}
-
-	@Override
-	public String writeResource(String resourceName, 
-			String tagName, 
-			String locationAttributeName, 
-			Map<String, Object> otherAttributes,
-			boolean closeTag) {
-		
-		NamedResourceInfo resource = resourceManager.getServedResource(resourceName);
-
-		if (resource == null) {
-			return StringUtils.EMPTY;
-		}
-		
-		String location = resourceManager.getLocation(resource);
-
-		if (otherAttributes == null){
-			otherAttributes = new LinkedHashMap<String, Object>();
-		}
-
-		otherAttributes.put(locationAttributeName, location);
-		return write(tagName, otherAttributes, closeTag);
-	}
-	
 }

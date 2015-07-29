@@ -13,16 +13,16 @@ import org.archboy.clobaframe.web.tool.PageHeaderProvider;
  * 
  * @author yang
  */
-public class ThemePageHeaderProvider implements PageHeaderProvider {
+public class ThemeResourcePageHeaderProvider implements PageHeaderProvider {
 
 	@Inject
-	private ThemePageHeaderTool themePageHeaderTool;
+	private ThemeResourcePageHeaderTool themeResourcePageHeaderTool;
 	
 	@Inject
 	private GlobalSetting globalSetting;
 
-	public void setThemePageHeaderTool(ThemePageHeaderTool themePageHeaderTool) {
-		this.themePageHeaderTool = themePageHeaderTool;
+	public void setThemeResourcePageHeaderTool(ThemeResourcePageHeaderTool themeResourcePageHeaderTool) {
+		this.themeResourcePageHeaderTool = themeResourcePageHeaderTool;
 	}
 
 	public void setGlobalSetting(GlobalSetting globalSetting) {
@@ -41,7 +41,7 @@ public class ThemePageHeaderProvider implements PageHeaderProvider {
 			return new ArrayList<String>();
 		}
 
-		return themePageHeaderTool.list(themeName);
+		return themeResourcePageHeaderTool.list(themeName);
 	}
 	
 }

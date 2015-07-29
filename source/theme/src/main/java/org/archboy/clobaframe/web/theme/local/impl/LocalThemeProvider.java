@@ -1,5 +1,6 @@
 package org.archboy.clobaframe.web.theme.local.impl;
 
+import org.archboy.clobaframe.web.theme.inject.LocalThemeResourceProvider;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -71,12 +72,9 @@ public class LocalThemeProvider implements ThemeProvider { //, ResourceLoaderAwa
 	@Value("${" + SETTING_KEY_THEME_RESOURCE_PATH + ":" + DEFAULT_THEME_RESOURCE_PATH + "}")
 	private String themeResourcePath;
 
-	@Value("${" + SETTING_KEY_THEME_RESOURCE_NAME_PREFIX + ":" + DEFAULT_THEME_RESOURCE_NAME_PREFIX + "}")
-	private String themeResourceNamePrefix;
-
 	private ThemePackage baseThemePackage;
 
-	private File localThemeResourcePath;
+	private File themeResourceDir;
 
 	private final Logger logger = LoggerFactory.getLogger(LocalThemeProvider.class);
 
@@ -113,10 +111,6 @@ public class LocalThemeProvider implements ThemeProvider { //, ResourceLoaderAwa
 		this.themeResourcePath = themeResourcePath;
 	}
 
-	public void setThemeResourceNamePrefix(String themeResourceNamePrefix) {
-		this.themeResourceNamePrefix = themeResourceNamePrefix;
-	}
-
 	@PostConstruct
 	//@Override
 	public void init() throws Exception {
@@ -139,18 +133,21 @@ public class LocalThemeProvider implements ThemeProvider { //, ResourceLoaderAwa
 					basePathNames);
 		}
 
-		// resolve local theme resource path
 		if (StringUtils.isNotEmpty(themeResourcePath)) {
-			localThemeResourcePath = getFile(themeResourcePath);
-			
-			if (localThemeResourcePath != null) {
-				// insert theme resource provider to web resource manager.
-				ResourceProvider resourceProvider = new LocalThemeWebResourceProvider(
-					localThemeResourcePath, themeResourceNamePrefix, mimeTypeDetector);
-				
-				resourceProviderSet.addProvider(resourceProvider);
-			}
+			themeResourceDir = getFile(themeResourcePath);
 		}
+		
+		// resolve local theme resource for export.
+		
+//			
+//			if (themeResourceDir != null) {
+//				// insert theme resource provider to web resource manager.
+//				ResourceProvider resourceProvider = new LocalThemeResourceProvider(
+//					themeResourceDir, themeResourceNamePrefix, mimeTypeDetector);
+//				
+//				resourceProviderSet.addProvider(resourceProvider);
+//			}
+//		}
 	}
 
 	private File getFile(String resourcePath) {
@@ -181,11 +178,8 @@ public class LocalThemeProvider implements ThemeProvider { //, ResourceLoaderAwa
 //		return getThemePackage(catalog, name, path, resourceNamePrefix);
 //	}
 	
-	private ThemePackage getThemePackage(String catalog, String id, File path, String resourceNamePrefix) {
-		return new LocalThemePackage(catalog, id, path, resourceNamePrefix, mimeTypeDetector);
-	}
-
 	private ThemePackage getThemePackage(String catalog, String id, Collection<Map.Entry<File, String>> pathNames) {
+		// for the base theme resource and template
 		return new MultiPathLocalThemePackage(catalog, id, pathNames, mimeTypeDetector);
 	}
 	
@@ -196,11 +190,11 @@ public class LocalThemeProvider implements ThemeProvider { //, ResourceLoaderAwa
 			themePackages.add(baseThemePackage);
 		}
 		
-		if (localThemeResourcePath == null) {
+		if (themeResourceDir == null) {
 			return themePackages;
 		}
 
-		File[] files = localThemeResourcePath.listFiles(new FileFilter() {
+		File[] files = themeResourceDir.listFiles(new FileFilter() {
 			@Override
 			public boolean accept(File pathname) {
 				return pathname.isDirectory();
@@ -208,7 +202,8 @@ public class LocalThemeProvider implements ThemeProvider { //, ResourceLoaderAwa
 		});
 		
 		for(File file : files) {
-			String packageResourceNamePrefix = String.format("%s%s/", themeResourceNamePrefix, file.getName());
+			//String packageResourceNamePrefix = String.format("%s%s/", themeResourceNamePrefix, file.getName());
+			String packageResourceNamePrefix = null;
 			
 			ThemePackage themePackage = getThemePackage(
 					ThemeManager.PACKAGE_CATALOG_LOCAL, file.getName(), 
@@ -222,6 +217,10 @@ public class LocalThemeProvider implements ThemeProvider { //, ResourceLoaderAwa
 		return themePackages;
 	}
 
+	private ThemePackage getThemePackage(String catalog, String id, File path, String resourceNamePrefix) {
+		return new LocalThemePackage(catalog, id, path, resourceNamePrefix, mimeTypeDetector);
+	}
+	
 	@Override
 	public ThemePackage get(String catalog, String id) {
 		
@@ -234,16 +233,17 @@ public class LocalThemeProvider implements ThemeProvider { //, ResourceLoaderAwa
 			return null;
 		}
 		
-		if (localThemeResourcePath == null) {
+		if (themeResourceDir == null) {
 			return null;
 		}
 		
-		File path = new File(localThemeResourcePath, id);
+		File path = new File(themeResourceDir, id);
 		if (!path.exists() || path.isFile()) {
 			return null;
 		}
 		
-		String packageResourceNamePrefix = String.format("%s%s/", themeResourceNamePrefix, id);
+		//String packageResourceNamePrefix = String.format("%s%s/", themeResourceNamePrefix, id);
+		String packageResourceNamePrefix = null;
 		return getThemePackage(catalog, id, path, packageResourceNamePrefix);
 	}
 

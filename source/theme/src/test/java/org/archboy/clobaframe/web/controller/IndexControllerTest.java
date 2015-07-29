@@ -1,11 +1,6 @@
 package org.archboy.clobaframe.web.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.LinkedHashMap;
-import java.util.Locale;
 import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
@@ -13,13 +8,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.apache.commons.io.IOUtils;
 import org.archboy.clobaframe.setting.global.GlobalSettingProvider;
 import org.archboy.clobaframe.setting.global.GlobalSettingRepository;
 import org.archboy.clobaframe.setting.support.Utils;
-import org.archboy.clobaframe.web.theme.ThemeManager;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -36,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration("src/test/resources/webapp")
 @ContextConfiguration(locations = { "/webapp/WEB-INF/servlet.xml"})
-public class ThemeControllerTest {
+public class IndexControllerTest {
 	
 	@Inject
 	private WebApplicationContext webApplicationContext;
@@ -55,33 +46,60 @@ public class ThemeControllerTest {
 	@Test
 	public void testGetPage() throws Exception {
 		// test get index
-		mock.perform(get("/changetheme"))
+		mock.perform(get("/settheme"))
+				.andExpect(status().isOk())
+				.andExpect(content().string("[]"));
+		
+		mock.perform(get("/index"))
 				.andExpect(status().isOk())
 				.andExpect(content().string(
 						"<!DOCTYPE html>\n" +
 						"<head>\n" +
 						"<script src=\"/resource/js/index.js?v4a6ae5f4\"></script>\n" +
 						"<script src=\"/resource/js/i18n/messages.js?v565ad0a3\"></script>\n" +
-						"</head>"));
+						"</head>\n" + 
+						"<body><h1>Index</h1></body>"));
+		
+		// It seems mock can not catch the exception
+		//mock.perform(get("/page"))
+		//		.andExpect(status().isNotFound());
 		
 		// test get index
-		mock.perform(get("/changetheme").param("name", "dark"))
+		mock.perform(get("/settheme").param("name", "dark"))
 				.andExpect(status().isOk())
-				.andExpect(content().string("<!DOCTYPE html>\n" +
-						"<head>\n" +
-						"<script src=\"/resource/js/index.js?v4a6ae5f4\"></script>\n" +
-						"<link rel=\"stylesheet\" data-source=\"theme\" data-catalog=\"local\" data-id=\"dark\" href=\"/resource/theme/dark/resource/css/dark.css?vbf81ee39\"><link rel=\"stylesheet\" data-source=\"theme\" data-catalog=\"local\" data-id=\"dark\" href=\"/resource/theme/dark/resource/css/index.css?v6dc92db3\"><script src=\"/resource/js/i18n/messages.js?v565ad0a3\"></script>\n" +
-						"</head>"));
+				.andExpect(content().string(
+						"[\"<script src=\\\"/resource/theme/dark/resource/js/dark.js?vc8acb1e1\\\"></script>\",\"<link href=\\\"/resource/theme/dark/resource/css/dark.css?vbf81ee39\\\" rel=\\\"stylesheet\\\">\",\"<link href=\\\"/resource/theme/dark/resource/css/index.css?v6dc92db3\\\" rel=\\\"stylesheet\\\">\"]"));
+						
+		mock.perform(get("/index"))
+				.andExpect(status().isOk())
+				.andExpect(content().string(				
+						"<!DOCTYPE html>\n" +
+						"<h1 class=\"dark\">Index</h1>"));
 		
 		// test get index
-		mock.perform(get("/changetheme").param("name", "flat"))
+		mock.perform(get("/settheme").param("name", "flat"))
 				.andExpect(status().isOk())
-				.andExpect(content().string("<!DOCTYPE html>\n" +
+				.andExpect(content().string("[\"<script src=\\\"/resource/theme/flat/resource/js/flat.js?v7d2bcd4a\\\"></script>\",\"<link href=\\\"/resource/theme/flat/resource/css/flat.css?vc724b117\\\" rel=\\\"stylesheet\\\">\"]"));
+	
+		mock.perform(get("/index"))
+				.andExpect(status().isOk())
+				.andExpect(content().string(
+						"<!DOCTYPE html>\n" +
 						"<head>\n" +
 						"<script src=\"/resource/js/index.js?v4a6ae5f4\"></script>\n" +
-						"<link rel=\"stylesheet\" data-source=\"theme\" data-catalog=\"local\" data-id=\"flat\" href=\"/resource/theme/flat/resource/css/flat.css?vc724b117\"><script src=\"/resource/js/i18n/messages.js?v565ad0a3\"></script>\n" +
-						"</head>"));
+						"<script src=\"/resource/js/i18n/messages.js?v565ad0a3\"></script><script src=\"/resource/theme/flat/resource/js/flat.js?v7d2bcd4a\"></script><link href=\"/resource/theme/flat/resource/css/flat.css?vc724b117\" rel=\"stylesheet\">\n" +
+						"</head>\n" + 
+						"<body><h1>Index</h1></body>"));
 		
+		mock.perform(get("/page"))
+				.andExpect(status().isOk())
+				.andExpect(content().string(				
+						"<!DOCTYPE html>\n" +
+						"<head>\n" +
+						"<script src=\"/resource/js/index.js?v4a6ae5f4\"></script>\n" +
+						"<script src=\"/resource/js/i18n/messages.js?v565ad0a3\"></script><script src=\"/resource/theme/flat/resource/js/flat.js?v7d2bcd4a\"></script><link href=\"/resource/theme/flat/resource/css/flat.css?vc724b117\" rel=\"stylesheet\">\n" +
+						"</head>\n" + 
+						"<body><main>Page</main></body>"));
 	}
 
 	@Named

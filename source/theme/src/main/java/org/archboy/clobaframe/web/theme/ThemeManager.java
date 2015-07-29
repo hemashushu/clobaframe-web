@@ -26,7 +26,7 @@ public interface ThemeManager {
 			String description, String version,
 			String authorName, String website);
 	
-	ThemePackage clone(ThemePackage themePackage, boolean includeTemplate, String catalog, String id);
+	ThemePackage clone(ThemePackage themePackage, int contentTypes, String catalog, String id);
 	
 	void save(ThemePackage themePackage, ThemeResourceInfo themeResourceInfo);
 	

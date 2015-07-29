@@ -27,7 +27,8 @@ import org.archboy.clobaframe.web.theme.ThemeResourceInfo;
 import org.archboy.clobaframe.web.theme.local.LocalThemeResourceInfo;
 
 /**
- *
+ * For the extra resource and template.
+ * 
  * @author yang
  */
 public class LocalThemePackage implements ThemePackage {
@@ -36,8 +37,10 @@ public class LocalThemePackage implements ThemePackage {
 	private String id;
 	private String name;
 	
+	// info file
 	private static final String infoFileName = "info.json";
 	
+	// info
 	private String description;
 	private String version;
 	private Date lastModified;
@@ -54,7 +57,6 @@ public class LocalThemePackage implements ThemePackage {
 			File basePath, 
 			String resourceNamePrefix, 
 			MimeTypeDetector mimeTypeDetector) {
-		
 		
 		LocalResourceNameStrategy localWebResourceNameStrategy = new DefaultLocalResourceNameStrategy(
 			basePath, resourceNamePrefix);
@@ -88,25 +90,26 @@ public class LocalThemePackage implements ThemePackage {
 		//objectMapper.setDateFormat(dateFormat);
 		
 		Map<String, Object> map = objectMapper.readValue(infoFile, typeReference);
+		this.name = (String)map.get("name");
 		this.description = (String)map.get("description");
 		this.version = (String)map.get("version");
 		this.lastModified = dateFormat.parse((String)map.get("lastModified"));
 		this.authorName = (String)map.get("authorName");
 		this.website = (String)map.get("website");
 
-		// set the name
-		String nameByInfo = (String)map.get("name");
-		if (StringUtils.isNotEmpty(nameByInfo)) {
-			this.name = nameByInfo;
-		}else{
-			this.name = id;
-		}
+//		// set the name
+//		String nameByInfo = (String)map.get("name");
+//		if (StringUtils.isNotEmpty(nameByInfo)) {
+//			this.name = nameByInfo;
+//		}else{
+//			this.name = id;
+//		}
 		
-		// override
-		String catalogByInfo = (String)map.get("catalog");
-		if (StringUtils.isNotEmpty(catalogByInfo)) {
-			this.catalog = catalogByInfo;
-		}
+//		// override
+//		String catalogByInfo = (String)map.get("catalog");
+//		if (StringUtils.isNotEmpty(catalogByInfo)) {
+//			this.catalog = catalogByInfo;
+//		}
 	}
 	
 	@Override
@@ -158,6 +161,7 @@ public class LocalThemePackage implements ThemePackage {
 	public Collection<ThemeResourceInfo> listResource() {
 		Collection<ThemeResourceInfo> themeResourceInfos = new ArrayList<ThemeResourceInfo>();
 		for(FileBaseResourceInfo fileBaseResourceInfo : localResourceProvider.list()){
+			// Filter resource type ?
 			themeResourceInfos.add((LocalThemeResourceInfo)fileBaseResourceInfo);
 		}
 		return themeResourceInfos;

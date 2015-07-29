@@ -35,4 +35,8 @@
 		</property>
 	</bean>-->
 	
+	<bean class="org.archboy.clobaframe.web.theme.inject.ThemeResourcePageHeaderProvider"></bean>
+	<bean class="org.archboy.clobaframe.web.theme.inject.ThemeTemplateProvider"></bean>
+	<bean class="org.archboy.clobaframe.web.theme.inject.LocalThemeResourceProvider"></bean>
+	
 </beans>

@@ -44,6 +44,13 @@ public interface ThemePackage {
 	
 	Collection<ThemeResourceInfo> listResource();
 	
+	/**
+	 * 
+	 * @param name includes 'resource' and 'template'.
+	 * @return 
+	 */
 	ThemeResourceInfo getResource(String name);
+	
+	//ThemeResourceInfo getResource(int contentType, String name);
 	
 }

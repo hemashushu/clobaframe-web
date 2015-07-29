@@ -40,6 +40,8 @@ public interface PageHeaderTool {
 	 */
 	String writeResource(String resourceName);
 	
+	String writeResource(String resourceName, Map<String, Object> otherAttributes);
+	
 	/**
 	 * Write a resource page header line with custom tag name and 
 	 * location attribute name and extra attributes.

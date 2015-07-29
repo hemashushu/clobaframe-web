@@ -16,14 +16,18 @@ import org.archboy.clobaframe.resource.ResourceManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static org.junit.Assert.*;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.util.Assert;
 
 /**
  *
  * @author yang
  */
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(locations = { "/applicationContext.xml", "/webContext.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "/applicationContext.xml"})
+@WebAppConfiguration("src/test/resources/webapp")
+@ContextConfiguration(locations = { "/webapp/WEB-INF/servlet.xml"})
 public class ThemeManagerTest {
 
 	@Inject
@@ -74,7 +78,7 @@ public class ThemeManagerTest {
 		for (String name : imageCssJs1) {
 			boolean found = false;
 			for(ThemeResourceInfo info : themeResourceInfos1) {
-				if (info.getName().equals(name)) {
+				if (info.getName().equals(name) && info.getContentType() == ThemeResourceInfo.TYPE_RESOURCE) {
 					found = true;
 					break;
 				}
@@ -86,11 +90,11 @@ public class ThemeManagerTest {
 		for (String name : templates1) {
 			boolean found = false;
 			for(ThemeResourceInfo info : themeResourceInfos1) {
-				if (info.getName().equals(name)) {
-					if (info.isTemplate()) {
+				if (info.getName().equals(name) && info.getContentType() == ThemeResourceInfo.TYPE_TEMPLATE) {
+					//if (info.isTemplate()) {
 						found = true;
 						break;
-					}
+					//}
 				}
 			}
 			
@@ -154,10 +158,13 @@ public class ThemeManagerTest {
 		assertEquals("http://archboy.org", themePackage1.getWebsite());
 		
 		// test get all resource
-		List<String> resources1 = Arrays.asList("theme/dark/info.json",
-				"theme/dark/resource/css/dark.css", "theme/dark/resource/css/index.css",
-				"theme/dark/resource/image/dark.png", "theme/dark/resource/js/dark.js", 
-				"theme/dark/template/page.vm");
+		List<String> resources1 = Arrays.asList(
+				"info.json",
+				"resource/css/dark.css", 
+				"resource/css/index.css",
+				"resource/image/dark.png", 
+				"resource/js/dark.js", 
+				"template/index.vm");
 		
 		Collection<ThemeResourceInfo> themeResourceInfos1 = themePackage1.listResource();
 		
@@ -182,7 +189,8 @@ public class ThemeManagerTest {
 		
 		// test get web resource
 		for (String name : resources1) {
-			assertNotNull(resourceManager.get(name));
+			String resourceName = "theme/dark/" + name;
+			assertNotNull(resourceManager.get(resourceName));
 		}
 	}
 

@@ -4,16 +4,16 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.io.NamedResourceInfo;
 import org.archboy.clobaframe.setting.global.GlobalSetting;
-import org.archboy.clobaframe.web.template.ViewResourceProvider;
+import org.archboy.clobaframe.web.template.TemplateProvider;
 import org.archboy.clobaframe.web.theme.ThemeManager;
 import org.archboy.clobaframe.web.theme.ThemePackage;
 import org.archboy.clobaframe.web.theme.ThemeResourceInfo;
 
 /**
- * Inject (replace exists) theme template into template manager.
+ * Inject (append or replace exists) theme template into template manager.
  * @author yang
  */
-public class ThemeViewResourceProvider implements ViewResourceProvider {
+public class ThemeTemplateProvider implements TemplateProvider {
 
 	@Inject
 	private ThemeManager themeManager;
@@ -23,7 +23,7 @@ public class ThemeViewResourceProvider implements ViewResourceProvider {
 	
 	@Override
 	public String getName() {
-		return "themeViewResource";
+		return "themeTemplate";
 	}
 
 	@Override
@@ -38,12 +38,14 @@ public class ThemeViewResourceProvider implements ViewResourceProvider {
 			return null;
 		}
 		
-		ThemeResourceInfo themeResourceInfo = themePackage.getResource(name);
-		if (themeResourceInfo == null || !themeResourceInfo.isTemplate()) {
-			return null;
-		}else{
-			return themeResourceInfo;
-		}
+		return themePackage.getResource("template/" + name);
+		
+//		ThemeResourceInfo themeResourceInfo = themePackage.getResource(name);
+//		if (themeResourceInfo == null || !themeResourceInfo.isTemplate()) {
+//			return null;
+//		}else{
+//			return themeResourceInfo;
+//		}
 	}
 
 	@Override

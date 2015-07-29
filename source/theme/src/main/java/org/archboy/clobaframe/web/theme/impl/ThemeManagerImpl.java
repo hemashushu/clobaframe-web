@@ -72,15 +72,18 @@ public class ThemeManagerImpl implements ThemeManager {
 	}
 
 	@Override
-	public ThemePackage clone(ThemePackage themePackage, boolean includeTemplate, String catalog, String id) {
+	public ThemePackage clone(ThemePackage themePackage, int contentTypes, String catalog, String id) {
 		Assert.isTrue(!(
 				themePackage.getCatalog().equals(catalog) &&
 				themePackage.getId().equals(id)));
 		
 		ThemePackage pkg = themeRepository.create(catalog, id);
 		for (ThemeResourceInfo themeResourceInfo : themePackage.listResource()) {
-			if (!themeResourceInfo.isTemplate() || includeTemplate)
-			themeRepository.save(pkg, themeResourceInfo);
+			//if (!themeResourceInfo.isTemplate() || includeTemplate)
+			int contentType = themeResourceInfo.getContentType();
+			if ((contentType & contentTypes) == contentType) {
+				themeRepository.save(pkg, themeResourceInfo);
+			}
 		}
 		
 		return pkg;
