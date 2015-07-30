@@ -35,30 +35,31 @@ public class ThemeResourcePageHeaderTool {
 		this.themeManager = themeManager;
 	}
 	
-	public List<String> list(String themeName) {
+	public List<String> listFixedResourceHeaders(String themeName) {
 		Assert.hasText(themeName);
 		
 		List<String> headers = new ArrayList<String>();
 		ThemePackage themePackage = themeManager.get(ThemeManager.PACKAGE_CATALOG_LOCAL, themeName);
-		if (themePackage == null) {
+		if (themePackage == null || themePackage.getFixedResources() == null || themePackage.getFixedResources().isEmpty()) {
 			return headers;
 		}
 		
 		Map<String, Object> attributes = new LinkedHashMap<String, Object>();
 		attributes.put("data-source", "theme");
 		attributes.put("data-catalog", themePackage.getCatalog());
-		attributes.put("data-id", themePackage.getName());
+		attributes.put("data-id", themePackage.getId());
 		
-		for(ThemeResourceInfo themeResourceInfo : themePackage.listResource()){
-			// filter resource mime type
-			String mimeType = themeResourceInfo.getMimeType();
-			if (!ResourceManager.MIME_TYPE_STYLE_SHEET.equals(mimeType) &&
-					!ResourceManager.MIME_TYPE_JAVA_SCRIPT.contains(mimeType)){
-				continue;
-			}
-			
-			// write header
-			String resourceName = "theme/" + themeName + "/" + themeResourceInfo.getName();
+//		for(ThemeResourceInfo themeResourceInfo : themePackage.listResource()){
+//			// filter resource mime type
+//			String mimeType = themeResourceInfo.getMimeType();
+//			if (!ResourceManager.MIME_TYPE_STYLE_SHEET.equals(mimeType) &&
+//					!ResourceManager.MIME_TYPE_JAVA_SCRIPT.contains(mimeType)){
+//				continue;
+//			}
+		
+		// write header
+		for (String name : themePackage.getFixedResources()){
+			String resourceName = "theme/" + themeName + "/resource/" + name;
 			String header = pageHeaderTool.writeResource(resourceName, attributes);
 			headers.add(header);
 		}

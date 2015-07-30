@@ -90,7 +90,7 @@ public class PageHeaderToolImpl implements PageHeaderTool {
 			attributes.put("src", location);
 			
 			if (otherAttributes != null && !otherAttributes.isEmpty()){
-				attributes.putAll(attributes);
+				attributes.putAll(otherAttributes);
 			}
 			
 			return write("script",attributes, true);
@@ -102,7 +102,7 @@ public class PageHeaderToolImpl implements PageHeaderTool {
 			attributes.put("rel", "stylesheet");
 			
 			if (otherAttributes != null && !otherAttributes.isEmpty()){
-				attributes.putAll(attributes);
+				attributes.putAll(otherAttributes);
 			}
 
 			return write("link",attributes, false);

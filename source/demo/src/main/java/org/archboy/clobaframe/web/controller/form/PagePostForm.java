@@ -1,4 +1,4 @@
-package org.archboy.clobaframe.web.demo.controller.form;
+package org.archboy.clobaframe.web.controller.form;
 
 import java.util.Locale;
 import javax.validation.constraints.NotNull;

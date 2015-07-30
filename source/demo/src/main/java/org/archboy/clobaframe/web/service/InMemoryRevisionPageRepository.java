@@ -1,4 +1,4 @@
-package org.archboy.clobaframe.web.demo.service;
+package org.archboy.clobaframe.web.service;
 
 import java.util.ArrayList;
 import java.util.Collection;

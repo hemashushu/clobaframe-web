@@ -7,3 +7,4 @@ target/
 .svn
 catalog.xml
 nb-configuration.xml
+velocity.log

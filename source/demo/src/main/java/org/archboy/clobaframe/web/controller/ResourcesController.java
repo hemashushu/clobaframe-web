@@ -1,4 +1,4 @@
-package org.archboy.clobaframe.web.demo.controller;
+package org.archboy.clobaframe.web.controller;
 
 import java.io.IOException;
 import javax.inject.Inject;

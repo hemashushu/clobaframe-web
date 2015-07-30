@@ -17,7 +17,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.archboy.clobaframe.io.MimeTypeDetector;
 import org.archboy.clobaframe.io.file.FileBaseResourceInfo;
-import org.archboy.clobaframe.io.file.FileBaseResourceInfoFactory;
 import org.archboy.clobaframe.io.file.local.DefaultLocalResourceProvider;
 import org.archboy.clobaframe.io.file.local.LocalResourceProvider;
 import org.archboy.clobaframe.resource.local.DefaultLocalResourceNameStrategy;
@@ -35,7 +34,7 @@ public class LocalThemePackage implements ThemePackage {
 
 	private String catalog;
 	private String id;
-	private String name;
+	private String title;
 	
 	// info file
 	private static final String infoFileName = "info.json";
@@ -46,6 +45,8 @@ public class LocalThemePackage implements ThemePackage {
 	private Date lastModified;
 	private String authorName;
 	private String website;
+	
+	private Collection<String> fixedResources;
 
 	private LocalResourceProvider localResourceProvider;
 	
@@ -90,14 +91,19 @@ public class LocalThemePackage implements ThemePackage {
 		//objectMapper.setDateFormat(dateFormat);
 		
 		Map<String, Object> map = objectMapper.readValue(infoFile, typeReference);
-		this.name = (String)map.get("name");
+		this.title = (String)map.get("title");
 		this.description = (String)map.get("description");
 		this.version = (String)map.get("version");
 		this.lastModified = dateFormat.parse((String)map.get("lastModified"));
 		this.authorName = (String)map.get("authorName");
 		this.website = (String)map.get("website");
-
-//		// set the name
+		this.fixedResources = (Collection<String>)map.get("fixedResources");
+		
+		// set the name
+		if (StringUtils.isEmpty(this.title)) {
+			this.title = this.id;
+		}
+		
 //		String nameByInfo = (String)map.get("name");
 //		if (StringUtils.isNotEmpty(nameByInfo)) {
 //			this.name = nameByInfo;
@@ -123,8 +129,8 @@ public class LocalThemePackage implements ThemePackage {
 	}
 	
 	@Override
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 
 	@Override
@@ -157,6 +163,11 @@ public class LocalThemePackage implements ThemePackage {
 		return true;
 	}
 
+	@Override
+	public Collection<String> getFixedResources() {
+		return fixedResources;
+	}
+	
 	@Override
 	public Collection<ThemeResourceInfo> listResource() {
 		Collection<ThemeResourceInfo> themeResourceInfos = new ArrayList<ThemeResourceInfo>();

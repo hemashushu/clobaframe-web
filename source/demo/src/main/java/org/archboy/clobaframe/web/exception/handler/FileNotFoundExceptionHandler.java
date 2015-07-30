@@ -1,4 +1,4 @@
-package org.archboy.clobaframe.web.demo.exception.handler;
+package org.archboy.clobaframe.web.exception.handler;
 
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;

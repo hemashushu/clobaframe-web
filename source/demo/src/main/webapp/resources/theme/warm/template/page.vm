@@ -1,2 +1,0 @@
-#set ($layout = 'layout/default.vm')
-<h1 class="flat">$page.title</h1>

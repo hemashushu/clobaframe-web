@@ -57,7 +57,7 @@ public class MultiPathLocalThemePackage implements ThemePackage {
 	}
 	
 	@Override
-	public String getName() {
+	public String getTitle() {
 		return id;
 	}
 
@@ -96,6 +96,11 @@ public class MultiPathLocalThemePackage implements ThemePackage {
 		return true;
 	}
 
+	@Override
+	public Collection<String> getFixedResources() {
+		return null;
+	}
+	
 	@Override
 	public Collection<ThemeResourceInfo> listResource() {
 		Collection<ThemeResourceInfo> themeResourceInfos = new ArrayList<ThemeResourceInfo>();

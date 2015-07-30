@@ -28,7 +28,7 @@ public interface ThemePackage {
 	 * 
 	 * @return 
 	 */
-	String getName();
+	String getTitle();
 	
 	String getDescription();
 	
@@ -51,6 +51,10 @@ public interface ThemePackage {
 	 */
 	ThemeResourceInfo getResource(String name);
 	
-	//ThemeResourceInfo getResource(int contentType, String name);
+	/**
+	 * 
+	 * @return NULL if no fixed resources.
+	 */
+	Collection<String> getFixedResources();
 	
 }

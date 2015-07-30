@@ -1,16 +1,19 @@
-package org.archboy.clobaframe.web.demo.controller;
+package org.archboy.clobaframe.web.controller;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.common.collection.DefaultObjectMap;
 import org.archboy.clobaframe.common.collection.ObjectMap;
+import org.archboy.clobaframe.io.NamedResourceInfo;
 import org.archboy.clobaframe.setting.global.GlobalSetting;
 import org.archboy.clobaframe.web.theme.ThemeManager;
 import org.archboy.clobaframe.web.theme.ThemePackage;
-import org.archboy.clobaframe.web.demo.tool.ThemePageHeaderTool;
+import org.archboy.clobaframe.web.theme.inject.ThemeResourcePageHeaderTool;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +34,7 @@ public class IndexController {
 	private ThemeManager themeManager;
 	
 	@Inject
-	private ThemePageHeaderTool themePageHeaderTool;
+	private ThemeResourcePageHeaderTool themeResourcePageHeaderTool;
 
 	public void setGlobalSetting(GlobalSetting globalSetting) {
 		this.globalSetting = globalSetting;
@@ -41,8 +44,8 @@ public class IndexController {
 		this.themeManager = themeManager;
 	}
 
-	public void setThemePageHeaderTool(ThemePageHeaderTool themePageHeaderTool) {
-		this.themePageHeaderTool = themePageHeaderTool;
+	public void setThemeResourcePageHeaderTool(ThemeResourcePageHeaderTool themeResourcePageHeaderTool) {
+		this.themeResourcePageHeaderTool = themeResourcePageHeaderTool;
 	}
 	
 	@RequestMapping("/")
@@ -61,23 +64,29 @@ public class IndexController {
 	public ObjectMap setLanguage(Locale locale) {
 		// route for org.springframework.web.servlet.i18n.LocaleChangeInterceptor
 		return new DefaultObjectMap()
-				.add("result", "success")
+				//.add("result", "success")
 				.add("locale", locale.toLanguageTag());
 	}
 	
 	@ResponseBody
 	@RequestMapping("/settheme")
-	public List<String> setTheme(@RequestParam(value = "name", required = false, defaultValue = "") String name) throws FileNotFoundException {
+	public Collection<String> setTheme(@RequestParam(value = "name", required = false, defaultValue = "") String name) throws FileNotFoundException {
+		Collection<String> headers = new ArrayList<>();
+		
 		if (StringUtils.isNotEmpty(name)) {
 			ThemePackage themePackage = themeManager.get(ThemeManager.PACKAGE_CATALOG_LOCAL, name);
 			if (themePackage == null) {
-				throw new FileNotFoundException("no this theme:" + name);
+				throw new FileNotFoundException("No this theme:" + name);
 			}
+			
+			globalSetting.set("theme", name);
+			headers = themeResourcePageHeaderTool.listFixedResourceHeaders(name);
+			
+		}else{
+			globalSetting.set("theme", StringUtils.EMPTY);
 		}
 		
-		globalSetting.set("theme", name);
-		
-		return themePageHeaderTool.list(name);
+		return headers;
 	}
 	
 	@RequestMapping("/error")

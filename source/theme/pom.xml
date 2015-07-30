@@ -186,6 +186,7 @@
 			<groupId>org.archboy.clobaframe</groupId>
 			<artifactId>clobaframe-web-template</artifactId>
 			<version>${project.version}</version>
+			<scope>test</scope>
 		</dependency>
 				
 	</dependencies>

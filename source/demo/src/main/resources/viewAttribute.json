@@ -3,6 +3,8 @@
 		"bean":"resourceManagerImpl"},
 	{"key":"esc",
 		"bean":"escapeTool"},
+	{"key":"date",
+		"bean":"dateTimeFormatter"},
 	{"key":"json",
 		"bean":"jsonWriter"},
 	{"key":"msg",

@@ -18,7 +18,7 @@
 	
 	<bean id="staticAttributeLoader"
 		class="org.archboy.clobaframe.web.template.impl.DelegateStaticAttributeLoader">
-		<property name="defineFileName" value="classpath:staticViewAttribute.json"/>
+		<property name="defineFileName" value="classpath:viewAttribute.json"/>
 	</bean>
 	
 	<bean id="viewResolver"

@@ -48,7 +48,7 @@ public class LocalThemeProvider implements ThemeProvider { //, ResourceLoaderAwa
 	public static final String DEFAULT_BASE_TEMPLATE_PATH = "";
 	public static final String DEFAULT_BASE_TEMPLATE_NAME_PREFIX = "template/";
 	public static final String DEFAULT_THEME_RESOURCE_PATH = ""; // "resources/theme";
-	public static final String DEFAULT_THEME_RESOURCE_NAME_PREFIX = "";
+	public static final String DEFAULT_THEME_RESOURCE_NAME_PREFIX = "theme/";
 
 	public static final String SETTING_KEY_BASE_RESOURCE_PATH = "clobaframe.web.theme.base.resource.path";
 	public static final String SETTING_KEY_BASE_RESOURCE_NAME_PREFIX = "clobaframe.web.theme.base.resource.resourceNamePrefix";
@@ -72,6 +72,9 @@ public class LocalThemeProvider implements ThemeProvider { //, ResourceLoaderAwa
 	@Value("${" + SETTING_KEY_THEME_RESOURCE_PATH + ":" + DEFAULT_THEME_RESOURCE_PATH + "}")
 	private String themeResourcePath;
 
+	@Value("${" + SETTING_KEY_THEME_RESOURCE_NAME_PREFIX + ":" + DEFAULT_THEME_RESOURCE_NAME_PREFIX + "}")
+	private String themeResourceNamePrefix;
+	
 	private ThemePackage baseThemePackage;
 
 	private File themeResourceDir;
@@ -137,17 +140,17 @@ public class LocalThemeProvider implements ThemeProvider { //, ResourceLoaderAwa
 			themeResourceDir = getFile(themeResourcePath);
 		}
 		
-		// resolve local theme resource for export.
-		
-//			
-//			if (themeResourceDir != null) {
-//				// insert theme resource provider to web resource manager.
-//				ResourceProvider resourceProvider = new LocalThemeResourceProvider(
-//					themeResourceDir, themeResourceNamePrefix, mimeTypeDetector);
-//				
-//				resourceProviderSet.addProvider(resourceProvider);
-//			}
-//		}
+		// inject local theme resource into web resource manager
+		// It's recommended that inject theme resource in this way, because 
+		// the resource manager maybe in the different application context, and it
+		// will fail to inject.
+		if (themeResourceDir != null) {
+			// insert theme resource provider to web resource manager.
+			ResourceProvider resourceProvider = new LocalThemeResourceProvider(
+				themeResourceDir, themeResourceNamePrefix, mimeTypeDetector);
+
+			resourceProviderSet.addProvider(resourceProvider);
+		}
 	}
 
 	private File getFile(String resourcePath) {
@@ -202,7 +205,7 @@ public class LocalThemeProvider implements ThemeProvider { //, ResourceLoaderAwa
 		});
 		
 		for(File file : files) {
-			//String packageResourceNamePrefix = String.format("%s%s/", themeResourceNamePrefix, file.getName());
+			//String packageResourceNamePrefix = String.format("%s%s/", themeResourceNamePrefix, file.getTitle());
 			String packageResourceNamePrefix = null;
 			
 			ThemePackage themePackage = getThemePackage(

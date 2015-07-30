@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <head>
-$headerTool.writeResource('js/index.js')
+$headerTool.writeResource('css/common.css')
+$headerTool.writeResources($pageResources)
 $headerWriter.write()
 </head>
 <body>$screen_content</body>

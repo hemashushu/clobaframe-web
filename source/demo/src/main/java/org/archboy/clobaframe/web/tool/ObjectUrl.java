@@ -1,4 +1,4 @@
-package org.archboy.clobaframe.web.demo.tool;
+package org.archboy.clobaframe.web.tool;
 
 import java.util.Locale;
 import javax.inject.Named;

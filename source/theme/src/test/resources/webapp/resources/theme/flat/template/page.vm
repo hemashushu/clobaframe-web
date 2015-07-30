@@ -1,1 +1,2 @@
+#set ($pageResources = ['css/flat.css','js/flat.js'])
 <main>Page</main>

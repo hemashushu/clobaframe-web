@@ -17,13 +17,16 @@ import org.archboy.clobaframe.web.page.PageKey;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static org.junit.Assert.*;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 /**
  *
  * @author yang
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"/applicationContext.xml"})
+//@ContextConfiguration(locations = {"/applicationContext.xml"})
+@WebAppConfiguration("src/test/resources/webapp")
+@ContextConfiguration(locations = { "/webapp/WEB-INF/servlet.xml"})
 public class RevisionPageManagerTest {
 
 	@Inject

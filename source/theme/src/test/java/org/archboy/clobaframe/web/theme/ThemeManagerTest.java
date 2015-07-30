@@ -152,7 +152,7 @@ public class ThemeManagerTest {
 		assertEquals(ThemeManager.PACKAGE_CATALOG_LOCAL, themePackage1.getCatalog());
 		assertEquals("a test theme", themePackage1.getDescription());
 		assertDateEquals(date1, themePackage1.getLastModified());
-		assertEquals("The Dark Theme", themePackage1.getName());
+		assertEquals("The Dark Theme", themePackage1.getTitle());
 		assertEquals("dark", themePackage1.getId());
 		assertEquals("1.0.1", themePackage1.getVersion());
 		assertEquals("http://archboy.org", themePackage1.getWebsite());

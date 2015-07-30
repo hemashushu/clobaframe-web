@@ -28,7 +28,7 @@ public class ThemeController {
 	private ThemeManager themeManager;
 	
 	@Inject
-	private ThemeResourcePageHeaderTool themePageHeaderTool;
+	private ThemeResourcePageHeaderTool themeResourcePageHeaderTool;
 	
 	@ResponseBody
 	@RequestMapping("/settheme")
@@ -43,7 +43,7 @@ public class ThemeController {
 			if (themePackage == null) {
 				throw new FileNotFoundException("No this theme:" + name);
 			}
-			headers = themePageHeaderTool.list(name);
+			headers = themeResourcePageHeaderTool.listFixedResourceHeaders(name);
 		}
 		
 		globalSetting.set("theme", name);

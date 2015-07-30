@@ -1,2 +1,3 @@
 #set ($layout = 'layout/default.vm')
+#set ($pageResources = ['js/index.js'])
 <h1>Index</h1>

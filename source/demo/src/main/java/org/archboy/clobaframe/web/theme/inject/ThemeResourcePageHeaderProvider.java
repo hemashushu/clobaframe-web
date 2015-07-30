@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.setting.global.GlobalSetting;
+import org.archboy.clobaframe.web.theme.inject.ThemeResourcePageHeaderTool;
 import org.archboy.clobaframe.web.tool.PageHeaderProvider;
 
 /**
@@ -41,7 +42,7 @@ public class ThemeResourcePageHeaderProvider implements PageHeaderProvider {
 			return new ArrayList<String>();
 		}
 
-		return themeResourcePageHeaderTool.list(themeName);
+		return themeResourcePageHeaderTool.listFixedResourceHeaders(themeName);
 	}
 	
 }

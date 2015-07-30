@@ -41,7 +41,7 @@ var PageBox = React.createClass({
 	handleLanguageChange: function(url) {
 		var me = this;
 		$.getJSON(url).done(function(data, textStatus, jqXHR){
-			if (data.result === 'success') {
+			if (data.locale) {
 				me.loadPages();
 
 				// update form

@@ -1,11 +1,11 @@
-package org.archboy.clobaframe.web.demo.controller;
+package org.archboy.clobaframe.web.controller;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
 import javax.validation.Valid;
-import org.archboy.clobaframe.web.demo.controller.form.PagePostForm;
+import org.archboy.clobaframe.web.controller.form.PagePostForm;
 import org.archboy.clobaframe.web.page.PageInfo;
 import org.archboy.clobaframe.web.page.PageKey;
 import org.archboy.clobaframe.web.page.PageManager;

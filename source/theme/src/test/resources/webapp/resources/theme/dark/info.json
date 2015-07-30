@@ -1,5 +1,6 @@
 {
-	"name": "The Dark Theme",
+	"title": "The Dark Theme",
+	"fixedResources":["css/dark.css","js/dark.js"],
 	"description": "a test theme",
 	"version": "1.0.1",
 	"lastModified": "2015-06-21T18:35:30.555Z",

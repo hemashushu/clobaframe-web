@@ -23,7 +23,7 @@
 				<ul class="list-inline">
 					<li>Locale: <em>$page.pageKey.locale</em></li>
 					<li>Revision: <em>$page.revision</em></li>
-					<li>Update: <em>$date.format('medium', $page.lastModified)</em></li>
+					<li>Update: <em>$date.datetime($page.lastModified,'medium','medium')</em></li>
 				</ul>
 			</div>
 			<div class="content markdown">
@@ -40,7 +40,7 @@
 						<a href="$objectUrl.revisionPage($revision)">
 							Rev. $revision.revision 
 							- 
-							<small class="text-muted">$date.format('long_date', $revision.lastModified)</small>
+							<small class="text-muted">$date.date($revision.lastModified, 'long')</small>
 						</a>
 					</li>
 					#end

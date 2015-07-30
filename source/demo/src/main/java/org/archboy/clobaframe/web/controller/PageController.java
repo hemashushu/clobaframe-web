@@ -1,4 +1,4 @@
-package org.archboy.clobaframe.web.demo.controller;
+package org.archboy.clobaframe.web.controller;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import org.archboy.clobaframe.web.page.PageInfo;
 import org.archboy.clobaframe.web.page.PageKey;
 import org.archboy.clobaframe.web.page.revision.RevisionPageInfo;
 import org.archboy.clobaframe.web.page.revision.RevisionPageManager;
-import org.archboy.clobaframe.web.demo.tool.ObjectUrl;
+import org.archboy.clobaframe.web.tool.ObjectUrl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
@@ -30,7 +30,7 @@ public class PageController {
 	private final int pagePathPrefixNameLength = "/page/".length();
 	private final int pagePrefixUrlNameLength = "/".length();
 	
-	private static final String DEFAULT_TEMPLATE_NAME = "page";
+//	private static final String DEFAULT_TEMPLATE_NAME = "page";
 	
 //	@Value("${clobaframe.web.page.defaultTemplateName:" + DEFAULT_TEMPLATE_NAME + "}")
 //	private String defaultTemplateName;

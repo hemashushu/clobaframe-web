@@ -10,7 +10,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.log.CommonsLogLogChute;
 import org.apache.velocity.runtime.log.Log4JLogChute;
+import org.apache.velocity.runtime.log.LogChute;
 import org.archboy.clobaframe.web.template.TemplateManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -72,8 +74,11 @@ public class VelocityConfigurer {
 			}
 		}
 		
+		//LogChute logChute = new CommonsLogLogChute();
 		VelocityEngine engine = new VelocityEngine(properties);
-		engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM, new Log4JLogChute()); // set using Log4J
+		//engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM, new Log4JLogChute()); // set using Log4J
+		engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, CommonsLogLogChute.class);
+		
 		initResourceLoader(engine);
 		engine.init();
 		
