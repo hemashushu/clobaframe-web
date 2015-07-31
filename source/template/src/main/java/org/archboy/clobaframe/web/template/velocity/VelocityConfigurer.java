@@ -34,13 +34,24 @@ public class VelocityConfigurer {
 	private ResourceLoader resourceLoader;
 	
 	@Inject
-	private TemplateManager viewResourceManager;
+	private TemplateManager templateManager;
 	
 	private static final String SETTING_KEY_CONFIG_FILE_NAME = "clobaframe.web.template.velocity.configFileName";
+	private static final String SETTING_KEY_ENABLE_CACHE = "clobaframe.web.template.velocity.enableCache";
+	private static final String SETTING_KEY_CACHE_SECONDS = "clobaframe.web.template.velocity.cacheSeconds";
+			
 	private static final String DEFAULT_CONFIG_FILE_NAME = ""; // "classpath:velocity.properties"
+	private static final boolean DEFAULT_ENABLE_CACHE = true;
+	private static final int DEFAULT_CACHE_SECONDS = 60;
 	
 	@Value("${" + SETTING_KEY_CONFIG_FILE_NAME + ":" + DEFAULT_CONFIG_FILE_NAME + "}")
 	private String configLocation;
+	
+	@Value("${" + SETTING_KEY_ENABLE_CACHE + ":" + DEFAULT_ENABLE_CACHE + "}")
+	private boolean enableCache = DEFAULT_ENABLE_CACHE;
+	
+	@Value("${" + SETTING_KEY_CACHE_SECONDS + ":" + DEFAULT_CACHE_SECONDS + "}")
+	private int cacheSeconds = DEFAULT_CACHE_SECONDS;
 	
 	private VelocityEngine velocityEngine;
 
@@ -48,8 +59,20 @@ public class VelocityConfigurer {
 		this.resourceLoader = resourceLoader;
 	}
 
-	public void setViewResourceManager(TemplateManager viewResourceManager) {
-		this.viewResourceManager = viewResourceManager;
+	public void setTemplateManager(TemplateManager templateManager) {
+		this.templateManager = templateManager;
+	}
+
+	public void setConfigLocation(String configLocation) {
+		this.configLocation = configLocation;
+	}
+
+	public void setEnableCache(boolean enableCache) {
+		this.enableCache = enableCache;
+	}
+
+	public void setCacheSeconds(int cacheSeconds) {
+		this.cacheSeconds = cacheSeconds;
 	}
 	
 	@PostConstruct
@@ -74,10 +97,9 @@ public class VelocityConfigurer {
 			}
 		}
 		
-		//LogChute logChute = new CommonsLogLogChute();
 		VelocityEngine engine = new VelocityEngine(properties);
-		//engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM, new Log4JLogChute()); // set using Log4J
-		engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, CommonsLogLogChute.class);
+		engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM, new CommonsLogLogChute());
+		//engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, CommonsLogLogChute.class);
 		
 		initResourceLoader(engine);
 		engine.init();
@@ -91,7 +113,13 @@ public class VelocityConfigurer {
 		velocityEngine.setProperty(
 				DelegateVelocityTemplateResourceLoader.RESOURCE_LOADER_CLASS, DelegateVelocityTemplateResourceLoader.class.getName());
 		velocityEngine.setProperty(
-				DelegateVelocityTemplateResourceLoader.VIEW_RESOURCE_MANAGER, viewResourceManager);
+				DelegateVelocityTemplateResourceLoader.RESOURCE_LOADER_CACHE, Boolean.toString(enableCache));
+		velocityEngine.setProperty(
+				DelegateVelocityTemplateResourceLoader.RESOURCE_LOADER_MODIFICATION_CHECK_INTERVAL, Integer.toString(cacheSeconds));
+		
+		// bring the resource manager to delegater.
+		velocityEngine.setApplicationAttribute(
+				DelegateVelocityTemplateResourceLoader.TEMPLATE_RESOURCE_MANAGER, templateManager);
 	}
 	
 	public VelocityEngine getVelocityEngine(){

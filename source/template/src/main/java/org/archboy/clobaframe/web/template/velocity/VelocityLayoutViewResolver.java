@@ -25,7 +25,7 @@ public class VelocityLayoutViewResolver implements ViewResolver {
 	public static final String SETTING_KEY_RESOURCE_NAME_SUFFIX = "clobaframe.web.template.velocity.resourceNameSuffix";
 	public static final String SETTING_KEY_CONTENT_TYPE = "clobaframe.web.template.velocity.contentType";
 	
-	public static final String DEFAULT_LAYOUT_URL = "dayout/default.vm";
+	public static final String DEFAULT_LAYOUT_URL = "layout/default.vm";
 	public static final String DEFAULT_LAYOUT_KEY = "layout";
 	public static final String DEFAULT_SCREEN_CONTENT_KEY = "screen_content";
 	public static final String DEFAULT_RESOURCE_NAME_PREFIX = "";
@@ -82,6 +82,10 @@ public class VelocityLayoutViewResolver implements ViewResolver {
 
 	public void setStaticAttributeLoader(StaticAttributeLoader staticAttributeLoader) {
 		this.staticAttributeLoader = staticAttributeLoader;
+	}
+
+	public void setVelocityEngineFactory(VelocityConfigurer velocityEngineFactory) {
+		this.velocityEngineFactory = velocityEngineFactory;
 	}
 	
 	@Override

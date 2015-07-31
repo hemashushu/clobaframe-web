@@ -18,16 +18,21 @@
 	
 	<bean id="staticAttributeLoader"
 		class="org.archboy.clobaframe.web.template.impl.DelegateStaticAttributeLoader">
+		<!--		
 		<property name="defineFileName" value="classpath:viewAttribute.json"/>
+		-->
 	</bean>
 	
 	<bean id="viewResolver"
 		class="org.archboy.clobaframe.web.template.velocity.VelocityLayoutViewResolver">
+		<!--
 		<property name="layoutUrl" value="layout/default.vm"/>
 		<property name="viewResourcePrefix" value=""/>
 		<property name="viewResourceSuffix" value=".vm"/>
 		<property name="contentType" value="text/html; charset=UTF-8"/>
 		<property name="staticAttributeLoader" ref="staticAttributeLoader"/>
+		<property name="velocityEngineFactory" ref="velocityConfigurer"/>
+		-->
 	</bean>
 
 </beans>

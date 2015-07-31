@@ -66,6 +66,9 @@ public class IndexControllerTest {
 		//mock.perform(get("/page"))
 		//		.andExpect(status().isNotFound());
 		
+		// NOTE::
+		// to test the theme changing, it's needed to turn off the template engine cache.
+		
 		// set theme to "dark"
 		mock.perform(get("/settheme").param("name", "dark"))
 				.andExpect(status().isOk())
