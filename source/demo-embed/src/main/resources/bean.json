@@ -1,0 +1,44 @@
+[
+	{"id":"messageSource",
+		"class":"org.springframework.context.support.ReloadableResourceBundleMessageSource",
+		"props":[
+			{"name":"basename", "value":"classpath:org/archboy/clobaframe/web/i18n/messages"},
+			{"name":"cacheSeconds", "value":"-1"}
+			]},
+	
+	{"id":"resourceManagerImpl",
+		"class":""},
+	
+	{"class":"org.archboy.clobaframe.web.mvc.impl.DefaultRouteDefinitionLoader"},
+	{"class":"org.archboy.clobaframe.web.mvc.DispatcherServlet"},
+	
+	{"class":"org.archboy.clobaframe.web.template.impl.TemplateManagerImpl"},
+	{"class":"org.archboy.clobaframe.web.template.velocity.VelocityConfigurer"},
+	{"class":"org.archboy.clobaframe.web.template.velocity.VelocityLayoutViewResolver"},
+	{"class":"org.archboy.clobaframe.web.template.velocity.local.LocalTemplateResourceProvider"},
+	
+	{"class":"org.archboy.clobaframe.web.page.revision.impl.RevisionPageManagerImpl"},
+	{"class":"org.archboy.clobaframe.web.page.revision.local.impl.LocalRevisionPageProvider"},
+	
+	
+	{"class":"org.archboy.clobaframe.web.tool.impl.EscapeToolImpl"},
+	{"class":"org.archboy.clobaframe.web.tool.DateTimeProvider"},
+	{"class":"org.archboy.clobaframe.web.tool.impl.JsonWriterImpl"},
+	{"class":"org.archboy.clobaframe.web.tool.impl.MessageSourceToolImpl"},
+	{"class":"org.archboy.clobaframe.web.tool.impl.PageHeaderToolImpl"},
+	{"class":"org.archboy.clobaframe.web.tool.impl.PageHeaderWriterImpl"},
+	{"class":"org.archboy.clobaframe.web.tool.impl.DefaultContextPageHeaderProvider"},
+	
+	{"class":"org.archboy.clobaframe.service.InMemoryGlobalSettingRepository"},
+	{"class":"org.archboy.clobaframe.web.controller.IndexController"},
+	{"class":"org.archboy.clobaframe.web.controller.PageController"},
+	{"class":"org.archboy.clobaframe.web.controller.ResourcesController"},
+	{"class":"org.archboy.clobaframe.web.controller.RestController"},
+	{"class":"org.archboy.clobaframe.web.controller.ThemeController"},
+	{"class":"org.archboy.clobaframe.web.mvc.controller.exception.resolver.FileNotFoundExceptionResolver"},
+	{"class":"org.archboy.clobaframe.web.service.InMemoryRevisionPageRepository"},
+	{"class":"org.archboy.clobaframe.web.theme.inject.ThemeResourcePageHeaderProvider"},
+	{"class":"org.archboy.clobaframe.web.theme.inject.ThemeTemplateProvider"},
+	{"class":"org.archboy.clobaframe.web.tool.ObjectUrl"}
+
+]

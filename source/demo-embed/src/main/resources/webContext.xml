@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:mvc="http://www.springframework.org/schema/mvc"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		">
+
+	<import resource="classpath:velocityContext.xml" />
+	
+	<!-- Scans the classpath of this application for @Components to deploy as
+		beans -->
+	<context:component-scan base-package="org.archboy.clobaframe.web"/>
+		
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<!-- JSR-303 support will be detected on classpath and enabled automatically -->
+	<mvc:annotation-driven/>
+	
+	<!-- Spring placeholder configurer -->
+	<bean id="propertyPlaceholderConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:web.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Configures Handler Interceptors -->
+	<mvc:interceptors>
+		<!-- Changes the locale when a '_locale' request parameter is sent; e.g.
+			/?locale=de -->
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+			<property name="paramName" value="_locale"/>
+		</bean>
+	</mvc:interceptors>
+
+	<!-- Saves locale change by cookie -->
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+		<property name="cookieName" value="LOCALE"/>
+		<!-- one month, 30 days -->
+		<property name="cookieMaxAge" value="2592000"/>
+		<property name="cookieDomain" value="localhost"/>
+	</bean>
+	
+<!--	<bean class="org.archboy.clobaframe.web.theme.inject.LocalThemeResourceProvider"></bean>-->
+	<bean class="org.archboy.clobaframe.web.theme.inject.ThemeResourcePageHeaderProvider"></bean>
+	<bean class="org.archboy.clobaframe.web.theme.inject.ThemeTemplateProvider"></bean>
+	
+</beans>

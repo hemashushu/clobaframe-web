@@ -1,9 +1,10 @@
-package org.archboy.clobaframe.web.controller.exception.handler;
+package org.archboy.clobaframe.web.controller.exception.resolver;
 
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileNotFoundException;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.archboy.clobaframe.common.collection.DefaultObjectMap;
 import org.archboy.clobaframe.common.collection.ObjectMap;
 import org.springframework.http.HttpHeaders;
@@ -22,14 +23,15 @@ import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolv
  * @author yang
  */
 @Named
-public class FileNotFoundExceptionHandler implements HandlerExceptionResolver {
+public class ResourceNotFoundExceptionResolver implements HandlerExceptionResolver {
 
 	@Override
 	public ModelAndView resolveException(HttpServletRequest request,
 		HttpServletResponse response,
 		Object handler, Exception ex) {
 
-		if (ex instanceof FileNotFoundException) {
+		if (ex instanceof ResourceNotFoundException) {
+			
 			// disable the client cache
 			response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache");
 			response.setDateHeader(HttpHeaders.EXPIRES, 1L);

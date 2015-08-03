@@ -1,0 +1,12 @@
+Hello World
+======
+
+“Hello, World”程序指的是指在计算机屏幕上输出“Hello, World!”（意为“你好，世界！”）这行字符串的计算机程序。一般来说，这是每一种计算机编程语言中最基本、最简单的程序，亦通常是初学者所编写的第一个程序。它还可以用来确定该语言的编译器、程序开发环境，以及运行环境是否已经安装妥当。
+
+将输出字符串“Hello World”作为第一个示范程序，现在已经成为编程语言学习的传统。该程序因布莱恩·柯林汉（Brian Kernighan）和丹尼斯·里奇（Dennis M. Ritchie）所著的计算机程序设计著作《C程序设计语言》（The C Programming Language）中使用而广泛流传；但对于这本书是“Hello World”的起源，是一个错误认知。
+
+Hello World”示范程序最早出现于1972年，由贝尔实验室成员布莱恩·柯林汉撰写的内部技术文件《"A Tutorial Introduction to the Language B" 》之中。不久同作者于1974年所撰写的《Programming in C: A Tutorial》，也延用这个示例；而以本文件扩编改写的《C语言程序设计》也保留了这个示范程序。
+
+但是需要注意的是，Hello World的标准程序是“hello, world”，没有感叹号，全部小写，逗号后面有空格，与现在流行的写法并不一致。
+
+[1]: https://zh.wikipedia.org/wiki/Hello_World

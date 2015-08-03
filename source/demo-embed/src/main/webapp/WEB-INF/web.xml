@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0"
+		 xmlns="http://java.sun.com/xml/ns/javaee"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd
+	">
+
+	<display-name>clobaframe-web-demo</display-name>
+
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>clobaframe-web-demo.root</param-value>
+	</context-param>
+
+	<!-- The image library -->
+<!--	<listener>
+		<display-name>ImageIO service provider loader/unloader</display-name>
+		<listener-class>com.twelvemonkeys.servlet.image.IIOProviderContextListener</listener-class>
+	</listener>-->
+	
+	<!-- Processes application requests -->
+	<servlet>
+		<servlet-name>clobaframe-web-demo</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>clobaframe-web-demo</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+	
+	<!-- Addition MIME types -->
+	<mime-mapping>
+		<extension>ico</extension>
+		<mime-type>image/x-icon</mime-type>
+	</mime-mapping>
+	
+	<!--
+		Disables Servlet Container welcome file handling. Needed for
+		compatibility with Servlet 3.0 and Tomcat 7.0
+	-->
+	<welcome-file-list>
+		<welcome-file></welcome-file>
+	</welcome-file-list>
+
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+	
+	<!-- for cluster and load balance, add this node to enable session replication -->
+	<!--
+	<distributable/>
+	-->
+	
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error?code=notFound</location>
+	</error-page>
+</web-app>

@@ -1,4 +1,4 @@
-package org.archboy.clobaframe.web.exception.handler;
+package org.archboy.clobaframe.web.exception.resolver;
 
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +22,7 @@ import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolv
  * @author yang
  */
 @Named
-public class FileNotFoundExceptionHandler implements HandlerExceptionResolver {
+public class FileNotFoundExceptionResolver implements HandlerExceptionResolver {
 
 	@Override
 	public ModelAndView resolveException(HttpServletRequest request,

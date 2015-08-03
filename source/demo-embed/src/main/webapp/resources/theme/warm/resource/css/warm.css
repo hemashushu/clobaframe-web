@@ -1,0 +1,41 @@
+/*
+ * warm.css
+ */
+
+body {
+	background-color: #fffcee;
+}
+
+header {
+	height: 300px;
+	background-image: url('../image/warm.jpg');
+	background-size: 100% auto;
+	margin-bottom: 24px;
+	position: relative;
+}
+
+header h1 {
+	position: absolute;
+	bottom: 24px;
+}
+
+header h1 a {
+	color: #fff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: #333;
+}
+
+a {
+	color: #c05b4d;
+}
+
+.form-control {
+	background-color: #FFF8E4;
+}
+
+.form-control:focus {
+	border-color: #CC7A6F;
+	box-shadow: none;
+}

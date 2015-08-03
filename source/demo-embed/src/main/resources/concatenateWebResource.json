@@ -1,0 +1,16 @@
+{
+	"css/combine-common.css":[
+		"css/bootstrap.css",
+		"css/font-awesome.css",
+		"css/common.css"
+	],
+	
+	"js/combine-common.js":[
+		"js/react.js",
+		"js/JSXTransformer.js",
+		"js/jquery-1.11.1.js",
+		"js/bootstrap.js",
+		"js/misc.js",
+		"js/common.js"
+	]
+}

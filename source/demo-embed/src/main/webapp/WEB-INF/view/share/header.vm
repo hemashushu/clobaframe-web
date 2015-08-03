@@ -1,0 +1,6 @@
+<!-- header -->
+<header>
+	<div class="container">
+		<h1><a href="/">$msg.write('site.title')</a></h1>
+	</div>
+</header>
