@@ -1,4 +1,4 @@
-package org.archboy.clobaframe.service;
+package org.archboy.clobaframe.setting.global;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

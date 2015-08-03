@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.web.page.PageInfo;
 import org.archboy.clobaframe.web.page.PageKey;
 import org.archboy.clobaframe.web.page.revision.RevisionPageManager;
+import org.springframework.core.Ordered;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,13 +22,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author yang
  */
 @Controller
-public class RestController {
+public class RestController implements Ordered {
 	
 	@Inject
 	private RevisionPageManager revisionPageManager;
 
 	public void setRevisionPageManager(RevisionPageManager revisionPageManager) {
 		this.revisionPageManager = revisionPageManager;
+	}
+
+	@Override
+	public int getOrder() {
+		return 50;
 	}
 	
 	@ResponseBody
@@ -39,7 +45,8 @@ public class RestController {
 			locale = preferLocale;
 		}
 		
-		Collection<PageInfo> pageInfos = revisionPageManager.listByLocale(locale);
+		//TODO::
+		Collection<PageInfo> pageInfos = revisionPageManager.listByLocale(Locale.ENGLISH);
 		return pageInfos;
 	}
 

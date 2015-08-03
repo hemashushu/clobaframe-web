@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.archboy.clobaframe.resource.http.NamedResourceSender;
+import org.springframework.core.Ordered;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author yang
  */
 @Controller
-public class ResourcesController {
+public class ResourcesController implements Ordered {
 
 	@Inject
 	private NamedResourceSender resourceSender;
@@ -32,6 +33,11 @@ public class ResourcesController {
 
 	public void setRootResourceNamePrefix(String rootResourceNamePrefix) {
 		this.rootResourceNamePrefix = rootResourceNamePrefix;
+	}
+
+	@Override
+	public int getOrder() {
+		return 50;
 	}
 	
 	/**

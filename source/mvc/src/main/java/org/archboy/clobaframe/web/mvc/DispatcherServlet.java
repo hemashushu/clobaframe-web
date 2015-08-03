@@ -119,27 +119,29 @@ public class DispatcherServlet extends HttpServlet {
 				if (modelAndView != null){
 					if (modelAndView.isEmpty()){
 						// the handler process the response itself.
-						return;
 					}else{
 						try {
 							View view = viewResolver.resolveViewName(modelAndView.getViewName(), req.getLocale());
 							if (view == null) {
 								resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
 										String.format("View [%s] not found.", modelAndView.getViewName()));
-								return;
+							}else {
+								view.render(modelAndView.getModel(), req, resp);
 							}
-							view.render(modelAndView.getModel(), req, resp);
 						} catch (Exception tex) {
 							logger.info(tex.getMessage(), tex);
 							resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, tex.getMessage());
-							return;
 						}
 					}
+					
+					return;
 				}
 			}
 			
 			// no match exception resolver.
-			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No match exception resolver.");
+			logger.error("No match exception resolver", te);
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+					String.format("No match exception resolver for [%s].", te.getClass().getName()));
 		}
 	}
 	
@@ -200,7 +202,7 @@ public class DispatcherServlet extends HttpServlet {
 				Class<?> annotationType = annotation.annotationType();
 				if (annotationType.equals(RequestParam.class)){
 					// handle @RequestParam
-					Assert.isTrue(clazz.equals(String.class));
+					//Assert.isTrue(clazz.equals(String.class));
 					
 					RequestParam requestParam = (RequestParam)annotation;
 					String value = req.getParameter(requestParam.value());
@@ -212,13 +214,34 @@ public class DispatcherServlet extends HttpServlet {
 											controller.getClass().getName(), 
 											method.getName()));
 						}else{
-							params.add(
-									requestParam.defaultValue().equals(ValueConstants.DEFAULT_NONE) ? 
-											null : requestParam.defaultValue());
+							if (requestParam.defaultValue().equals(ValueConstants.DEFAULT_NONE)) {
+								params.add(null);
+								continue;
+							}else{
+								value = requestParam.defaultValue();
+							}
 						}
-					}else{
-						params.add(value);
 					}
+					
+					//params.add(value);
+					if (clazz.equals(Locale.class)){
+						params.add(Locale.forLanguageTag(value));
+					}else if (clazz.equals(Integer.class) || clazz == Integer.TYPE) {
+						params.add(Integer.parseInt(value));
+					}else if (clazz.equals(Long.class) || clazz == Long.TYPE) {
+						params.add(Long.parseLong(value));
+					}else if (clazz.equals(Boolean.class) || clazz == Boolean.TYPE) {
+						params.add(Boolean.parseBoolean(value));
+					}else if (clazz.equals(String.class)) {
+						params.add(value);
+					}else{
+						throw new IllegalArgumentException(
+								String.format("Unsupport type of parameter [%s] in method [%s#%s].",
+										requestParam.value(), 
+										controller.getClass().getName(), 
+										method.getName()));
+					}
+					
 				}else if (annotationType.equals(PathVariable.class)) {
 					// handle @PathVariable
 					Assert.isTrue(clazz.equals(String.class));
@@ -252,6 +275,8 @@ public class DispatcherServlet extends HttpServlet {
 				}
 			}
 		} // end building params
+		
+		logger.info("Execute route [{}] in controller [{}].", method.getName(), controller.getClass().getSimpleName());
 		
 		// excute
 		Object returnObject = method.invoke(controller, params.toArray());

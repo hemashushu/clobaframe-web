@@ -10,13 +10,14 @@
 	</parent>
 
 	<artifactId>clobaframe-web-demo-embed</artifactId>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>clobaframe-web-demo-embed</name>
 	<url>https://github.com/ivarptr/clobaframe-web</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<org.eclipse.jetty-version>9.2.10.v20150310</org.eclipse.jetty-version>
 	</properties>
 
 	<dependencies>
@@ -58,7 +59,20 @@
 			<groupId>org.mortbay.jetty</groupId>
 			<artifactId>servlet-api</artifactId>
 		</dependency>
-			
+		
+		<!-- Jetty -->
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>${org.eclipse.jetty-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-servlet</artifactId>
+			<version>${org.eclipse.jetty-version}</version>
+		</dependency>
+		
 		<!-- Clobaframe -->
 		<dependency>
 			<groupId>org.archboy.clobaframe</groupId>
@@ -134,5 +148,20 @@
 			<version>1.0.0.GA</version>
 		</dependency>-->
 	</dependencies>
+	
+	<build>
+		<!-- the final package name -->
+		<finalName>web-demo-embed</finalName>
+		
+		<resources>
+			<resource>
+				<targetPath>webapp</targetPath>
+				<directory>src/main/webapp</directory>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+	</build>
 
 </project>

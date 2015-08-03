@@ -61,6 +61,7 @@ public class VelocityLayoutView implements View {
 		VelocityContext velocityContext = new VelocityContext(attributes);
 		
 		response.setContentType(getContentType());
+		response.setCharacterEncoding("UTF-8");
 		doRender(velocityContext, response.getWriter());
 	}
 	

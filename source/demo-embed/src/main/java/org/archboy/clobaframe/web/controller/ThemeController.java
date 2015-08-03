@@ -9,6 +9,7 @@ import org.archboy.clobaframe.setting.global.GlobalSetting;
 import org.archboy.clobaframe.web.theme.ThemeManager;
 import org.archboy.clobaframe.web.theme.ThemePackage;
 import org.archboy.clobaframe.web.theme.inject.ThemeResourcePageHeaderTool;
+import org.springframework.core.Ordered;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author yang
  */
 @Controller
-public class ThemeController {
+public class ThemeController implements Ordered {
 
 	@Inject
 	private GlobalSetting globalSetting;
@@ -42,6 +43,11 @@ public class ThemeController {
 		this.themeResourcePageHeaderTool = themeResourcePageHeaderTool;
 	}
 
+	@Override
+	public int getOrder() {
+		return 50;
+	}
+	
 	@ResponseBody
 	@RequestMapping("^/settheme$")
 	public Collection<String> setTheme(

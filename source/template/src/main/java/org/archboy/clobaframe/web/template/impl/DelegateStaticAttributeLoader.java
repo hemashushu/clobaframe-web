@@ -13,6 +13,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.web.template.StaticAttributeLoader;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -53,7 +54,7 @@ public class DelegateStaticAttributeLoader implements StaticAttributeLoader {
 	public void setBeanFactory(BeanFactory beanFactory) {
 		this.beanFactory = beanFactory;
 	}
-	
+
 	@PostConstruct
 	public void init() throws Exception {
 		if (StringUtils.isEmpty(defineFileName)) {
@@ -78,10 +79,10 @@ public class DelegateStaticAttributeLoader implements StaticAttributeLoader {
 					String bean = item.get("bean");
 					Object object = beanFactory.getBean(bean);
 
-					if (object == null) {
-						throw new IllegalArgumentException(
-								String.format("Can not found the bean [id=%s]", bean));
-					}
+//					if (object == null) {
+//						throw new IllegalArgumentException(
+//								String.format("Can not found the bean [id=%s]", bean));
+//					}
 
 					staticAttributes.put(key, object);
 				//}

@@ -1,6 +1,7 @@
 package org.archboy.clobaframe.web.template.velocity.local;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -26,7 +27,7 @@ import org.springframework.core.io.ResourceLoader;
  * @author yang
  */
 @Named
-public class LocalTemplateResourceProvider implements TemplateProvider { //, ResourceLoaderAware {
+public class LocalTemplateProvider implements TemplateProvider { //, ResourceLoaderAware {
 
 	public static final String SETTING_KEY_LOCAL_PATH = "clobaframe.web.template.local.path";
 	public static final String SETTING_KEY_RESOURCE_NAME_PREFIX = "clobaframe.web.template.local.resourceNamePrefix";
@@ -48,7 +49,7 @@ public class LocalTemplateResourceProvider implements TemplateProvider { //, Res
 	
 	private LocalResourceProvider localResourceProvider;
 	
-	private final Logger logger = LoggerFactory.getLogger(LocalTemplateResourceProvider.class);
+	private final Logger logger = LoggerFactory.getLogger(LocalTemplateProvider.class);
 	
 	public void setLocalPath(String localPath) {
 		this.localPath = localPath;
@@ -74,21 +75,23 @@ public class LocalTemplateResourceProvider implements TemplateProvider { //, Res
 		
 		Resource resource = resourceLoader.getResource(localPath);
 		
-		try{
+		//try{
 			File basePath = resource.getFile();
 			
 			if (!basePath.exists()){
-				logger.error("Can not find the view resource folder [{}].", localPath);
-				return;
+				//logger.error("Can not find the view resource folder [{}].", localPath);
+				//return;
+				throw new FileNotFoundException(
+						String.format("Can not find the view resource folder [%s].", localPath));
 			}
 			
 			LocalResourceNameStrategy localResourceNameStrategy = new DefaultLocalResourceNameStrategy(basePath, resourceNamePrefix);
 			LocalResourceInfoFactory localResourceInfoFactory = new LocalResourceInfoFactory(mimeTypeDetector, localResourceNameStrategy);
 			this.localResourceProvider = new DefaultLocalResourceProvider(basePath, localResourceInfoFactory, localResourceNameStrategy);
 			
-		}catch(IOException e){
-			logger.error("Load local view resource provider error, message: {}", e.getMessage());
-		}
+//		}catch(IOException e){
+//			logger.error("Load local view resource provider error, message: {}", e.getMessage());
+//		}
 	}
 	
 	@Override
