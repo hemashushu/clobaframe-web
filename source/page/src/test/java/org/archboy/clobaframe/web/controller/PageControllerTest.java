@@ -48,7 +48,7 @@ public class PageControllerTest {
 		// test get page with locale
 		mock.perform(get("/page/about").locale(Locale.SIMPLIFIED_CHINESE))
 				.andExpect(status().isOk())
-				.andExpect(content().string("<h1>about zh_CN r8</h1>"));
+				.andExpect(content().string("<h1>about zh-CN r8</h1>"));
 		
 		// test get page with locale that does not exists
 		mock.perform(get("/page/about").locale(Locale.GERMANY))
@@ -59,7 +59,7 @@ public class PageControllerTest {
 		mock.perform(get("/page/terms").locale(Locale.JAPANESE)
 				.param("locale", "zh_CN"))
 				.andExpect(status().isOk())
-				.andExpect(content().string("<h3>terms zh_CN r24</h3>"));
+				.andExpect(content().string("<h3>terms zh-CN r24</h3>"));
 		
 		// test get page with prefer locale that does not exist
 		mock.perform(get("/page/terms").locale(Locale.JAPANESE)
@@ -71,7 +71,7 @@ public class PageControllerTest {
 				.param("locale", "zh_CN")
 				.param("revision", "23"))
 				.andExpect(status().isOk())
-				.andExpect(content().string("<h3>terms zh_CN r23</h3>"));
+				.andExpect(content().string("<h3>terms zh-CN r23</h3>"));
 		
 		// test get page with prefer locale and revision that does not found
 		mock.perform(get("/page/terms").locale(Locale.JAPANESE)
@@ -99,7 +99,7 @@ public class PageControllerTest {
 		mock.perform(get("/help/terms").locale(Locale.ENGLISH)
 				.param("locale", "zh_CN"))
 				.andExpect(status().isOk())
-				.andExpect(content().string("<h3>terms zh_CN r24</h3>"));
+				.andExpect(content().string("<h3>terms zh-CN r24</h3>"));
 		
 		// test get page by url name and prefer locale that does not exist
 		mock.perform(get("/help/terms").locale(Locale.ENGLISH)
@@ -111,7 +111,7 @@ public class PageControllerTest {
 				.param("locale", "zh_CN")
 				.param("revision", "23"))
 				.andExpect(status().isOk())
-				.andExpect(content().string("<h3>terms zh_CN r23</h3>"));
+				.andExpect(content().string("<h3>terms zh-CN r23</h3>"));
 		
 		// test get page with prefer locale and revision that does not found
 		mock.perform(get("/help/terms").locale(Locale.JAPANESE)

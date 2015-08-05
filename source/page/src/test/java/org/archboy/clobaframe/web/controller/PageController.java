@@ -51,7 +51,7 @@ public class PageController {
 		}else if (preferLocale != null) {
 			page = revisionPageManager.get(new PageKey(pageName, preferLocale));
 		}else {
-			page = getCompatibleLocalePage(pageName, locale);
+			page = getCompatibleLocalePage(pageName, locale, true);
 		}
 		
 		if (page == null){
@@ -90,7 +90,7 @@ public class PageController {
 		}else if (preferLocale != null) {
 			page = revisionPageManager.get(new PageKey(pageName, preferLocale));
 		}else {
-			page = getCompatibleLocalePage(pageName, locale);
+			page = getCompatibleLocalePage(pageName, locale, true);
 		}
 		
 		if (page == null){
@@ -109,39 +109,43 @@ public class PageController {
 	/**
 	 * try to find the compatible language page.
 	 * 
-	 * @param pageName
-	 * @param locale
+	 * When specify locale is NULL then return the application default locale page.
+	 * 
 	 * @return 
 	 */
-	private PageInfo getCompatibleLocalePage(String pageName, Locale locale) {
+	private PageInfo getCompatibleLocalePage(String pageName, Locale locale, boolean fallbackDefault) {
 		
-		PageKey pageKey = new PageKey(pageName, locale);
-		PageInfo page = revisionPageManager.get(pageKey);
+		Locale defaultLocale = revisionPageManager.getDefaultLocale();
 		
-		if (page != null) {
-			return page;
+		if (locale == null) {
+			return revisionPageManager.get(new PageKey(pageName, defaultLocale));
 		}
 		
-		if (StringUtils.isNotEmpty(locale.getLanguage())){
-			
-			// try to get the page without country code
-			if (StringUtils.isNotEmpty(locale.getCountry())){
-			
-				locale = new Locale(locale.getLanguage());
-				pageKey = new PageKey(pageName, locale);
-				page = revisionPageManager.get(pageKey);
+		PageInfo pageInfo = revisionPageManager.get(new PageKey(pageName, locale));
+		
+		if (pageInfo != null) {
+			return pageInfo;
+		}
+		
+		// try to get the page without country code
+		if (StringUtils.isNotEmpty(locale.getCountry())){
 
-				if (page != null) {
-					return page;
-				}
+			pageInfo = revisionPageManager.get(new PageKey(
+					pageName, 
+					new Locale(locale.getLanguage())));
+
+			if (pageInfo != null) {
+				return pageInfo;
 			}
+		}
 			
 			// try to get the page with default locale
-			pageKey = new PageKey(pageName, revisionPageManager.getDefaultLocale());
-			page = revisionPageManager.get(pageKey);
+		if (fallbackDefault) {
+			return revisionPageManager.get(new PageKey(
+					pageName, defaultLocale));
 		}
 		
-		return page;
+		return null;
 	}
 		
 }

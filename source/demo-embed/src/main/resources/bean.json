@@ -31,6 +31,14 @@
 	{"class":"org.archboy.clobaframe.web.mvc.impl.DefaultRouteDefinitionLoader"},
 	{"class":"org.archboy.clobaframe.web.mvc.DispatcherServlet"},
 
+	{"class":"org.springframework.web.context.request.RequestContextListener"},
+	{"class":"org.springframework.web.servlet.i18n.CookieLocaleResolver",
+		"props":[
+			{"name":"cookieName", "value":"LOCALE"},
+			{"name":"cookieMaxAge", "value":2592000}
+		]},
+	{"class":"org.archboy.clobaframe.web.i18n.CookieLocaleInterceptor"},
+
 	{"class":"org.archboy.clobaframe.web.template.impl.TemplateManagerImpl"},
 	{"class":"org.archboy.clobaframe.web.template.impl.DelegateStaticAttributeLoader"},
 	{"class":"org.archboy.clobaframe.web.template.velocity.VelocityConfigurer"},

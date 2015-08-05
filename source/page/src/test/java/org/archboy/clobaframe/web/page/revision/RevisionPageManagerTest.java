@@ -137,8 +137,8 @@ public class RevisionPageManagerTest {
 		// test get a page - by the current revison - latest revision - different locale
 		RevisionPageInfo page2 = (RevisionPageInfo) revisionPageManager.get(about_zh_CN);
 		assertEquals(8, page2.getRevision());
-		assertEquals("about zh_CN r8", page2.getTitle());
-		assertEquals("this about zh_CN r8", page2.getContent());
+		assertEquals("about zh-CN r8", page2.getTitle());
+		assertEquals("this about zh-CN r8", page2.getContent());
 
 		//assertEquals(8, revisionPageManager.getCurrentRevision(new PageKey("about", Locale.SIMPLIFIED_CHINESE)));
 		// test get a page - by the current revison - no revision

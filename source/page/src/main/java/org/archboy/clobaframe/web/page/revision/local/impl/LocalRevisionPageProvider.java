@@ -20,22 +20,16 @@ import org.archboy.clobaframe.io.file.local.DefaultLocalResourceScanner;
 import org.archboy.clobaframe.io.file.local.LocalResourceScanner;
 import org.archboy.clobaframe.web.page.PageInfo;
 import org.archboy.clobaframe.web.page.PageKey;
-import org.archboy.clobaframe.web.page.PageProvider;
 import org.archboy.clobaframe.web.page.revision.RevisionPageInfo;
-import org.archboy.clobaframe.web.page.revision.RevisionPageProvider;
 import org.archboy.clobaframe.web.page.revision.impl.AbstractPreloadRevisionPageProvider;
-import static org.archboy.clobaframe.web.page.revision.impl.RevisionPageManagerImpl.DEFAULT_LOCALE;
 import org.archboy.clobaframe.web.page.revision.local.LocalRevisionPageInfo;
 import org.archboy.clobaframe.web.page.revision.local.LocalRevisionPageResourceInfo;
 import org.archboy.clobaframe.web.page.revision.local.LocalRevisionPageResourceNameStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.util.Assert;
 
 /**
  *
@@ -81,7 +75,7 @@ public class LocalRevisionPageProvider extends AbstractPreloadRevisionPageProvid
 	 * terms[templatepath#name].md // using the template "templatepath/name" for rendering, 
 	 *								//the slash mark is replaced with the hash mark.
 	 * A full name example:
-	 * terms@developers#api[template#dev]_zh_CN.r23.md
+	 * terms@developers#api[template#dev]_zh-CN.r23.md
 	 * 
 	 * Regex match groups:
 	 * 1 - name
@@ -94,7 +88,13 @@ public class LocalRevisionPageProvider extends AbstractPreloadRevisionPageProvid
 	 * 
 	 */
 	private static final String resourceNameRegex = 
-			"^([a-zA-Z0-9-]+)(@([a-zA-Z0-9#-]+))?(\\[([a-zA-Z0-9#-]+)\\])?(_([a-z]{2})((_)([A-Z]{2}))?)?(.r(\\d+))?\\.md$";
+			//"^([a-zA-Z0-9-]+)(@([a-zA-Z0-9#-]+))?(\\[([a-zA-Z0-9#-]+)\\])?(_([a-z]{2})((_)([A-Z]{2}))?)?(.r(\\d+))?\\.md$";
+			"^(?<name>[a-zA-Z0-9-]+)" +
+			"(@(?<url>[a-zA-Z0-9#-]+))?" +
+			"(\\[(?<template>[a-zA-Z0-9#-]+)\\])?" +
+			"(_(?<locale>[a-z]{2}(-[a-zA-Z]{2,4})?))?" +
+			"(.r(?<revision>\\d+))?" +
+			"\\.md$";
 	
 	private Pattern resourceNamePattern = Pattern.compile(resourceNameRegex);
 	
@@ -187,32 +187,33 @@ public class LocalRevisionPageProvider extends AbstractPreloadRevisionPageProvid
 			
 			Matcher matcher = resourceNamePattern.matcher(filename);
 			if (matcher.find()){
-				String name = matcher.group(1);
-				String urlName = matcher.group(3);
-				String templateName = matcher.group(5);
-				String langCode = matcher.group(7);
-				String countryCode = matcher.group(10);
-				String revision = matcher.group(12);
+				String name = matcher.group("name");
+				String urlName = matcher.group("url");
+				String templateName = matcher.group("template");
+				//String langCode = matcher.group(7);
+				//String countryCode = matcher.group(10);
+				String localeString = matcher.group("locale");
+				String revisionString = matcher.group("revision");
 				
 				// build page name
 				String pageName = (path != null) ? path + "/" + name : name;
 				
 				// get the locale value
-				Locale locale = null;
+				Locale locale = (localeString == null) ? defaultLocale : Locale.forLanguageTag(localeString);
 
-				if (langCode != null && countryCode != null){
-					locale = new Locale(langCode, countryCode);
-				}else if (langCode != null){
-					locale = new Locale(langCode);
-				}else{
-					locale = defaultLocale;
-				}
+//				if (langCode != null && countryCode != null){
+//					locale = new Locale(langCode, countryCode);
+//				}else if (langCode != null){
+//					locale = new Locale(langCode);
+//				}else{
+//					locale = defaultLocale;
+//				}
 
 				// get the revision number.
 				// default is "0" (while no specified).
-				int revisionNumber = 0;
-				if (revision != null) {
-					revisionNumber = Integer.parseInt(revision);
+				int revision = 0;
+				if (revisionString != null) {
+					revision = Integer.parseInt(revisionString);
 				}
 				
 				// convert the hash mark
@@ -228,7 +229,7 @@ public class LocalRevisionPageProvider extends AbstractPreloadRevisionPageProvid
 				try{
 					RevisionPageInfo revisionDoc = convertResourceInfo(
 								fileBaseResourceInfo, 
-								pageName, locale, revisionNumber, 
+								pageName, locale, revision, 
 								urlName, templateName);
 				
 					pages.add(revisionDoc);

@@ -27,9 +27,10 @@ var PageBox = React.createClass({
 		var me = this;
 		$.ajax({
 			url: me.props.url,
-			dataType: 'json',
+			contentType: 'application/json; charset=UTF-8',
+			dataType: 'json', // expect return data type
 			type: 'POST',
-			data: page
+			data: JSON.stringify(page)
 		}).done(function(data, textStatus, jqXHR) {
 			var newPages = pages.concat([data]);
 			me.setState({pages: newPages});
@@ -79,9 +80,9 @@ var LanguageSwitch = React.createClass({
 			<div className="text-right locale-switch">
 				<h4>Change Language</h4>
 				<ul className="list-inline">
-					<li><a onClick={this.handleClick} href="/setlanguage?_locale=en">English</a></li>
-					<li><a onClick={this.handleClick} href="/setlanguage?_locale=ja">Japanese</a></li>
-					<li><a onClick={this.handleClick} href="/setlanguage?_locale=zh_CN">Simplified Chinese</a></li>
+					<li><a onClick={this.handleClick} href="/setlanguage?locale=en">English</a></li>
+					<li><a onClick={this.handleClick} href="/setlanguage?locale=ja">Japanese</a></li>
+					<li><a onClick={this.handleClick} href="/setlanguage?locale=zh_CN">Simplified Chinese</a></li>
 				</ul>
 			</div>	
 		);

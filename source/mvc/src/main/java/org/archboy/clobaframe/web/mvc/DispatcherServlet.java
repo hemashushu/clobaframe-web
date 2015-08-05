@@ -27,18 +27,21 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.OrderComparator;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ValueConstants;
 import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
@@ -58,6 +61,9 @@ public class DispatcherServlet extends HttpServlet {
 	@Inject
 	private ViewResolver viewResolver;
 
+	@Autowired(required = false)
+	private List<HandlerInterceptor> handlerInterceptors;
+	
 	private List<RouteDefinition> routeDefinitions;
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
@@ -148,6 +154,10 @@ public class DispatcherServlet extends HttpServlet {
 	private void handle(HttpServletRequest req, HttpServletResponse resp)
 			throws Exception {
 		
+		if (!applyPreHandle(req, resp)){
+			return;
+		}
+		
 		RouteMatcher routeMatcher = matcher(req);
 		if (routeMatcher == null) {
 			throw new FileNotFoundException(
@@ -176,7 +186,8 @@ public class DispatcherServlet extends HttpServlet {
 				}else if (clazz.equals(HttpServletResponse.class)) {
 					params.add(resp);
 				}else if (clazz.equals(Locale.class)){
-					params.add(req.getLocale());
+					//params.add(req.getLocale());
+					params.add(LocaleContextHolder.getLocale()); // using context holder instead
 				}else if (clazz.equals(InputStream.class)) {
 					params.add(req.getInputStream()); // ServletInputStream
 				}else if (clazz.equals(Reader.class)) {
@@ -223,9 +234,9 @@ public class DispatcherServlet extends HttpServlet {
 						}
 					}
 					
-					//params.add(value);
 					if (clazz.equals(Locale.class)){
-						params.add(Locale.forLanguageTag(value));
+						// the Language Tag is 'aa-AA' but locale toString is 'aa_AA'
+						params.add(Locale.forLanguageTag(value.replace("_", "-")));
 					}else if (clazz.equals(Integer.class) || clazz == Integer.TYPE) {
 						params.add(Integer.parseInt(value));
 					}else if (clazz.equals(Long.class) || clazz == Long.TYPE) {
@@ -360,5 +371,17 @@ public class DispatcherServlet extends HttpServlet {
 		public RouteDefinition getRouteDefinition() {
 			return routeDefinition;
 		}
+	}
+	
+	boolean applyPreHandle(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		if (handlerInterceptors != null && !handlerInterceptors.isEmpty()) {
+			for (HandlerInterceptor handlerInterceptor : handlerInterceptors) {
+				if (!handlerInterceptor.preHandle(request, response, null)) {
+					//triggerAfterCompletion(request, response, null);
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }

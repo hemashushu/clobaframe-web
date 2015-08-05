@@ -162,6 +162,31 @@
 				<directory>src/main/resources</directory>
 			</resource>
 		</resources>
+		
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<executions>
+					<execution>
+						<id>default-cli</id>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>org.archboy.clobaframe.web.demo.App</mainClass>
+<!--							<systemProperties>
+								<systemProperty>
+									<key></key>
+									<value></value>
+								</systemProperty>
+							</systemProperties>-->
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 
 </project>
