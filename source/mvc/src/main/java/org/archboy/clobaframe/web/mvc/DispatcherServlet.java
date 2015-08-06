@@ -81,18 +81,17 @@ public class DispatcherServlet extends HttpServlet {
 		this.handlerExceptionResolvers = handlerExceptionResolvers;
 	}
 
+	public void setHandlerInterceptors(List<HandlerInterceptor> handlerInterceptors) {
+		this.handlerInterceptors = handlerInterceptors;
+	}
+	
 	@Override
-	public void init(ServletConfig config) throws ServletException {
+	public void init() throws ServletException {
 		routeDefinitions = routeDefinitionLoader.list();
 		
 		if (handlerExceptionResolvers != null && !handlerExceptionResolvers.isEmpty()){
 			OrderComparator.sort(handlerExceptionResolvers);
 		}
-	}
-
-	@Override
-	public void destroy() {
-		//
 	}
 
 	@Override

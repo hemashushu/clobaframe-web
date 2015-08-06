@@ -71,7 +71,7 @@ public class App
 		//handler.setResourceBase(new ClassPathResource("src/main/webapp").getPath());
 		
 		// start http server
-		Server server = new Server(8088);
+		Server server = new Server(8080);
 		server.setHandler(handler);
 		
 		try{
@@ -79,7 +79,7 @@ public class App
 			
 			long span = System.currentTimeMillis() - start;
 			System.out.println("Server start in " + span + " ms.");
-			System.out.println("Server listening at TCP port 8088.");
+			System.out.println("Server listening at TCP port 8080.");
 			
 			//server.join();
 			System.in.read(); // wait for exit

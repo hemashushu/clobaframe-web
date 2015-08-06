@@ -17,12 +17,8 @@
 	<listener>
 		<display-name>ImageIO service provider loader/unloader</display-name>
 		<listener-class>com.twelvemonkeys.servlet.image.IIOProviderContextListener</listener-class>
-	</listener>-->
-
-	<servlet-mapping>
-		<servlet-name>clobaframe-web-demo</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
+	</listener>
+	-->
 	
 	<!-- Addition MIME types -->
 	<mime-mapping>

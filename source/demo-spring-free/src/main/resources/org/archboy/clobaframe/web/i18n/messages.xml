@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment></comment>
+	<entry key="common.language">English</entry>
+	<entry key="common.language.en">English</entry>
+	<entry key="common.language.ja">日本語</entry>
+	<entry key="common.language.zh_CN">中文(简体)</entry>
+	<entry key="common.language.zh_TW">中文(正體)</entry>
+
+	<entry key="site.title">Clobaframe Web Demo</entry>
+
+	<entry key="common.theme.default">Default</entry>
+	<entry key="common.theme.dark">Dark</entry>
+	<entry key="common.theme.warm">Warm</entry>
+	
+	<entry key="test.text1">This is test text.</entry>
+	<entry key="test.text2">Hello {0}, now is {1,date,long}.</entry>
+
+	<!-- The following are page messages -->
+	<entry key="index.about">About</entry>
+	<entry key="index.terms">Terms of Service</entry>
+	<entry key="index.privacy">Privacy Policy</entry>
+	
+	<entry key="index.changeLanguage">Change language</entry>
+	<entry key="index.changeTheme">Change Theme</entry>
+	
+	<entry key="index.pages">Pages</entry>
+	<entry key="index.createNewPage">Create new page</entry>
+	<entry key="page.revision">Revisions</entry>
+	<entry key="page.otherLanguage">Read in other language</entry>
+	
+</properties>

@@ -1,0 +1,78 @@
+#set ($layout = 'layout/default.vm')
+#set ($pageTitle = 'Clobaframe Web Demo')
+#set ($pageResources = ['css/index.css','js/index.js', 'js/marked.js'])
+#set ($metaKeywords = 'clobaframe web')
+#set ($metaDescription = 'clobaframe web demo')
+
+<div class="container">
+	<!--
+	<div class="text-right locale-switch">
+		<h4 class="">$msg.write('index.changeLanguage')</h4>
+		<ul class="list-inline">
+			<li><a href="/setlanguage?_locale=en">$msg.write('common.language.en')</a></li>
+			<li><a href="/setlanguage?_locale=ja">$msg.write('common.language.ja')</a></li>
+			<li><a href="/setlanguage?_locale=zh_CN">$msg.write('common.language.zh_CN')</a></li>
+		</ul>
+	</div>
+	-->
+	
+	<main class="row">
+		<div class="col-md-8">
+			<h1>$esc.html($page.title)</h1>
+			<div class="text-muted meta">
+				<ul class="list-inline">
+					<li>Locale: <em>$page.pageKey.locale</em></li>
+					<li>Revision: <em>$page.revision</em></li>
+					<li>Update: <em>$date.datetime($page.lastModified,'medium','medium')</em></li>
+				</ul>
+			</div>
+			<div class="content markdown">
+				<input type="hidden" value="$esc.html($page.content)">
+			</div>
+		</div>
+		
+		<div class="col-md-4">
+			<div class="text-right revision-list">
+				<h4>$msg.write('page.revision')</h4>
+				<ul class="revisions">
+					#foreach ($revision in $revisions)
+					<li>	
+						<a href="$objectUrl.revisionPage($revision)">
+							Rev. $revision.revision 
+							- 
+							<small class="text-muted">$date.date($revision.lastModified, 'long')</small>
+						</a>
+					</li>
+					#end
+				</ul>
+			</div>
+			<div class="text-right locale-list">
+				<h4>$msg.write('page.otherLanguage')</h4>
+				<ul class="locales">
+					#foreach ($locale in $locales)
+					<li>
+						<a href="$objectUrl.page($page, $locale)">
+							$locale.toString()
+						</a>
+					</li>
+					#end
+				</ul>
+			</div>
+		</div>
+	</main>
+
+	<div class="text-right theme-switch">
+		<h4 class="">$msg.write('index.changeTheme')</h4>
+		<ul class="list-inline">
+			<li><a href="/settheme?name=">$msg.write('common.theme.default')</a></li>
+			<li><a href="/settheme?name=dark">$msg.write('common.theme.dark')</a></li>
+			<li><a href="/settheme?name=warm">$msg.write('common.theme.warm')</a></li>
+		</ul>
+	</div>
+</div>
+
+<script>
+	(function (window) {
+		
+	})(this);
+</script>

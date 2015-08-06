@@ -39,6 +39,7 @@
 		<module>page</module>
 		<module>theme</module>
 		<module>demo</module>
+		<module>demo-spring-free</module>
 		<module>demo-embed</module>
 	</modules>
 	

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment></comment>
+	<entry key="common.language">日本語</entry>
+
+	<entry key="site.title">Clobaframe Web デモ</entry>
+
+	<entry key="common.theme.default">デフォルト</entry>
+	<entry key="common.theme.dark">濃色</entry>
+	<entry key="common.theme.warm">暖かいです</entry>
+	
+	<entry key="test.text1">これはテストテキストです。</entry>
+	<entry key="test.text2">こんにちは {0}、今の時間 {1,date,long}。</entry>
+	
+	<entry key="index.about">について</entry>
+	<entry key="index.terms">使用条件</entry>
+	<entry key="index.privacy">プライバシー</entry>
+	
+	<entry key="index.changeLanguage">言語を変更</entry>
+	<entry key="index.changeTheme">テーマの変更</entry>
+	
+	<entry key="index.pages">ページ一覧</entry>
+	<entry key="index.createNewPage">新しいページ</entry>
+	<entry key="page.revision">歴史コピー</entry>
+	<entry key="page.otherLanguage">他の言語で読みます</entry>
+</properties>

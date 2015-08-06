@@ -126,7 +126,7 @@
 
 	<build>
 		<!-- the final package name -->
-		<finalName>clobaframe-web-demo</finalName>
+		<finalName>web-demo</finalName>
 
 		<plugins>
 			<plugin>

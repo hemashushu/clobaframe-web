@@ -1,0 +1,7 @@
+#set ($layout = 'layout/default.vm')
+#set ($pageTitle = 'Error')
+
+<div class="container">
+	<h1>Something error.</h1>
+	<p>Code: <em>$error.code</em></p>
+</div>

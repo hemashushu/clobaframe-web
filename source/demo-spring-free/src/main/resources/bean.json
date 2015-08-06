@@ -1,0 +1,65 @@
+[
+	{"id":"messageSource",
+		"class":"org.springframework.context.support.ReloadableResourceBundleMessageSource",
+		"props":[
+			{"name":"basename", "value":"classpath:org/archboy/clobaframe/web/i18n/messages"},
+			{"name":"cacheSeconds", "value":-1}
+			]},
+
+	{"class":"org.archboy.clobaframe.setting.global.impl.GlobalSettingImpl"},
+
+	{"class":"org.archboy.clobaframe.io.impl.ExtensionNameMimeTypeDetector"},
+	{"class":"org.archboy.clobaframe.io.http.impl.ClientCacheResourceSenderImpl"},
+	{"class":"org.archboy.clobaframe.io.http.impl.ResourceSenderImpl"},
+	
+	{"class":"org.archboy.clobaframe.resource.http.impl.NamedResourceSenderImpl"},
+	{"class":"org.archboy.clobaframe.resource.impl.ResourceManagerImpl"},
+	{"class":"org.archboy.clobaframe.resource.impl.ResourceProviderSetImpl"},
+	{"class":"org.archboy.clobaframe.resource.impl.DefaultVersionStrategy"},
+	{"class":"org.archboy.clobaframe.resource.impl.DefaultLocationStrategy"},
+	{"class":"org.archboy.clobaframe.resource.local.MultiPathLocalResourceProvider"},
+	{"class":"org.archboy.clobaframe.resource.impl.ConcatenateWebResourceProvider"},
+
+	{"class":"org.archboy.clobaframe.web.tool.impl.EscapeToolImpl"},
+	{"class":"org.archboy.clobaframe.web.tool.DateTimeFormatter"},
+	{"class":"org.archboy.clobaframe.web.tool.impl.JsonWriterImpl"},
+	{"class":"org.archboy.clobaframe.web.tool.impl.MessageSourceToolImpl"},
+	{"class":"org.archboy.clobaframe.web.tool.impl.PageHeaderToolImpl"},
+	{"class":"org.archboy.clobaframe.web.tool.impl.PageHeaderWriterImpl"},
+	{"class":"org.archboy.clobaframe.web.tool.impl.DefaultContextPageHeaderProvider"},
+
+	{"class":"org.archboy.clobaframe.web.mvc.impl.DefaultRouteDefinitionLoader"},
+
+	{"class":"org.springframework.web.servlet.i18n.CookieLocaleResolver",
+		"props":[
+			{"name":"cookieName", "value":"LOCALE"},
+			{"name":"cookieMaxAge", "value":2592000}
+		]},
+	{"class":"org.archboy.clobaframe.web.i18n.CookieLocaleInterceptor"},
+
+	{"class":"org.archboy.clobaframe.web.template.impl.TemplateManagerImpl"},
+	{"class":"org.archboy.clobaframe.web.template.impl.DelegateStaticAttributeLoader"},
+	{"class":"org.archboy.clobaframe.web.template.velocity.VelocityConfigurer"},
+	{"class":"org.archboy.clobaframe.web.template.velocity.VelocityLayoutViewResolver"},
+	{"class":"org.archboy.clobaframe.web.template.velocity.local.LocalTemplateProvider"},
+	
+	{"class":"org.archboy.clobaframe.web.theme.impl.ThemeManagerImpl"},
+	{"class":"org.archboy.clobaframe.web.theme.local.impl.LocalThemeProvider"},
+	{"class":"org.archboy.clobaframe.web.theme.inject.ThemeResourcePageHeaderTool"},
+	
+	{"class":"org.archboy.clobaframe.web.page.revision.impl.RevisionPageManagerImpl"},
+	{"class":"org.archboy.clobaframe.web.page.revision.local.impl.LocalRevisionPageProvider"},
+	
+	{"class":"org.archboy.clobaframe.setting.global.InMemoryGlobalSettingRepository"},
+	{"class":"org.archboy.clobaframe.web.controller.IndexController"},
+	{"class":"org.archboy.clobaframe.web.controller.PageController"},
+	{"class":"org.archboy.clobaframe.web.controller.ResourcesController"},
+	{"class":"org.archboy.clobaframe.web.controller.RestController"},
+	{"class":"org.archboy.clobaframe.web.controller.ThemeController"},
+	{"class":"org.archboy.clobaframe.web.exception.resolver.FileNotFoundExceptionResolver"},
+	{"class":"org.archboy.clobaframe.web.page.revision.InMemoryRevisionPageRepository"},
+	{"class":"org.archboy.clobaframe.web.theme.inject.ThemeResourcePageHeaderProvider"},
+	{"class":"org.archboy.clobaframe.web.theme.inject.ThemeTemplateProvider"},
+	{"class":"org.archboy.clobaframe.web.tool.ObjectUrl"}
+
+]

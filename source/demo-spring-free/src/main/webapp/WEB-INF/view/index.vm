@@ -1,0 +1,31 @@
+#set ($layout = 'layout/default.vm')
+#set ($pageTitle = 'Clobaframe Web Demo')
+#set ($pageResources = ['css/index.css','js/index.js'])
+#set ($metaKeywords = 'clobaframe web')
+#set ($metaDescription = 'clobaframe web demo')
+
+<div class="container">
+	<main id="page-box"></main>
+
+	<div class="text-right theme-switch">
+		<h4 class="">$msg.write('index.changeTheme')</h4>
+		<ul class="list-inline">
+			<li><a href="/settheme?name=">$msg.write('common.theme.default')</a></li>
+			<li><a href="/settheme?name=dark">$msg.write('common.theme.dark')</a></li>
+			<li><a href="/settheme?name=warm">$msg.write('common.theme.warm')</a></li>
+		</ul>
+	</div>
+</div>
+
+<script>
+	(function (window) {
+		#if ($pageOptions)
+			window.pageOptions = $json.write($pageOptions);
+		#else
+			window.pageOptions = {};
+		#end
+	})(this);
+</script>
+
+<!-- write custom page resource -->
+$headerTool.writeResource('jsx/page-box.js', 'script', 'src', {'type':'text/jsx'}, true)
