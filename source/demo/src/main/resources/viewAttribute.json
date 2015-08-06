@@ -14,5 +14,7 @@
 	{"key":"headerWriter",
 		"bean":"pageHeaderWriter"},
 	{"key":"headerProvider",
-		"bean":"contextPageHeaderProvider"}
+		"bean":"contextPageHeaderProvider"},
+	{"key":"objectUrl",
+		"bean":"objectUrl"}
 ]

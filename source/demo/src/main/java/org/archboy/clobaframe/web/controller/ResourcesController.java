@@ -51,6 +51,7 @@ public class ResourcesController {
 	/**
 	 * Send web resource.
 	 *
+	 * @param resourceVersionName
 	 * @param request
 	 * @param response
 	 * @throws IOException

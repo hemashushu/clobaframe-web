@@ -4,8 +4,6 @@ import java.util.Date;
 import javax.inject.Named;
 import org.archboy.clobaframe.web.page.PageInfo;
 import org.archboy.clobaframe.web.page.PageKey;
-import org.archboy.clobaframe.web.page.revision.RevisionPageInfo;
-import org.archboy.clobaframe.web.page.revision.RevisionPageRepository;
 import org.archboy.clobaframe.web.page.revision.impl.AbstractPreloadRevisionPageProvider;
 
 /**

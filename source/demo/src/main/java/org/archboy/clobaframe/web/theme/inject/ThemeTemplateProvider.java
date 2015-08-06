@@ -7,7 +7,6 @@ import org.archboy.clobaframe.setting.global.GlobalSetting;
 import org.archboy.clobaframe.web.template.TemplateProvider;
 import org.archboy.clobaframe.web.theme.ThemeManager;
 import org.archboy.clobaframe.web.theme.ThemePackage;
-import org.archboy.clobaframe.web.theme.ThemeResourceInfo;
 
 /**
  * Inject (append or replace exists) theme template into template manager.

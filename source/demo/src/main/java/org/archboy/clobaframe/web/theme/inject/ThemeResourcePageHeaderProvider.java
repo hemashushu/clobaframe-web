@@ -3,10 +3,8 @@ package org.archboy.clobaframe.web.theme.inject;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import javax.inject.Named;
 import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.setting.global.GlobalSetting;
-import org.archboy.clobaframe.web.theme.inject.ThemeResourcePageHeaderTool;
 import org.archboy.clobaframe.web.tool.PageHeaderProvider;
 
 /**
