@@ -1,4 +1,4 @@
-package org.archboy.clobaframe.web.i18n;
+package org.archboy.clobaframe.web.mvc.i18n;
 
 import java.io.IOException;
 import java.util.Locale;

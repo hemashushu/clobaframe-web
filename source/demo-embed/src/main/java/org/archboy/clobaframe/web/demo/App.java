@@ -7,7 +7,7 @@ import org.archboy.clobaframe.ioc.BeanFactoryClosedEvent;
 import org.archboy.clobaframe.ioc.impl.DefaultBeanFactory;
 import org.archboy.clobaframe.setting.application.ApplicationSetting;
 import org.archboy.clobaframe.setting.application.impl.DefaultApplicationSetting;
-import org.archboy.clobaframe.web.i18n.CookieLocaleInterceptor;
+import org.archboy.clobaframe.web.mvc.i18n.CookieLocaleInterceptor;
 import org.archboy.clobaframe.web.mvc.DispatcherServlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.FilterHolder;

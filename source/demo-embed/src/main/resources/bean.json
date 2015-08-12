@@ -37,7 +37,7 @@
 			{"name":"cookieName", "value":"LOCALE"},
 			{"name":"cookieMaxAge", "value":2592000}
 		]},
-	{"class":"org.archboy.clobaframe.web.i18n.CookieLocaleInterceptor"},
+	{"class":"org.archboy.clobaframe.web.mvc.i18n.CookieLocaleInterceptor"},
 
 	{"class":"org.archboy.clobaframe.web.template.impl.TemplateManagerImpl"},
 	{"class":"org.archboy.clobaframe.web.template.impl.DelegateStaticAttributeLoader"},
