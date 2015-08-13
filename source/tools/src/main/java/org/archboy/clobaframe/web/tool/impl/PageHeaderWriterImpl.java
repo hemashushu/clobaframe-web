@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.web.tool.PageHeaderWriter;
 import org.archboy.clobaframe.web.tool.PageHeaderProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.OrderComparator;
 import org.springframework.util.Assert;
 
 /**
@@ -23,6 +24,12 @@ public class PageHeaderWriterImpl implements PageHeaderWriter {
 		this.pageHeaderProviders = pageHeaderProviders;
 	}
 
+	public void init() throws Exception {
+		if (pageHeaderProviders != null && !pageHeaderProviders.isEmpty()) {
+			OrderComparator.sort(pageHeaderProviders);
+		}
+	}
+	
 	@Override
 	public void addProvider(PageHeaderProvider pageHeaderProvider) {
 		if (pageHeaderProviders == null) {
@@ -30,6 +37,9 @@ public class PageHeaderWriterImpl implements PageHeaderWriter {
 		}
 		
 		pageHeaderProviders.add(pageHeaderProvider);
+		
+		// sort 0-9
+		OrderComparator.sort(pageHeaderProviders);
 	}
 
 	@Override

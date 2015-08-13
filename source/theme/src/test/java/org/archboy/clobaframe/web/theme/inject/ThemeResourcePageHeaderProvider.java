@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.archboy.clobaframe.setting.global.GlobalSetting;
 import org.archboy.clobaframe.web.theme.inject.ThemeResourcePageHeaderTool;
 import org.archboy.clobaframe.web.tool.PageHeaderProvider;
+import org.springframework.core.Ordered;
 
 /**
  * Inject (append) theme resources into page header.
@@ -28,6 +29,11 @@ public class ThemeResourcePageHeaderProvider implements PageHeaderProvider {
 
 	public void setGlobalSetting(GlobalSetting globalSetting) {
 		this.globalSetting = globalSetting;
+	}
+
+	@Override
+	public int getOrder() {
+		return Ordered.LOWEST_PRECEDENCE;
 	}
 
 	@Override

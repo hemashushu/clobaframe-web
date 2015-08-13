@@ -29,6 +29,11 @@ public class ThemeResourcePageHeaderProvider implements PageHeaderProvider {
 	}
 
 	@Override
+	public int getOrder() {
+		return PRIORITY_LOWER;
+	}
+	
+	@Override
 	public String getName() {
 		return "themePageHeader";
 	}

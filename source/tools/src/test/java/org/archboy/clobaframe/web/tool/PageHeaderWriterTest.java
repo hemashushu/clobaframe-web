@@ -78,9 +78,9 @@ public class PageHeaderWriterTest {
 		contextPageHeaderProvider.add("meta", attr1, false);
 		
 		assertEquals(
-				"<meta charset=\"UTF-8\">" +
 				pageHeaderTool.writeResource("js/i18n/messages.js") + 
-				pageHeaderTool.writeResource("js/i18n/messages_zh_CN.js"),
+				pageHeaderTool.writeResource("js/i18n/messages_zh_CN.js") +
+				"<meta charset=\"UTF-8\">",
 				pageHeaderWriter.write());
 		
 		HttpServletRequest httpServletRequest2 = new MockHttpServletRequest();
@@ -92,9 +92,9 @@ public class PageHeaderWriterTest {
 		
 		contextPageHeaderProvider.add("meta", attr2, false);
 		assertEquals(
-				"<meta name=\"robots\" content=\"noodp\">" +
 				pageHeaderTool.writeResource("js/i18n/messages.js") + 
-				pageHeaderTool.writeResource("js/i18n/messages_zh_CN.js"),
+				pageHeaderTool.writeResource("js/i18n/messages_zh_CN.js") +
+				"<meta name=\"robots\" content=\"noodp\">",
 				pageHeaderWriter.write());
 		
 	}

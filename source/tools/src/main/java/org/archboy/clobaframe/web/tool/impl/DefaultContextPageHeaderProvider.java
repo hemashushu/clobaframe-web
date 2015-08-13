@@ -39,6 +39,11 @@ public class DefaultContextPageHeaderProvider implements ContextPageHeaderProvid
 	public void setPageHeaderRequestAttributeName(String pageHeaderRequestAttributeName) {
 		this.pageHeaderRequestAttributeName = pageHeaderRequestAttributeName;
 	}
+
+	@Override
+	public int getOrder() {
+		return PRIORITY_LOWER;
+	}
 	
 	@Override
 	public String getName() {

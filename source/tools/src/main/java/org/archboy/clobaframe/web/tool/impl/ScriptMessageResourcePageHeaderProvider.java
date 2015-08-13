@@ -137,6 +137,11 @@ public class ScriptMessageResourcePageHeaderProvider implements ScriptMessageRes
 //	}
 
 	@Override
+	public int getOrder() {
+		return PRIORITY_LOW;
+	}
+	
+	@Override
 	public String getName() {
 		return "scriptMessageResourcePageHeader";
 	}
