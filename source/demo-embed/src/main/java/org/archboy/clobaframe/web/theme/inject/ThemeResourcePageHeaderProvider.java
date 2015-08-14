@@ -30,7 +30,7 @@ public class ThemeResourcePageHeaderProvider implements PageHeaderProvider {
 
 	@Override
 	public int getOrder() {
-		return PRIORITY_LOWER;
+		return PRIORITY_NORMAL;
 	}
 
 	@Override

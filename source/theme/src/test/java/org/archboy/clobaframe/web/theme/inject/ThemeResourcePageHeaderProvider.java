@@ -33,7 +33,7 @@ public class ThemeResourcePageHeaderProvider implements PageHeaderProvider {
 
 	@Override
 	public int getOrder() {
-		return Ordered.LOWEST_PRECEDENCE;
+		return PRIORITY_NORMAL;
 	}
 
 	@Override
