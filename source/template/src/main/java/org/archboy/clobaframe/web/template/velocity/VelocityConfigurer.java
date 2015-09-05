@@ -108,6 +108,7 @@ public class VelocityConfigurer {
 	}
 	
 	protected void initResourceLoader(VelocityEngine velocityEngine) {
+		// the VelocityEngine.setProperty method is used to init the engine.
 		velocityEngine.setProperty(
 				RuntimeConstants.RESOURCE_LOADER, DelegateVelocityTemplateResourceLoader.NAME);
 		velocityEngine.setProperty(
@@ -117,6 +118,7 @@ public class VelocityConfigurer {
 		velocityEngine.setProperty(
 				DelegateVelocityTemplateResourceLoader.RESOURCE_LOADER_MODIFICATION_CHECK_INTERVAL, Integer.toString(cacheSeconds));
 		
+		// the VelocityEngine.setApplicationAttribute method is used to bring some object to other place.
 		// bring the resource manager to delegater.
 		velocityEngine.setApplicationAttribute(
 				DelegateVelocityTemplateResourceLoader.TEMPLATE_RESOURCE_MANAGER, templateManager);
