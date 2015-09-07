@@ -48,7 +48,6 @@ public class DelegateVelocityTemplateResourceLoader extends ResourceLoader {
 	@Override
 	public InputStream getResourceStream(String source) throws ResourceNotFoundException {
 		NamedResourceInfo namedResourceInfo = getResource(source);
-		System.out.println("<<<<<<<< READ..." + source);
 		try {
 			return namedResourceInfo.getContent();
 		}catch(IOException e){
@@ -61,10 +60,6 @@ public class DelegateVelocityTemplateResourceLoader extends ResourceLoader {
 		Date lastModified = getResource(resource.getName()).getLastModified();
 		Assert.notNull(lastModified);
 		boolean modified = lastModified.getTime() != resource.getLastModified();
-		
-		System.out.println("check source modified:" + resource.getName());
-		System.out.println("		now:" + lastModified.getTime() + ", old:" + resource.getLastModified());
-		System.out.println("		change?" + modified);
 		return modified;
 	}
 
@@ -72,20 +67,11 @@ public class DelegateVelocityTemplateResourceLoader extends ResourceLoader {
 	public long getLastModified(Resource resource) {
 		Date lastModified = getResource(resource.getName()).getLastModified();
 		Assert.notNull(lastModified);
-		
-		System.out.println("GET last modified:" + resource.getName());
-		System.out.println("		" + lastModified);
-		System.out.println("		" + lastModified.getTime());
-		
 		return lastModified.getTime();
 	}
 
 	private NamedResourceInfo getResource(String name) {
 		NamedResourceInfo namedResourceInfo = templateManager.get(name);
-
-		System.out.println();
-		System.out.println(">>>>>>> GET resource:" + name);
-		
 		if (namedResourceInfo == null){
 			throw new ResourceNotFoundException(
 				"Could not find resource [" + name + "] in the template resource manager.");
